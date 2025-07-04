@@ -67,7 +67,7 @@ AccessPOS Pro est une solution complète de point de vente (POS) développée av
 
 1. **Cloner le projet**
 ```bash
-git clone https://github.com/votre-username/accesspos-pro.git
+git clone https://github.com/ouknik/accesspos-pro.git
 cd accesspos-pro
 ```
 
@@ -241,34 +241,15 @@ Les contributions sont les bienvenues ! Pour contribuer :
 4. Pushez vers la branche (`git push origin feature/nouvelle-fonctionnalite`)
 5. Ouvrez une Pull Request
 
-## 📝 Licence
-
-Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
 
 ## 📞 Support
 
 Pour toute question ou support :
 
-- **Email** : support@accesspos-pro.com
-- **Documentation** : [Wiki du projet](https://github.com/votre-username/accesspos-pro/wiki)
-- **Issues** : [GitHub Issues](https://github.com/votre-username/accesspos-pro/issues)
+- **Email** : oopokni@gmail.com
+- **Documentation** : [Wiki du projet](https://github.com/ouknik/accesspos-pro/wiki)
+- **Issues** : [GitHub Issues](https://github.com/ouknik/accesspos-pro/issues)
 
-## 📊 Statistiques du Projet
-
-![GitHub stars](https://img.shields.io/github/stars/votre-username/accesspos-pro)
-![GitHub forks](https://img.shields.io/github/forks/votre-username/accesspos-pro)
-![GitHub issues](https://img.shields.io/github/issues/votre-username/accesspos-pro)
-![GitHub license](https://img.shields.io/github/license/votre-username/accesspos-pro)
-
-## 🔮 Roadmap
-
-- [ ] Module de comptabilité avancée
-- [ ] Intégration e-commerce
-- [ ] Application mobile native
-- [ ] API REST complète
-- [ ] Module de Business Intelligence
-- [ ] Support multi-magasins
-- [ ] Intégration avec systèmes de caisse
 
 ---
 
