@@ -1,0 +1,1350 @@
+=== بنية قاعدة البيانات: RestoWinxo ===
+تاريخ الاستخراج: 2025-07-08 20:27:54
+عدد الجداول: 92
+نوع قاعدة البيانات: SQL Server
+إجمالي الأعمدة: سيتم حسابه...
+================================================================================
+
+الجدول: ADRESSE
+----------------------------------------
+عدد الأعمدة: 11
+  - ADR_ID (int(10)) NOT NULL
+  - CLT_REF (nvarchar(32)) NOT NULL
+  - ADR_PAYS (nvarchar(200)) NOT NULL
+  - ADR_REGION (nvarchar(200)) NOT NULL
+  - ADR_QUARTIER (nvarchar(200)) NOT NULL
+  - ADR_VILLE (nvarchar(200)) NOT NULL
+  - ADR_ADRESSE (nvarchar(200)) NOT NULL
+  - ADR_CODE_POSTALE (nvarchar(200)) NOT NULL
+  - ADR_ETAT (nvarchar(200)) NOT NULL
+  - ADR_REMARQUE (nvarchar(200)) NOT NULL
+  - ADR_TYPE (nvarchar(200)) NULL
+
+الجدول: ARTICLE
+----------------------------------------
+عدد الأعمدة: 49
+  - ART_REF (nvarchar(32)) NOT NULL
+  - SFM_REF (nvarchar(32)) NOT NULL
+  - FRN_REFERENCE (nvarchar(200)) NULL
+  - ART_DESIGNATION (nvarchar(200)) NULL
+  - ART_TVA_ACHAT (int(10)) NULL
+  - ART_TVA_VENTE (float(53)) NULL
+  - ART_PRIX_ACHAT (float(53)) NULL
+  - ART_PRIX_VENTE (float(53)) NULL
+  - ART_LIBELLE_TICKET (nvarchar(200)) NULL
+  - ART_STYLE (image(2147483647)) NULL
+  - ART_DESCRIPTION (nvarchar(200)) NULL
+  - ART_STOCK_MIN (int(10)) NULL
+  - ART_STOCK_MAX (int(10)) NULL
+  - ART_STOCKABLE (bit) NULL
+  - ART_ACHAT (bit) NULL
+  - ART_VENTE (bit) NULL
+  - ART_PLU (int(10)) NULL
+  - ART_DERNIER_PA (float(53)) NULL
+  - ART_DATE_CREATION (datetime) NULL
+  - ART_DATE_MODIFICATION (datetime) NULL
+  - ART_COLISAGE (float(53)) NULL
+  - ART_COMPOSER (bit) NULL
+  - ART_PESABLE (bit) NULL
+  - ART_REMISABLE (bit) NULL
+  - ART_CMT (nvarchar(300)) NULL
+  - IsFini (bit) NULL
+  - IsMenu (bit) NULL
+  - UNM_ABR (nvarchar(32)) NOT NULL
+  - ART_CODEBARR (nvarchar(255)) NULL
+  - ART_PRIX_ACHAT_HT (decimal(18,2)) NOT NULL
+  - ART_PRIX_VENTE_HT (decimal(18,2)) NOT NULL
+  - ART_LIBELLE_CAISSE (nvarchar(255)) NOT NULL
+  - ART_LIBELLE_ARABE (nvarchar(255)) NOT NULL
+  - ART_NIVEAU (nvarchar(255)) NULL
+  - ART_CUI_REF (nvarchar(32)) NULL
+  - ART_PRIX_EMPORTER (decimal(18,2)) NULL DEFAULT: ('0')
+  - ART_ORDRE_AFFICHAGE (int(10)) NOT NULL DEFAULT: ('999')
+  - base64 (nvarchar(-1)) NOT NULL DEFAULT: ('')
+  - CF1 (nvarchar(10)) NOT NULL DEFAULT: ('')
+  - CF2 (nvarchar(10)) NOT NULL DEFAULT: ('')
+  - CF3 (nvarchar(10)) NOT NULL DEFAULT: ('')
+  - CF4 (nvarchar(10)) NOT NULL DEFAULT: ('')
+  - CF5 (nvarchar(10)) NOT NULL DEFAULT: ('')
+  - CF6 (nvarchar(10)) NOT NULL DEFAULT: ('')
+  - CF7 (nvarchar(10)) NOT NULL DEFAULT: ('')
+  - CF8 (nvarchar(10)) NOT NULL DEFAULT: ('')
+  - CF9 (nvarchar(10)) NOT NULL DEFAULT: ('')
+  - CF10 (nvarchar(10)) NOT NULL DEFAULT: ('')
+  - IsIngredient (bit) NOT NULL DEFAULT: ('false')
+
+الجدول: AVOIR_ACHAT
+----------------------------------------
+عدد الأعمدة: 11
+  - AVRA_REF (nvarchar(32)) NOT NULL
+  - FRS_REF (nvarchar(32)) NOT NULL
+  - ETP_REF (nvarchar(32)) NOT NULL
+  - AVRA_NUMERO (nvarchar(50)) NULL
+  - AVRA_DATE (datetime) NULL
+  - AVRA_UTILISATEUR (nvarchar(10)) NULL
+  - AVRA_MNT_HT (decimal(18,2)) NULL
+  - AVRA_MNT_TTC (decimal(18,2)) NULL
+  - AVRA_VALIDE (bit) NULL
+  - AVRA_EXONORE (bit) NULL
+  - AVRA_REMARQUE (nvarchar(200)) NULL
+
+الجدول: AVOIR_ACHAT_DETAIL
+----------------------------------------
+عدد الأعمدة: 10
+  - ART_REF (nvarchar(32)) NOT NULL
+  - AVRA_REF (nvarchar(32)) NOT NULL
+  - AVRA_QTE (decimal(18,3)) NOT NULL
+  - AVRA_REMISE (float(53)) NOT NULL
+  - ARVA_PRIX_HT (decimal(18,2)) NOT NULL
+  - AVRA_PRIX_TTC (decimal(18,2)) NOT NULL
+  - AVRA_TVA (float(53)) NOT NULL
+  - AVRA_COLISAGE (float(53)) NOT NULL
+  - AVRA_NBR_COLIS (float(53)) NOT NULL
+  - AVRA_NBR_GRATUITE (decimal(18,3)) NOT NULL
+
+الجدول: AVOIR_VENTE
+----------------------------------------
+عدد الأعمدة: 11
+  - AVRV_REF (nvarchar(32)) NOT NULL
+  - CLT_REF (nvarchar(32)) NOT NULL
+  - ETP_REF (nvarchar(32)) NOT NULL
+  - AVRV_NUMERO (nvarchar(50)) NULL
+  - AVRV_DATE (datetime) NULL
+  - AVRV_UTILISATEUR (nvarchar(10)) NULL
+  - AVRV_MNT_HT (decimal(18,2)) NULL
+  - AVRV_MNT_TTC (decimal(18,2)) NULL
+  - AVRV_VALIDE (bit) NULL
+  - AVRV_EXONORE (bit) NULL
+  - AVRV_REMARQUE (nvarchar(200)) NULL
+
+الجدول: AVOIR_VENTE_DETAIL
+----------------------------------------
+عدد الأعمدة: 10
+  - ART_REF (nvarchar(32)) NOT NULL
+  - AVRV_REF (nvarchar(32)) NOT NULL
+  - AVRVD_QTE (decimal(18,3)) NOT NULL
+  - AVRVD_REMISE (float(53)) NOT NULL
+  - AVRVD_PRIX_HT (decimal(18,2)) NOT NULL
+  - AVRVD_PRIX_TTC (decimal(18,2)) NOT NULL
+  - AVRVD_TVA (float(53)) NOT NULL
+  - AVRVD_COLISAGE (float(53)) NOT NULL
+  - AVRVD_NBR_COLIS (float(53)) NOT NULL
+  - AVRVD_NBR_GRATUITE (decimal(18,3)) NOT NULL
+
+الجدول: AVR_FACT_ACHAT
+----------------------------------------
+عدد الأعمدة: 2
+  - AVRA_REF (nvarchar(32)) NOT NULL
+  - FCF_REF (nvarchar(32)) NOT NULL
+
+الجدول: AVR_FACT_VENTE
+----------------------------------------
+عدد الأعمدة: 2
+  - AVRV_REF (nvarchar(32)) NOT NULL
+  - FCTV_REF (nvarchar(32)) NOT NULL
+
+الجدول: BL_FACT_VENTE
+----------------------------------------
+عدد الأعمدة: 2
+  - CMV_REF (nvarchar(32)) NOT NULL
+  - FCTV_REF (nvarchar(32)) NOT NULL
+
+الجدول: BL_FOURNISSEUR
+----------------------------------------
+عدد الأعمدة: 13
+  - BLF_REF (nvarchar(32)) NOT NULL
+  - FRS_REF (nvarchar(32)) NOT NULL
+  - ETP_REF (nvarchar(32)) NOT NULL
+  - BLF_NUMERO (nvarchar(15)) NOT NULL
+  - BLF_DATE (datetime) NOT NULL
+  - BLF_MONTANT_HT (decimal(18,2)) NOT NULL
+  - BLF_MONTANT_TTC (decimal(18,2)) NOT NULL
+  - BLF_REMISE (float(53)) NULL
+  - BLF_UTILISATEUR (nvarchar(10)) NULL
+  - BLF_VALIDE (bit) NOT NULL
+  - BLF_TRANSFORME (bit) NOT NULL
+  - BLF_EXONORE (bit) NULL
+  - BLF_REMARQUE (nvarchar(200)) NULL
+
+الجدول: BL_VENTE
+----------------------------------------
+عدد الأعمدة: 17
+  - CMV_REF (nvarchar(32)) NOT NULL
+  - ETP_REF (nvarchar(32)) NOT NULL
+  - CLT_REF (nvarchar(32)) NOT NULL
+  - CMV_NUMERO (nvarchar(32)) NULL
+  - CMV_REMISE (float(53)) NULL
+  - CMV_EXONORE (bit) NULL
+  - CMV_VALIDE (bit) NULL
+  - CMV_TRANSFORME (bit) NULL
+  - CMV_DATELIVRAISON (datetime) NULL
+  - CMV_UTILISATEUR (nvarchar(20)) NULL
+  - CMV_DATEPLUSTARD (datetime) NULL
+  - CMV_ADRESSELIV (nvarchar(250)) NULL
+  - CMV_MNT_HT (decimal(18,2)) NULL
+  - CMV_MNT_TTC (decimal(18,2)) NULL
+  - CMV_DATE (datetime) NULL
+  - CMV_REMARQUE (nvarchar(250)) NULL
+  - LIV_ID (nvarchar(32)) NOT NULL
+
+الجدول: BL_VENTE_DETAIL
+----------------------------------------
+عدد الأعمدة: 10
+  - CMV_REF (nvarchar(32)) NOT NULL
+  - ART_REF (nvarchar(32)) NOT NULL
+  - BVD_COLISAGE (float(53)) NULL
+  - BVD_REMISE (float(53)) NULL
+  - BVD_NBR_COLIS (decimal(18,3)) NULL
+  - BVD_QTE (decimal(18,3)) NULL
+  - BVD_PRIX_VNT_HT (decimal(18,2)) NULL
+  - BVD_TVA (float(53)) NULL
+  - BVD_PRIX_VNT_TTC (decimal(18,2)) NULL
+  - BVD_QTE_GRATUITE (decimal(18,3)) NULL
+
+الجدول: BLF_OF_FCF
+----------------------------------------
+عدد الأعمدة: 2
+  - BLF_REF (nvarchar(32)) NOT NULL
+  - FCF_REF (nvarchar(32)) NOT NULL
+
+الجدول: BLFOURNISSEUR_DETAIL
+----------------------------------------
+عدد الأعمدة: 11
+  - ART_REF (nvarchar(32)) NOT NULL
+  - BLF_REF (nvarchar(32)) NOT NULL
+  - ABF_COLISAGE (decimal(18,2)) NOT NULL
+  - ABF_REMISE (float(53)) NOT NULL
+  - ABF_NBR_COLIS (decimal(18,2)) NOT NULL
+  - ABF_QTE_COMMANDE (decimal(18,3)) NOT NULL
+  - ABF_QTE_RECUS (decimal(18,3)) NOT NULL
+  - ABF_PRIXHT (decimal(18,2)) NOT NULL
+  - ABF_TVA (float(53)) NOT NULL
+  - ABF_PRIX_TTC (decimal(18,2)) NOT NULL
+  - ABF_QTE_GRATUIT (decimal(18,3)) NOT NULL
+
+الجدول: BLV_OF_CMD
+----------------------------------------
+عدد الأعمدة: 2
+  - CMV_REF (nvarchar(32)) NOT NULL
+  - CMD_REF (nvarchar(32)) NOT NULL
+
+الجدول: CADEAU_FEDELITE
+----------------------------------------
+عدد الأعمدة: 14
+  - Cadeau_REF (nvarchar(32)) NOT NULL
+  - NumTicket (nvarchar(50)) NOT NULL
+  - Pt_Cadeau (int(10)) NOT NULL
+  - Date_Cad (date) NOT NULL
+  - Heure_Cad (time) NOT NULL
+  - Num_Caisse (nvarchar(32)) NOT NULL
+  - Code_Caissier (nvarchar(32)) NOT NULL
+  - Nom_Caissier (nvarchar(50)) NOT NULL
+  - Prenom_Cassier (nvarchar(50)) NOT NULL
+  - Code_Client (nvarchar(32)) NOT NULL
+  - Client (nvarchar(50)) NOT NULL
+  - Cadeau (decimal(18,2)) NOT NULL
+  - MntCadeau (decimal(18,2)) NOT NULL
+  - Exporter (bit) NOT NULL DEFAULT: ('False')
+
+الجدول: CAISSE
+----------------------------------------
+عدد الأعمدة: 5
+  - CSS_ID_CAISSE (nvarchar(32)) NOT NULL
+  - CSS_LIBELLE_CAISSE (nvarchar(255)) NULL
+  - CSS_AVEC_AFFICHEUR (bit) NOT NULL
+  - CSS_NUM_CMD (nvarchar(100)) NOT NULL
+  - CSS_NUM_FACT (nvarchar(100)) NOT NULL
+
+الجدول: CATEGORIE_CLIENT
+----------------------------------------
+عدد الأعمدة: 2
+  - CLTCAT_REF (nvarchar(32)) NOT NULL
+  - CLTCAT_LIBELLE (nvarchar(255)) NULL
+
+الجدول: CLIENT
+----------------------------------------
+عدد الأعمدة: 23
+  - CLT_REF (nvarchar(32)) NOT NULL
+  - CLTCAT_REF (nvarchar(32)) NOT NULL
+  - CLT_CLIENT (nvarchar(250)) NULL
+  - CLT_TELEPHONE (nvarchar(20)) NULL
+  - CLT_EMAIL (nvarchar(250)) NULL
+  - CLT_SITE_WEB (nvarchar(250)) NULL
+  - CLT_FAX (nvarchar(20)) NULL
+  - CLT_BLOQUE (bit) NULL
+  - CLT_POINTFIDILIO (int(10)) NULL
+  - CLT_FIDELE (bit) NULL
+  - CLT_COMMANTAIRE (nvarchar(200)) NULL
+  - CLT_ISENTREPRISE (bit) NULL
+  - CLT_CNSS (nvarchar(20)) NULL
+  - CLT_RC (nvarchar(20)) NULL
+  - CLT_PATENTE (nvarchar(20)) NULL
+  - CLT_REPRESENTANT (nvarchar(200)) NULL
+  - CLT_ENVOISMS (bit) NULL
+  - CLT_ENVOIMMS (bit) NULL
+  - CLT_ENVOIEMAIL (bit) NULL
+  - CLT_ENVOICOURIER (bit) NULL
+  - CLT_CIVILITE (nvarchar(5)) NULL
+  - CLT_RAISONSOCIAL (nvarchar(200)) NULL
+  - CLT_CREDIT (decimal(18,2)) NOT NULL DEFAULT: ('0')
+
+الجدول: CMD_OF_FACTURE
+----------------------------------------
+عدد الأعمدة: 2
+  - FCTV_REF (nvarchar(32)) NOT NULL
+  - CMD_REF (nvarchar(32)) NOT NULL
+
+الجدول: CMD_VENTE
+----------------------------------------
+عدد الأعمدة: 22
+  - CMD_REF (nvarchar(32)) NOT NULL
+  - CLT_REF (nvarchar(32)) NOT NULL
+  - ETP_REF (nvarchar(32)) NOT NULL
+  - DVS_DATE (datetime) NOT NULL
+  - DVS_MONTANT_HT (decimal(18,2)) NOT NULL
+  - DVS_MONTANT_TTC (decimal(18,2)) NOT NULL
+  - DVS_REMISE (float(53)) NOT NULL
+  - DVS_DUREEVALIDE (int(10)) NOT NULL
+  - DVS_NUMERO (nvarchar(32)) NOT NULL
+  - DVS_VALIDE (bit) NULL
+  - DVS_TRANSFORME (bit) NULL
+  - DVS_EXONORE (bit) NULL
+  - DVS_UTILISATEUR (nvarchar(20)) NULL
+  - DVS_RMARQUE (nvarchar(200)) NULL
+  - TAB_REF (nvarchar(32)) NULL
+  - DVS_ETAT (nvarchar(255)) NULL
+  - DVS_NBR_COUVERT (float(53)) NULL
+  - DVS_SERVEUR (nvarchar(20)) NULL
+  - CSS_ID_CAISSE (nvarchar(32)) NULL
+  - NbrReclame (int(10)) NULL
+  - TAB_LIB (nvarchar(250)) NULL
+  - ImprimerNote (bit) NOT NULL DEFAULT: ('FALSE')
+
+الجدول: CMD_VENTE_DETAIL
+----------------------------------------
+عدد الأعمدة: 18
+  - CMD_REF (nvarchar(32)) NOT NULL
+  - ART_REF (nvarchar(32)) NOT NULL
+  - CVD_COILISAGE (float(53)) NOT NULL
+  - CVD_REMISE (float(53)) NOT NULL
+  - CVD_NBR_COLIS (float(53)) NOT NULL
+  - CVD_QTE (decimal(18,3)) NOT NULL
+  - CVD_PRIX_HT (decimal(18,2)) NOT NULL
+  - CVD_PRIX_TTC (decimal(18,2)) NOT NULL
+  - CVD_TVA (float(53)) NOT NULL
+  - CVD_QTE_GRATUITE (float(53)) NOT NULL
+  - CVD_COMMENTAIRE (nvarchar(-1)) NULL
+  - TRF_LIBELLE (nvarchar(200)) NULL
+  - CMD_ID (int(10)) NOT NULL
+  - ASUIVRE (int(10)) NULL
+  - IsMenu (bit) NOT NULL DEFAULT: ('False')
+  - NameMenu (nvarchar(255)) NULL DEFAULT: (' ')
+  - CVD_COMPOSITION (nvarchar(500)) NOT NULL DEFAULT: ('')
+  - CVD_PREPARER (bit) NOT NULL DEFAULT: ('False')
+
+الجدول: CMDACHAT_BLF
+----------------------------------------
+عدد الأعمدة: 2
+  - ACH_REF (nvarchar(32)) NOT NULL
+  - BLF_REF (nvarchar(32)) NOT NULL
+
+الجدول: CODE_BARRE
+----------------------------------------
+عدد الأعمدة: 2
+  - COD_CODEBARR (nvarchar(32)) NOT NULL
+  - ART_REF (nvarchar(32)) NOT NULL
+
+الجدول: CODE_SUPLEMENTAIRE
+----------------------------------------
+عدد الأعمدة: 2
+  - COD_CODESUP (nvarchar(32)) NOT NULL
+  - ART_REF (nvarchar(32)) NOT NULL
+
+الجدول: COMMANDE_ACHAT
+----------------------------------------
+عدد الأعمدة: 14
+  - ACH_REF (nvarchar(32)) NOT NULL
+  - FRS_REF (nvarchar(32)) NOT NULL
+  - ETP_REF (nvarchar(32)) NOT NULL
+  - ACH_NUMERO (nvarchar(15)) NULL
+  - ACH_REMISE (float(53)) NULL
+  - ACH_VALIDE (bit) NULL
+  - ACH_TRANSFORMER (bit) NULL
+  - ACH_DATELIV (datetime) NULL
+  - ACH_UTILISATEUR (nvarchar(10)) NULL
+  - ACH_DATEPLUSTARD (datetime) NULL
+  - ACH_MONTANT_HT (decimal(18,2)) NULL
+  - ACH_MONTANT_TTC (decimal(18,2)) NULL
+  - ACH_DATECOMMANDE (datetime) NULL
+  - ACH_REMARQUE (nvarchar(200)) NULL
+
+الجدول: COMMANDE_ACHAT_DETAIL
+----------------------------------------
+عدد الأعمدة: 10
+  - ART_REF (nvarchar(32)) NOT NULL
+  - ACH_REF (nvarchar(32)) NOT NULL
+  - CAD_COLISAGE (decimal(18,3)) NOT NULL
+  - CAD_REMISE (float(53)) NOT NULL
+  - CAD_QTE (decimal(18,3)) NOT NULL
+  - CAD_PRIXV_HT (decimal(18,2)) NOT NULL
+  - CAD_TVA (float(53)) NOT NULL
+  - CAD_PRIX_TTC (decimal(18,2)) NOT NULL
+  - CAD_QTE_GRATUIT (decimal(18,3)) NOT NULL
+  - CAD_NBR_COLIS (decimal(18,2)) NOT NULL
+
+الجدول: COMMENTAIRE_ARTICLE
+----------------------------------------
+عدد الأعمدة: 3
+  - CMA_REF (nvarchar(32)) NOT NULL
+  - ART_REF (nvarchar(32)) NOT NULL
+  - CMA_COMMANTAIRE (nvarchar(255)) NULL
+
+الجدول: COMMENTAIRE_CUISINE
+----------------------------------------
+عدد الأعمدة: 3
+  - CMC_COMMENATIRE_REF (nvarchar(32)) NOT NULL
+  - CMC_COMMENATIRE (nvarchar(200)) NULL
+  - CUI_REF (nvarchar(32)) NULL
+
+الجدول: COMPOSITION_ARTICLE
+----------------------------------------
+عدد الأعمدة: 4
+  - ART_COMPOSE (nvarchar(32)) NOT NULL
+  - ART_COMPOSANT (nvarchar(32)) NOT NULL
+  - QTE_COMPOSITION (float(53)) NOT NULL
+  - PrixVntTTC (float(53)) NULL
+
+الجدول: Comptage_Caisse
+----------------------------------------
+عدد الأعمدة: 29
+  - Comptage_Ref (nvarchar(32)) NOT NULL
+  - C200 (int(10)) NOT NULL DEFAULT: ('0')
+  - C100 (int(10)) NOT NULL DEFAULT: ('0')
+  - C50 (int(10)) NOT NULL DEFAULT: ('0')
+  - C20 (int(10)) NOT NULL DEFAULT: ('0')
+  - C10 (int(10)) NOT NULL DEFAULT: ('0')
+  - C5 (int(10)) NOT NULL DEFAULT: ('0')
+  - C2 (int(10)) NOT NULL DEFAULT: ('0')
+  - C1 (int(10)) NOT NULL DEFAULT: ('0')
+  - C050 (int(10)) NOT NULL DEFAULT: ('0')
+  - C020 (int(10)) NOT NULL DEFAULT: ('0')
+  - C010 (int(10)) NOT NULL DEFAULT: ('0')
+  - C005 (int(10)) NOT NULL DEFAULT: ('0')
+  - CCarte (decimal(18,2)) NOT NULL DEFAULT: ('0')
+  - CnbCarte (int(10)) NOT NULL DEFAULT: ('0')
+  - CCheque (decimal(18,2)) NOT NULL DEFAULT: ('0')
+  - CnbCheque (int(10)) NOT NULL DEFAULT: ('0')
+  - CBonAchat (decimal(18,2)) NOT NULL DEFAULT: ('0')
+  - CnbBonAchat (int(10)) NOT NULL DEFAULT: ('0')
+  - TEspece (decimal(18,2)) NOT NULL DEFAULT: ('0')
+  - TCarte (decimal(18,2)) NOT NULL DEFAULT: ('0')
+  - TCheque (decimal(18,2)) NOT NULL DEFAULT: ('0')
+  - TBonAchat (decimal(18,2)) NOT NULL DEFAULT: ('0')
+  - TCredit (decimal(18,2)) NOT NULL DEFAULT: ('0')
+  - FondCaisse (decimal(18,2)) NOT NULL DEFAULT: ('0')
+  - CAGlobale (decimal(18,2)) NOT NULL DEFAULT: ('0')
+  - TotalDepense (decimal(18,2)) NOT NULL DEFAULT: ('0')
+  - Remarque (nvarchar(255)) NOT NULL DEFAULT: ('0')
+  - DateComptage (datetime) NOT NULL
+
+الجدول: CONTACT
+----------------------------------------
+عدد الأعمدة: 8
+  - FRCTC_REF (nvarchar(32)) NOT NULL
+  - FRS_REF (nvarchar(32)) NOT NULL
+  - FRCTC_NOM (nvarchar(200)) NULL
+  - FRCTC_PRENOM (nvarchar(200)) NULL
+  - FRCTC_TEL (nvarchar(200)) NULL
+  - FRCTC_FONCTION (nvarchar(200)) NULL
+  - FRCTC_EMAIL (nvarchar(200)) NULL
+  - FRCTC_NOTE (nvarchar(200)) NULL
+
+الجدول: CUISINE
+----------------------------------------
+عدد الأعمدة: 3
+  - CUI_REF (nvarchar(32)) NOT NULL
+  - CUI_LIB (nvarchar(100)) NULL
+  - CUI_IMPRIMANTE (nvarchar(250)) NULL
+
+الجدول: DEMARQUE
+----------------------------------------
+عدد الأعمدة: 7
+  - DMQ_ID (nvarchar(32)) NOT NULL
+  - ART_REF (nvarchar(32)) NOT NULL
+  - MTF_DMK_REF (nvarchar(32)) NOT NULL
+  - DMQ_QUANTITE (float(53)) NULL
+  - DMQ_DATE (datetime) NOT NULL
+  - DMQ_USER (nvarchar(200)) NULL
+  - DMQ_COMMENTAIRE (nvarchar(255)) NOT NULL DEFAULT: (' ')
+
+الجدول: DEPENSE
+----------------------------------------
+عدد الأعمدة: 6
+  - DEP_REF (nvarchar(32)) NOT NULL
+  - DEP_DATE (datetime) NULL
+  - DEP_MONTANTHT (float(53)) NULL
+  - DEP_COMMENTAIRE (nvarchar(200)) NULL
+  - MTF_DPS_MOTIF (nvarchar(255)) NOT NULL
+  - CSS_ID_CAISSE (nvarchar(32)) NOT NULL
+
+الجدول: Det_Fedilite
+----------------------------------------
+عدد الأعمدة: 5
+  - DET_FED_REF (nvarchar(32)) NOT NULL
+  - FED_REF (nvarchar(32)) NOT NULL
+  - DET_FED_PT_CADEAU (int(10)) NOT NULL
+  - DET_FED_MNT_CADEAU (decimal(18,2)) NOT NULL
+  - DET_FED_ARRETE (bit) NOT NULL
+
+الجدول: DetailsReglement
+----------------------------------------
+عدد الأعمدة: 5
+  - REG_REF (nvarchar(32)) NOT NULL
+  - FCTV_REF (nvarchar(32)) NOT NULL
+  - MontantTotal (decimal(18,2)) NOT NULL
+  - MontantRegle (decimal(18,2)) NOT NULL
+  - Reste (decimal(18,2)) NOT NULL
+
+الجدول: ENTREPOT
+----------------------------------------
+عدد الأعمدة: 9
+  - ETP_REF (nvarchar(32)) NOT NULL
+  - ETP_LIBELLE (nvarchar(255)) NULL
+  - ETP_PAYS (nvarchar(255)) NULL
+  - ETP_VILLE (nvarchar(200)) NULL
+  - ETP_ADRESS (nvarchar(300)) NULL
+  - ETP_TELEPHONE (nvarchar(100)) NULL
+  - ETP_EMAIL (nvarchar(200)) NULL
+  - ETP_DESCRIPTION (nvarchar(200)) NULL
+  - TRF_LIBELLE (nvarchar(200)) NULL
+
+الجدول: ETAT_TABLE
+----------------------------------------
+عدد الأعمدة: 2
+  - ETT_ETAT (nvarchar(32)) NOT NULL
+  - ETT_STYLE (image(2147483647)) NULL
+
+الجدول: FACTURE_FOURNISSEUR
+----------------------------------------
+عدد الأعمدة: 15
+  - FCF_REF (nvarchar(32)) NOT NULL
+  - FRS_REF (nvarchar(32)) NOT NULL
+  - ETP_REF (nvarchar(32)) NOT NULL
+  - FCF_NUMERO (nvarchar(15)) NOT NULL
+  - FCF_MONTANT_HT_ (decimal(18,2)) NOT NULL
+  - FCF_MONTANT_TTC (decimal(18,2)) NOT NULL
+  - FCF_DATE (datetime) NOT NULL
+  - FCF_UTILISATEUR (nvarchar(10)) NULL
+  - FCF_REMISE_GLOBAL (float(53)) NOT NULL
+  - FCF_VALIDE (bit) NOT NULL
+  - FCF_EXONORE (bit) NULL
+  - FCF_REMARQUE (nvarchar(200)) NULL
+  - FCT_MODEPAIMENT (nvarchar(200)) NULL
+  - FCT_MNT_TOTAL (decimal(18,2)) NOT NULL
+  - FCT_MNT_RGL (decimal(18,2)) NOT NULL
+
+الجدول: FACTURE_FRS_DETAIL
+----------------------------------------
+عدد الأعمدة: 11
+  - ART_REF (nvarchar(32)) NOT NULL
+  - FCF_REF (nvarchar(32)) NOT NULL
+  - FCF_QTE (decimal(18,3)) NOT NULL
+  - FCF_REMISE (float(53)) NOT NULL
+  - FCF_PRIX_HT (decimal(18,2)) NOT NULL
+  - FCF_PRIX_TTC (decimal(18,2)) NOT NULL
+  - FCF_TVA (float(53)) NOT NULL
+  - FCF_COLISAGE (float(53)) NOT NULL
+  - _FCF_NBR_COLIS (float(53)) NOT NULL
+  - FCF_NBR_GRATUITE (float(53)) NOT NULL
+  - FCF_NUMBL (nvarchar(30)) NOT NULL
+
+الجدول: FACTURE_VNT
+----------------------------------------
+عدد الأعمدة: 28
+  - FCTV_REF (nvarchar(32)) NOT NULL
+  - ETP_REF (nvarchar(32)) NOT NULL
+  - CLT_REF (nvarchar(32)) NOT NULL
+  - FCTV_NUMERO (nvarchar(15)) NULL
+  - FCTV_REMISE (float(53)) NULL
+  - FCTV_EXONORE (bit) NULL
+  - FCTV_VALIDE (bit) NULL
+  - FCTV_UTILISATEUR (nvarchar(10)) NULL
+  - FCTV_MNT_HT (decimal(18,2)) NULL
+  - FCTV_MNT_TTC (decimal(18,2)) NULL
+  - FCTV_DATE (datetime) NULL
+  - FCTV_REMARQUE (nvarchar(200)) NULL
+  - FCTV_MODEPAIEMENT (nvarchar(200)) NULL
+  - FCT_MNT_TOTAL (decimal(18,2)) NOT NULL
+  - FCT_MNT_RGL (decimal(18,2)) NOT NULL
+  - TAB_REF (nvarchar(32)) NULL
+  - FCTV_SERVEUR (nvarchar(20)) NULL
+  - CSS_ID_CAISSE (nvarchar(32)) NULL
+  - MontantCharte (decimal(18,2)) NOT NULL DEFAULT: ('0')
+  - MontantEspece (decimal(18,2)) NOT NULL DEFAULT: ('0')
+  - MontantCredit (decimal(18,2)) NOT NULL DEFAULT: ('0')
+  - MontantTicketR (decimal(18,2)) NOT NULL DEFAULT: ('0')
+  - MontantCheque (decimal(18,2)) NOT NULL DEFAULT: ('0')
+  - FCTV_RENDU (decimal(18,2)) NULL DEFAULT: ('0')
+  - FCTV_ETAT (bit) NOT NULL DEFAULT: ('FALSE')
+  - FCTV_RESPANNUL_TICK (nvarchar(20)) NULL
+  - MontantBonAchat (decimal(18,2)) NOT NULL DEFAULT: ('0')
+  - DTMB (decimal(18,2)) NOT NULL DEFAULT: ('0')
+
+الجدول: FACTURE_VNT_DETAIL
+----------------------------------------
+عدد الأعمدة: 15
+  - FCTV_REF (nvarchar(32)) NOT NULL
+  - ART_REF (nvarchar(32)) NOT NULL
+  - FVD_COLISAGE (float(53)) NOT NULL
+  - FVD_REMISE (float(53)) NOT NULL
+  - FVD_NBR_COLIS (float(53)) NOT NULL
+  - FVD_PRIX_VNT_HT (decimal(18,2)) NOT NULL
+  - FVD_PRIX_VNT_TTC (decimal(18,2)) NOT NULL
+  - FVD_TVA (float(53)) NOT NULL
+  - FVD_NBR__GRATUITE (float(53)) NOT NULL
+  - FVD_QTE (decimal(18,3)) NULL
+  - FVD_NUMBL (nvarchar(30)) NOT NULL
+  - TRF_LIBELLE (nvarchar(200)) NULL
+  - FVD_ID (int(10)) NOT NULL
+  - IsMenu (bit) NOT NULL DEFAULT: ('False')
+  - NameMenu (nvarchar(255)) NOT NULL DEFAULT: (' ')
+
+الجدول: FAMILLE
+----------------------------------------
+عدد الأعمدة: 3
+  - FAM_REF (nvarchar(32)) NOT NULL
+  - FAM_LIB (nvarchar(255)) NOT NULL
+  - FAM_ORDRE_AFFICHAGE (int(10)) NOT NULL DEFAULT: ('999')
+
+الجدول: Fedilite
+----------------------------------------
+عدد الأعمدة: 6
+  - FED_REF (nvarchar(32)) NOT NULL
+  - ETP_REF (nvarchar(32)) NOT NULL
+  - FED_DATEDEBUT (datetime) NOT NULL
+  - FED_DATEFIN (datetime) NOT NULL
+  - FED_MNT_PT (decimal(18,2)) NOT NULL
+  - FED_Arrete (bit) NOT NULL DEFAULT: ('False')
+
+الجدول: FONDDECAISSE
+----------------------------------------
+عدد الأعمدة: 4
+  - id (int(10)) NOT NULL
+  - FondCaisse (decimal(18,2)) NOT NULL DEFAULT: ('0')
+  - DateFondcaisse (datetime) NOT NULL
+  - Numcaisse (nvarchar(50)) NOT NULL
+
+الجدول: FOURNISSEUR
+----------------------------------------
+عدد الأعمدة: 24
+  - FRS_REF (nvarchar(32)) NOT NULL
+  - FRS_RAISONSOCIAL (nvarchar(250)) NULL
+  - FRS_COMPT_COMPTA (nvarchar(250)) NULL
+  - FRS_PAYS (nvarchar(250)) NULL
+  - FRS_VILLE (nvarchar(250)) NULL
+  - FRS_ADRESS (nvarchar(250)) NULL
+  - FRS_WEBSITE (nvarchar(250)) NULL
+  - FRS_CODEPOSTAL (int(10)) NULL
+  - FRS_TEL (nvarchar(250)) NULL
+  - FRS_FAX (nvarchar(250)) NULL
+  - FRS_EMAIL (nvarchar(250)) NULL
+  - FRS_BLOQUE (bit) NULL
+  - FRS_PEUTLIVR_SSBC (bit) NULL
+  - FRS_RC (nvarchar(250)) NULL
+  - FRS_IF (nvarchar(250)) NULL
+  - FRS_CNSS (nvarchar(250)) NULL
+  - FRS_PATENTE (nvarchar(250)) NULL
+  - FRS_NUMCOMPTB (nvarchar(200)) NULL
+  - FRS_AGENCEB (nvarchar(200)) NULL
+  - FRS_BANQUE (nvarchar(200)) NULL
+  - FRS_DELAIPAIE (int(10)) NULL
+  - FRS_CALCULDELAI (nvarchar(3)) NULL
+  - FRS_DESCRIPTION (nvarchar(200)) NULL
+  - FRS_REPRESENTANT (nvarchar(200)) NULL
+
+الجدول: FOURNISSEUR_OF_ARTICLE
+----------------------------------------
+عدد الأعمدة: 5
+  - FRS_REF (nvarchar(32)) NOT NULL
+  - ART_REF (nvarchar(32)) NOT NULL
+  - PRIX_ACHAT (decimal(18,2)) NULL
+  - FR_ART_REFERENCE (nvarchar(100)) NULL
+  - FR_ART_REMISE (float(53)) NULL
+
+الجدول: HISTORIQUE_ANNULATION
+----------------------------------------
+عدد الأعمدة: 13
+  - HA_REF (nvarchar(32)) NOT NULL
+  - CMD_REF (nvarchar(32)) NOT NULL
+  - ART_REF (nvarchar(32)) NOT NULL
+  - HA_REMISE (float(53)) NOT NULL
+  - HA_QTE (decimal(18,3)) NOT NULL
+  - HA_PRIX_HT (decimal(18,2)) NOT NULL
+  - HA_PRIX_TTC (decimal(18,2)) NOT NULL
+  - HA_TVA (float(53)) NOT NULL
+  - HA_EXPORT (bit) NOT NULL
+  - HA_UTILISATEUR (nvarchar(10)) NULL
+  - HA_RESPANNUL_TICK (nvarchar(20)) NULL
+  - FCTV_DATE (datetime) NULL
+  - CODE_CLT (nvarchar(32)) NOT NULL DEFAULT: ('0000000')
+
+الجدول: IGR_OF_ARTICLE
+----------------------------------------
+عدد الأعمدة: 4
+  - ART_REF (nvarchar(32)) NOT NULL
+  - IGR_REF (nvarchar(32)) NOT NULL
+  - QTE (decimal(18,3)) NOT NULL
+  - ART_COUT_ACHAT (decimal(18,2)) NOT NULL
+
+الجدول: IMPR_OF_CUSIN
+----------------------------------------
+عدد الأعمدة: 2
+  - IMP_REF (nvarchar(32)) NOT NULL
+  - CUI_REF (nvarchar(32)) NOT NULL
+
+الجدول: IMPRESSION_LIGNES
+----------------------------------------
+عدد الأعمدة: 8
+  - Id_session (int(10)) NULL
+  - CMD_REF (nvarchar(32)) NULL
+  - Qte (float(53)) NULL
+  - ART_REF (nvarchar(32)) NULL
+  - Commentaire (nvarchar(-1)) NULL
+  - Printed (bit) NULL
+  - Remarque (varchar(100)) NULL
+  - Asuivre (int(10)) NULL
+
+الجدول: IMPRESSION_SESSION
+----------------------------------------
+عدد الأعمدة: 5
+  - Id_session (int(10)) NOT NULL
+  - Date_session (datetime) NULL
+  - CMD_REF (nvarchar(-1)) NULL
+  - Remarque (varchar(50)) NULL
+  - Etat (varchar(50)) NULL
+
+الجدول: IMPRIMANTE
+----------------------------------------
+عدد الأعمدة: 8
+  - IMP_REF (nvarchar(32)) NOT NULL
+  - IMP_LIB (nvarchar(250)) NULL
+  - IMP_PORT (nvarchar(10)) NULL
+  - IMP_CHEMIN_LOCAL (nvarchar(250)) NULL
+  - IMP_CHEMEIN_RESEAU (nvarchar(250)) NULL
+  - IMP_BAUDS (int(10)) NULL
+  - IMP_MODE_CONNEXION (nvarchar(200)) NULL
+  - IMP_TYPE_CONNEXION (nvarchar(250)) NULL
+
+الجدول: INFORMATION_CARTE
+----------------------------------------
+عدد الأعمدة: 9
+  - INCR_REF (nvarchar(32)) NOT NULL
+  - FCTV_REF (nvarchar(32)) NOT NULL
+  - INCR_CIN (nvarchar(32)) NULL
+  - INCR_NOM (nvarchar(32)) NULL
+  - INCR_BANQUE (nvarchar(32)) NULL
+  - INCR_TYPE_CARTE (nvarchar(40)) NULL
+  - INCR_NUMERO_TRANSACTION (nvarchar(40)) NULL
+  - INCR_MNT (decimal(18,3)) NULL
+  - INCR_DATE_VENTE (datetime) NOT NULL DEFAULT: ('01-01-2001')
+
+الجدول: INFORMATION_CHEQUE
+----------------------------------------
+عدد الأعمدة: 10
+  - INC_REF (nvarchar(32)) NOT NULL
+  - FCTV_REF (nvarchar(32)) NOT NULL
+  - INC_CIN (nvarchar(32)) NULL
+  - INC_NOM (nvarchar(32)) NULL
+  - INC_TEL (nvarchar(32)) NULL
+  - INC_MNT (decimal(18,3)) NULL
+  - INC_N_CHEQUE (nvarchar(40)) NULL
+  - INC_BANQUE (nvarchar(32)) NULL
+  - INC_D_ECHEANCE (date) NOT NULL
+  - INC_D_VENTE (datetime) NOT NULL DEFAULT: ('01-01-2001')
+
+الجدول: INVENTAIRE
+----------------------------------------
+عدد الأعمدة: 8
+  - INV_REF (nvarchar(32)) NOT NULL
+  - ETP_REF (nvarchar(32)) NOT NULL
+  - INV_DATECREATION (datetime) NULL
+  - INV_DATAVALIDATION (datetime) NULL
+  - INV_VALIDE (bit) NULL
+  - INV_VALORISATION (nvarchar(20)) NULL
+  - INV_UTILISATEUR (nvarchar(10)) NULL
+  - INV_TYPE (nvarchar(20)) NULL
+
+الجدول: INVENTAIRE_DETAIL
+----------------------------------------
+عدد الأعمدة: 6
+  - ART_REF (nvarchar(32)) NOT NULL
+  - INV_REF (nvarchar(32)) NOT NULL
+  - INV_QTEREEL (float(53)) NOT NULL
+  - INV_QTETHEORIQUE (float(53)) NOT NULL
+  - INV_ECART (float(53)) NOT NULL
+  - INV_ARTPRIX (float(53)) NOT NULL
+
+الجدول: Licence
+----------------------------------------
+عدد الأعمدة: 3
+  - Id (int(10)) NOT NULL
+  - LicenseKey (nvarchar(-1)) NOT NULL
+  - LicenceId (nvarchar(50)) NOT NULL
+
+الجدول: LIVREUR
+----------------------------------------
+عدد الأعمدة: 11
+  - LIV_ID (nvarchar(32)) NOT NULL
+  - LIV_NOM (nvarchar(50)) NOT NULL
+  - LIV_PRENOM (nvarchar(50)) NOT NULL
+  - LIV_TELEPHONE (nvarchar(50)) NOT NULL
+  - LIV_PASS (nvarchar(50)) NOT NULL
+  - LIV_CIN (nvarchar(50)) NOT NULL
+  - LIV_LOGIN (nvarchar(50)) NOT NULL
+  - LIV_ADRESSE (nvarchar(50)) NOT NULL
+  - LIV_CNSS (nvarchar(50)) NOT NULL
+  - LIV_ETAT (nvarchar(50)) NOT NULL
+  - LIV_IMAGE (image(2147483647)) NULL
+
+الجدول: MENU
+----------------------------------------
+عدد الأعمدة: 5
+  - ART_COMPOSE (nvarchar(32)) NOT NULL
+  - ART_COMPOSANT (nvarchar(32)) NOT NULL
+  - QTE_COMPOSITION (float(53)) NOT NULL
+  - PrixVntTTC (float(53)) NULL
+  - MNU_NIVEAU (nvarchar(255)) NOT NULL
+
+الجدول: MODEPAIMENT
+----------------------------------------
+عدد الأعمدة: 2
+  - MPY_REF (nvarchar(10)) NOT NULL
+  - MPY_LIB (nvarchar(200)) NULL
+
+الجدول: MOTIF_DEMARQUE
+----------------------------------------
+عدد الأعمدة: 2
+  - MTF_DMK_REF (nvarchar(32)) NOT NULL
+  - MTF_DMK_MOTIF (nvarchar(250)) NULL
+
+الجدول: MOTIF_DEPENSE
+----------------------------------------
+عدد الأعمدة: 1
+  - MTF_DPS_MOTIF (nvarchar(255)) NOT NULL
+
+الجدول: MOUVEMENT
+----------------------------------------
+عدد الأعمدة: 6
+  - MVM_REF (nvarchar(32)) NOT NULL
+  - MVM_NUMERO (nvarchar(32)) NOT NULL
+  - MVM_DATE (date) NOT NULL
+  - ETP_REF_ENTREE (nvarchar(32)) NOT NULL
+  - ETP_REF_SORTIE (nvarchar(32)) NOT NULL
+  - MVM_valide (bit) NOT NULL
+
+الجدول: MOUVEMENT_DETAIL
+----------------------------------------
+عدد الأعمدة: 3
+  - MVM_REF (nvarchar(32)) NOT NULL
+  - ART_REF (nvarchar(32)) NOT NULL
+  - MVD_QTE (decimal(18,2)) NOT NULL
+
+الجدول: OCCUPE
+----------------------------------------
+عدد الأعمدة: 2
+  - RES_REF (nvarchar(32)) NOT NULL
+  - TAB_REF (nvarchar(32)) NOT NULL
+
+الجدول: PARAMETRECAISSE
+----------------------------------------
+عدد الأعمدة: 58
+  - NumCaisse (nvarchar(50)) NOT NULL
+  - Enteteticket1 (nvarchar(100)) NOT NULL
+  - Enteteticket2 (nvarchar(100)) NOT NULL
+  - Npattente (nvarchar(100)) NOT NULL
+  - RC (nvarchar(100)) NOT NULL
+  - IFE (nvarchar(100)) NOT NULL
+  - Adresse (nvarchar(100)) NOT NULL
+  - PiedPage (nvarchar(100)) NOT NULL
+  - GTable (bit) NOT NULL
+  - GServeur (bit) NOT NULL
+  - Ouverturetiroir (bit) NOT NULL
+  - ImprimerNote (bit) NOT NULL
+  - ImprimerCuisine (bit) NOT NULL
+  - ImprimerTicket (bit) NOT NULL
+  - ImprimanteTicket (nvarchar(100)) NOT NULL
+  - RenitialiserTicket (bit) NOT NULL
+  - ActiverAffich (bit) NOT NULL
+  - ComAfficheur (nvarchar(50)) NOT NULL
+  - RenitialiserNumCmd (bit) NOT NULL
+  - NumEntrepot (nvarchar(100)) NULL
+  - MSGAFFICHEUR (nvarchar(255)) NOT NULL DEFAULT: ('**WELCOME TO**')
+  - MSGAFFICHEUR2 (nvarchar(255)) NULL
+  - BAUDRATEAFFICHEUR (nvarchar(50)) NULL
+  - OptionRamadan (bit) NOT NULL DEFAULT: ('false')
+  - Imp_Expr (bit) NOT NULL DEFAULT: ('False')
+  - SourceChemin (nvarchar(255)) NOT NULL DEFAULT: ('')
+  - LocalChemin (nvarchar(255)) NOT NULL DEFAULT: ('')
+  - ArchiveChemin (nvarchar(255)) NOT NULL DEFAULT: ('')
+  - cloturer_journee_continu (bit) NOT NULL DEFAULT: ('false')
+  - Choix_Tva (bit) NOT NULL DEFAULT: ('True')
+  - Choix_Credit (bit) NOT NULL DEFAULT: ('false')
+  - Imp_Expr_Pda (bit) NOT NULL DEFAULT: ('false')
+  - SourceCheminPda (nvarchar(255)) NOT NULL DEFAULT: ('')
+  - option_table_par_clavier (bit) NOT NULL DEFAULT: ('false')
+  - option_Voir_Numticket (bit) NOT NULL DEFAULT: ('false')
+  - CF (nvarchar(10)) NOT NULL DEFAULT: ('CF')
+  - Telephone (nvarchar(100)) NOT NULL DEFAULT: ('')
+  - ImporterTout (bit) NOT NULL DEFAULT: ('TRUE')
+  - PiedPage2 (nvarchar(100)) NOT NULL DEFAULT: ('')
+  - Tarif (nvarchar(10)) NOT NULL DEFAULT: ('Sur place')
+  - option_imprimer_cmdCompler (bit) NOT NULL DEFAULT: ('false')
+  - NbrTicketEncaiss (int(10)) NOT NULL DEFAULT: ('1')
+  - ImprimanteRecapCuisine (nvarchar(50)) NOT NULL DEFAULT: (' ')
+  - Nbr_Imp_Cuisine (int(10)) NOT NULL DEFAULT: ('1')
+  - ImprimerRecapCuisine (bit) NOT NULL DEFAULT: ('False')
+  - FamilleNonImprime (nvarchar(50)) NOT NULL DEFAULT: ('')
+  - ICE (nvarchar(50)) NOT NULL DEFAULT: ('')
+  - RFID (bit) NOT NULL DEFAULT: ('FALSE')
+  - BAUDRFID (int(10)) NOT NULL DEFAULT: ('9600')
+  - COMRFID (nvarchar(50)) NOT NULL DEFAULT: ('')
+  - GestionFedilite (bit) NOT NULL DEFAULT: ('False')
+  - GestionPlanSalle (bit) NOT NULL DEFAULT: ('False')
+  - ImprimerTencaissemetavecTcuisine (bit) NOT NULL DEFAULT: ('False')
+  - ExportFileTxtOrDbf (bit) NOT NULL DEFAULT: ('false')
+  - NbrCouvert (bit) NOT NULL DEFAULT: ('false')
+  - ImprimerNoteSE (bit) NOT NULL DEFAULT: ('false')
+  - Tauxdroittimbre (decimal(18,2)) NOT NULL DEFAULT: ('0')
+  - Droittimbre (bit) NOT NULL DEFAULT: ('false')
+
+الجدول: PARAMETRES
+----------------------------------------
+عدد الأعمدة: 2
+  - CHAMP (nvarchar(250)) NOT NULL
+  - VALEUR (nvarchar(250)) NOT NULL
+
+الجدول: PARAMETRES_BALANCE
+----------------------------------------
+عدد الأعمدة: 10
+  - NUMCAISSE (nvarchar(50)) NOT NULL
+  - REPERE_CODE_BALANCE (nvarchar(250)) NOT NULL
+  - LONGEUR_CODEBARRE (nvarchar(250)) NOT NULL
+  - CODEBARRE_PRIX (bit) NOT NULL
+  - LGPARTIE_ENTIERE (nvarchar(250)) NOT NULL
+  - LGPARTIE_DECIMAL (nvarchar(250)) NOT NULL
+  - CDART_POSITION (nvarchar(250)) NOT NULL
+  - CDART_LONGEUR (nvarchar(250)) NOT NULL
+  - LGPARTIE_POSITION (nvarchar(250)) NOT NULL
+  - CODEBARRE_POIDS (bit) NOT NULL
+
+الجدول: PERIODE_TRAVAIL
+----------------------------------------
+عدد الأعمدة: 10
+  - PER_TRV_REF (nvarchar(32)) NOT NULL
+  - PER_TRV_DATE (datetime) NOT NULL
+  - PER_TRV_UTILISATEUR (nvarchar(100)) NOT NULL
+  - PER_TRV_FOND_CAISSE (float(53)) NOT NULL
+  - PER_TRV_CLOTURER (bit) NOT NULL
+  - PER_TRV_DATE_CLOTURE (datetime) NOT NULL
+  - PER_TRV_RECETTE_TOTAL (float(53)) NOT NULL
+  - PER_TRV_MONTANT_CAISSE (float(53)) NOT NULL
+  - CSS_ID_CAISSE (nvarchar(32)) NOT NULL
+  - PER_TRV_SORTIE (float(53)) NULL
+
+الجدول: PERIODE_TRAVAIL_JOUR
+----------------------------------------
+عدد الأعمدة: 9
+  - PER_TRV_JR_REF (nvarchar(32)) NOT NULL
+  - PER_TRV_JR_UTILISATEUR (nvarchar(100)) NOT NULL
+  - PER_TRV_JR_FOND_CAISSE (float(53)) NOT NULL
+  - PER_TRV_JR_CLOTURER (bit) NOT NULL
+  - PER_TRV_JR_DATE_CLOTURE (datetime) NOT NULL
+  - PER_TRV_JR_RECETTE_TOTAL (float(53)) NOT NULL
+  - PER_TRV_JR_MONTANT_CAISSE (float(53)) NOT NULL
+  - PER_TRV_JR_SORTIE (float(53)) NOT NULL
+  - CSS_ID_CAISSE (nvarchar(32)) NOT NULL
+
+الجدول: PREPARATION
+----------------------------------------
+عدد الأعمدة: 6
+  - PRE_REF (nvarchar(32)) NOT NULL
+  - ETP_REF (nvarchar(32)) NOT NULL
+  - USR_REF (nvarchar(32)) NOT NULL
+  - PRE_DATE (datetime) NOT NULL
+  - PRE_REMARQUE (nvarchar(255)) NOT NULL
+  - PRE_IsValide (nvarchar(255)) NOT NULL
+
+الجدول: PREPARATION_DETAIL
+----------------------------------------
+عدد الأعمدة: 5
+  - PRE_REF (nvarchar(32)) NOT NULL
+  - ART_REF (nvarchar(32)) NOT NULL
+  - QTE (decimal(18,2)) NOT NULL DEFAULT: ('0')
+  - CoutAchatHT (decimal(18,2)) NOT NULL DEFAULT: ('0')
+  - MntHT (decimal(18,2)) NOT NULL DEFAULT: ('0')
+
+الجدول: PROFIL
+----------------------------------------
+عدد الأعمدة: 3
+  - PR_REF (nvarchar(32)) NOT NULL
+  - PR_NOM (nvarchar(200)) NULL
+  - PR_ROLE (image(2147483647)) NULL
+
+الجدول: REGLEMENT
+----------------------------------------
+عدد الأعمدة: 6
+  - REG_REF (nvarchar(32)) NOT NULL
+  - CLT_REF (nvarchar(32)) NOT NULL
+  - TYPE_REGLEMENT (nvarchar(200)) NOT NULL
+  - REG_DATE (datetime) NULL
+  - REG_MONTANT (money(19,4)) NULL
+  - REG_REMARQUE (nvarchar(255)) NULL
+
+الجدول: RESERVATION
+----------------------------------------
+عدد الأعمدة: 7
+  - RES_REF (nvarchar(32)) NOT NULL
+  - CLT_REF (nvarchar(32)) NOT NULL
+  - NUMERO_RESERVATION (nvarchar(32)) NOT NULL
+  - NBRCOUVERT_TABLE (int(10)) NOT NULL
+  - DATE_RESERVATION (datetime) NOT NULL
+  - ETAT_RESERVATION (nvarchar(150)) NOT NULL
+  - DELAI_RESERVATION (int(10)) NOT NULL
+
+الجدول: ROLE
+----------------------------------------
+عدد الأعمدة: 174
+  - LIBELLE_ROLE (nvarchar(200)) NOT NULL
+  - BS_GS_DROITS_ACCES (bit) NULL
+  - BS_GS_SOCIETE (bit) NULL
+  - BS_GS_MOTIFS_ENTREES (bit) NULL
+  - BS_GS_MOTIFS_SORTIES (bit) NULL
+  - BS_GS_CLIENTS (bit) NULL
+  - BS_GS_CONSULT_CLIENTS (bit) NULL
+  - BS_GS_ARTICLES (bit) NULL
+  - BS_GS_CONSULT_ARTICLES (bit) NULL
+  - BS_GS_FOURNISSEURS (bit) NULL
+  - BS_GS_CONSULT_FOURNISSEURS (bit) NULL
+  - BS_GS_ART_TVA (bit) NULL
+  - BS_GS_ART_FAMILLES (bit) NULL
+  - BS_GS_ART_SOUS_FAMILLES (bit) NULL
+  - BS_GS_ART_IMPRIMER_CODEB (bit) NULL
+  - A_CMD_COMMANDES (bit) NULL
+  - A_CMD_CREATIONCMD (bit) NULL
+  - A_CMD_MODIF_PRIXART (bit) NULL
+  - A_CMD_MODIF_DESIGNATIONART (bit) NULL
+  - A_CMD_AFFECTATION_REMISE (bit) NULL
+  - A_CMD_VALIDATION_CMD (bit) NULL
+  - A_CMD_SUPPRESSION_CMD (bit) NULL
+  - A_CMD_SUPP_CMD_VALIDEE (bit) NULL
+  - A_CMD_DUPLICATION_CMD (bit) NULL
+  - A_CMD_IMPRESSION_CMD (bit) NULL
+  - A_CMD_TARNS_CMD_BL (bit) NULL
+  - A_RECEP_LIVRAISON (bit) NULL
+  - A_RECEP_CREATION_LIVRAISON (bit) NULL
+  - A_RECEP_MODIF_PRIXART (bit) NULL
+  - A_RECEP_MODIF_DESIGNATIONART (bit) NULL
+  - A_RECEP_AFFECTATION_REMISE (bit) NULL
+  - A_RECEP_VALIDATION_LIVRAISON (bit) NULL
+  - A_RECEP_SUPP_LIVRAISON (bit) NULL
+  - A_RECEP_SUPP_LIVRAISON_VALIDEE (bit) NULL
+  - A_RECEP_DUPLICATION_LIVRAISON (bit) NULL
+  - A_RECEP_TRANSF_LIVFACT (bit) NULL
+  - A_FACT_FACTURES (bit) NULL
+  - A_FACT_CREATION_FACTURES (bit) NULL
+  - A_FACT_MODIF_PRIXART (bit) NULL
+  - A_FACT_MODIF_DESIGNATIONART (bit) NULL
+  - A_FACT_AFFECTATION_REMISE (bit) NULL
+  - A_FACT_VALIDATION_FACTURE (bit) NULL
+  - A_FACT_SUPP_FACTURE (bit) NULL
+  - A_FACT_SUPP_FACTURE_VALIDEE (bit) NULL
+  - A_FACT_DUPLICATION_FACTURE (bit) NULL
+  - A_FACT_IMPR_FACTURE (bit) NULL
+  - A_FACT_COPIER_AVOIR (bit) NULL
+  - A_RET_RETOURS (bit) NULL
+  - A_RET_CREATION_RETOURS (bit) NULL
+  - A_RET_MODIF_PRIXART (bit) NULL
+  - A_RET_MODIF_DESIGNATIONART (bit) NULL
+  - A_RET_VALIDATION_RETOURS (bit) NULL
+  - A_RET_SUPP_RETOURS (bit) NULL
+  - A_RET_SUPP_RETOURS_VALIDEE (bit) NULL
+  - A_RET_DUPLICATION_RETOURS (bit) NULL
+  - A_RET_IMP_RETOURS (bit) NULL
+  - A_RET_TRANSRET_EN_AVOIR (bit) NULL
+  - A_AVR_AVOIRS (bit) NULL
+  - A_AVR_CREATION_AVOIRS (bit) NULL
+  - A_AVR_MODIF_PRIXART (bit) NULL
+  - A_AVR_DESIGNATIONART (bit) NULL
+  - A_AVR_AFFECT_REMISE (bit) NULL
+  - A_AVR_VALIDATION_AVOIR (bit) NULL
+  - A_AVR_SUPP_AVOIR (bit) NULL
+  - A_AVR_SUPP_AVOIR_VALIDEE (bit) NULL
+  - A_AVR_DUPLICATION_AVOIR (bit) NULL
+  - A_AVR_IMP_AVOIR (bit) NULL
+  - A_REG_CREATION_REGLEMENT (bit) NULL
+  - A_REG_AJ_FACT_SSDETAIL (bit) NULL
+  - A_REG_SUPP_REGL (bit) NULL
+  - A_REG_LISTES_REGL (bit) NULL
+  - A_REG_RELEVE_FACT (bit) NULL
+  - A_REG_RELEVE_COMPTE (bit) NULL
+  - A_REG_LST_REGL_FOUR (bit) NULL
+  - A_REG_LST_FACT_FOUR (bit) NULL
+  - A_REG_LST_AVOIR_FOUR (bit) NULL
+  - V_DEV_DEVIS (bit) NULL
+  - V_DEV_CREATION_DEV (bit) NULL
+  - V_DEV_MODIF_PRIXART (bit) NULL
+  - V_DEV_MODIF_DESIGNATIONART (bit) NULL
+  - V_DEV_AFFECT_REMISE (bit) NULL
+  - V_DEV_VALID_DEV (bit) NULL
+  - V_DEV_SUPP_DEV (bit) NULL
+  - V_DEV_SUPP_DEV_VALIDEE (bit) NULL
+  - V_DEV_DUPLICATION_DEV (bit) NULL
+  - V_DEV_IMP_DEV (bit) NULL
+  - V_DEV_TRANSF_DEV_BL (bit) NULL
+  - V_LIV_LIVRAISONS (bit) NULL
+  - V_LIV_CREATION_LIV (bit) NULL
+  - V_LIV_MODIF_PRIXART (bit) NULL
+  - V_LIV_MODIF_DESIGNATIONART (bit) NULL
+  - V_LIV_AFFECT_REMISE (bit) NULL
+  - V_LIV_VALID_LIV (bit) NULL
+  - V_LIV_SUPP_LIV (bit) NULL
+  - V_LIV_SUPP_LIV_VALIDEE (bit) NULL
+  - V_LIV_DUPLICATION_LIV (bit) NULL
+  - V_LIV_IMP_LIV (bit) NULL
+  - V_LIV_TRANSF_LIV_FACT (bit) NULL
+  - V_FACT_FACTURES (bit) NULL
+  - V_FACT_CREATION_FACT (bit) NULL
+  - V_FACT_MODIF_PRIXART (bit) NULL
+  - V_FACT_MODIF_DESIGNATIONART (bit) NULL
+  - V_FACT_AFFECT_REMISE (bit) NULL
+  - V_FACT_VALID_FACTURE (bit) NULL
+  - V_FACT_SUPP_FACTURE (bit) NULL
+  - V_FACT_SUPP_FACT_VALIDEE (bit) NULL
+  - V_FACT_DUPLICATION_FACT (bit) NULL
+  - V_FACT_IMP_FACT (bit) NULL
+  - V_FACT_COPIER_AVOIR (bit) NULL
+  - V_AV_AVOIRS (bit) NULL
+  - V_AV_CREATION_AVOIRS (bit) NULL
+  - V_AV_MODIF_PRIXART (bit) NULL
+  - V_AV_MODIF_DESINATIONART (bit) NULL
+  - V_AV_AFFECTATION_REMISE (bit) NULL
+  - V_AV_VALID_AVOIR (bit) NULL
+  - V_AV_SUPP_AVOIR (bit) NULL
+  - V_AV_SUPP_AVOIR_VALIDEE (bit) NULL
+  - V_AV_DUPLICATION_AVOIR (bit) NULL
+  - V_AV_IMP_AVOIR (bit) NULL
+  - V_ENC_CREATION_ENC (bit) NULL
+  - V_ENC_AJT_FACT_SS_DET (bit) NULL
+  - V_ENC_SUPP_ENC (bit) NULL
+  - V_ENC_LST_ENC (bit) NULL
+  - V_ENC_RELEV_FACT (bit) NULL
+  - V_ENC_RELEV_COMPTE (bit) NULL
+  - V_ENC_LST_ENC_CLT (bit) NULL
+  - V_ENC_LST_FACT_CLT (bit) NULL
+  - V_ENC_AVR_CLT (bit) NULL
+  - CAIS_REMISE_CHANG_PRIX_OFFERT (bit) NULL
+  - CAIS_ANNUL_ART_TICKET_ENCOURS (bit) NULL
+  - CAIS_ANNUL_TICKET_ENCAISSE (bit) NULL
+  - CAIS_RETOUR (bit) NULL
+  - CAIS_AVOIR (bit) NULL
+  - CAIS_REIMP_TICKET (bit) NULL
+  - CAIS_ACTIV_MISE_EN_ATTENTE (bit) NULL
+  - CAIS_OUVR_TIR_SS_ENC (bit) NULL
+  - CAIS_LECTUREX (bit) NULL
+  - CAIS_LECTUREZ (bit) NULL
+  - CAIS_PARAMETRAGE (bit) NULL
+  - CAIS_VOIR_TAB_BORD (bit) NULL
+  - INTER_ENTR_ENTREE (bit) NULL
+  - INTER_ENTR_CREATION_ENTR (bit) NULL
+  - INTER_ENTR_MODIF_PRIXACHT (bit) NULL
+  - INTER_ENTR_MODIF_DESIGNATIONART (bit) NULL
+  - INTER_ENTR_AFFECT_REMISE (bit) NULL
+  - INTER_ENTR_VALID_ENTREE (bit) NULL
+  - INTER_ENTR_SUPP_ENTR (bit) NULL
+  - INTER_ENTR_SUPP_ENTR_VALIDEE (bit) NULL
+  - INTER_ENTR_DUPLICATION_ENTR (bit) NULL
+  - INTER_ENTR_IMP_ENTR (bit) NULL
+  - INTER_SORT_SORTIES (bit) NULL
+  - INTER_SORT_CREATION_SORT (bit) NULL
+  - INTER_SORT_MODIF_PRIXART (bit) NULL
+  - INTER_SORT_MODIF_DESIGNATION (bit) NULL
+  - INTER_SORT_AFFECTATION_REMISE (bit) NULL
+  - INTER_SORT_VALID_SORTIE (bit) NULL
+  - INTER_SORT_SUPP_SORT (bit) NULL
+  - INTER_SORT_SUPP_SORT_VALIDEE (bit) NULL
+  - INTER_SORT_DUPLICATION_SORT (bit) NULL
+  - INTER_SORT_IMP_SORT (bit) NULL
+  - INTER_INVENT_SAISIE_INVENTAIRE (bit) NULL
+  - INTER_INVENT_VALIDATION_INVENTAIRE (bit) NULL
+  - STATIS_CHIFFREAF_FAMILLE (bit) NULL
+  - STATIS_CHIFFREAF_SOUSFAMILLE (bit) NULL
+  - STATIS_CHIFFREAF_ARTICLE (bit) NULL
+  - STATIS_CHIFFREAF_FOURNIS (bit) NULL
+  - STATIS_CHIFFREAF_CLIENT (bit) NULL
+  - STATIS_CHIFFREAF_TAUXTVA (bit) NULL
+  - ETATS_STOCK_GLOBAL (bit) NULL
+  - ETATS_STOCK_AR_ENTR_SORT (bit) NULL
+  - ETATS_STOCK_ALERTE (bit) NULL
+  - ETATS_HISTO_ENTREE (bit) NULL
+  - ETATS_HISTO_SORTIES (bit) NULL
+  - ETATS_HISTO_INVENTAIRES (bit) NULL
+
+الجدول: SOCIETE
+----------------------------------------
+عدد الأعمدة: 18
+  - SOC_ID (int(10)) NOT NULL
+  - SOC_RAISON_SOCIALE (nvarchar(250)) NULL
+  - SOC_RC (nvarchar(250)) NULL
+  - SOC_CNSS (nvarchar(250)) NULL
+  - SOC_PATENTE (nvarchar(250)) NULL
+  - SOC_ADRESS_1 (nvarchar(250)) NULL
+  - SOC_ADRESS_2 (nvarchar(250)) NULL
+  - SOC_VILLE (nvarchar(250)) NULL
+  - SOC_CP (nvarchar(250)) NULL
+  - SOC_TEL (nvarchar(250)) NULL
+  - SOC_EMAIL (nvarchar(250)) NULL
+  - SOC_SECTEUR (nvarchar(250)) NULL
+  - SOC_ID_FISCAL (nvarchar(250)) NULL
+  - SOC_STATUT (nvarchar(250)) NULL
+  - SOC_ACTIVITE (nvarchar(250)) NULL
+  - SOC_CAPITAL (decimal(18,2)) NULL
+  - SOC_TEL2 (nvarchar(250)) NULL
+  - SOC_FAX (nvarchar(250)) NULL
+
+الجدول: SOUS_FAMILLE
+----------------------------------------
+عدد الأعمدة: 4
+  - SFM_REF (nvarchar(32)) NOT NULL
+  - FAM_REF (nvarchar(32)) NOT NULL
+  - SFM_LIB (nvarchar(250)) NULL
+  - SFM_ORDRE_AFFICHAGE (int(10)) NOT NULL DEFAULT: ('999')
+
+الجدول: STOCK
+----------------------------------------
+عدد الأعمدة: 3
+  - ART_REF (nvarchar(32)) NOT NULL
+  - ETP_REF (nvarchar(32)) NOT NULL
+  - STK_QTE (decimal(18,2)) NOT NULL
+
+الجدول: SYNC_STATE
+----------------------------------------
+عدد الأعمدة: 3
+  - id (int(10)) NOT NULL
+  - table_name (varchar(50)) NULL
+  - last_op_date (datetime) NULL
+
+الجدول: sysdiagrams
+----------------------------------------
+عدد الأعمدة: 5
+  - name (nvarchar(128)) NOT NULL
+  - principal_id (int(10)) NOT NULL
+  - diagram_id (int(10)) NOT NULL
+  - version (int(10)) NULL
+  - definition (varbinary(-1)) NULL
+
+الجدول: TABLE
+----------------------------------------
+عدد الأعمدة: 6
+  - TAB_REF (nvarchar(32)) NOT NULL
+  - ZON_REF (nvarchar(32)) NOT NULL
+  - ETT_ETAT (nvarchar(50)) NOT NULL
+  - TAB_LIB (nvarchar(250)) NULL
+  - TAB_DESCRIPT (nvarchar(250)) NULL
+  - TAB_NBR_Couvert (int(10)) NOT NULL
+
+الجدول: TARIF
+----------------------------------------
+عدد الأعمدة: 1
+  - TRF_LIBELLE (nvarchar(200)) NOT NULL
+
+الجدول: TARIF_OF_ARTICLE
+----------------------------------------
+عدد الأعمدة: 5
+  - ART_REF (nvarchar(32)) NOT NULL
+  - TRF_LIBELLE (nvarchar(200)) NOT NULL
+  - TRF_ART_PRIXHT (float(53)) NULL
+  - TRF_ART_TVA (int(10)) NULL
+  - TRF_ART_PRIXTTC (float(53)) NULL
+
+الجدول: TRANSACTIONCLIENT
+----------------------------------------
+عدد الأعمدة: 7
+  - TR_ID (nvarchar(32)) NOT NULL
+  - CLT_REF (nvarchar(32)) NOT NULL
+  - TR_DATE (datetime) NOT NULL
+  - TR_MONTANT_RGL (float(53)) NOT NULL
+  - TR_MODE_RGL (nvarchar(200)) NOT NULL
+  - TR_REMARQUE (nvarchar(255)) NOT NULL
+  - TR_RESTE (decimal(18,2)) NOT NULL DEFAULT: ('0')
+
+الجدول: TVA
+----------------------------------------
+عدد الأعمدة: 1
+  - TVA_TVA (float(53)) NOT NULL
+
+الجدول: TYPE_REGLEMENT
+----------------------------------------
+عدد الأعمدة: 1
+  - TYPE_REGLEMENT (nvarchar(200)) NOT NULL
+
+الجدول: UNITE_MESURE
+----------------------------------------
+عدد الأعمدة: 2
+  - UNM_ABR (nvarchar(32)) NOT NULL
+  - UNM_LIB (nvarchar(50)) NULL
+
+الجدول: UTILISATEUR
+----------------------------------------
+عدد الأعمدة: 21
+  - USR_REF (nvarchar(32)) NOT NULL
+  - LIBELLE_ROLE (nvarchar(200)) NOT NULL
+  - USR_LOGIN (nvarchar(200)) NULL
+  - USR_ABREV (nvarchar(200)) NULL
+  - USR_PASS (nvarchar(200)) NULL
+  - USR_STYLE (image(2147483647)) NULL
+  - USR_PRENOM (nvarchar(200)) NULL
+  - USR_NOM (nvarchar(200)) NULL
+  - USR_ADRESSE (nvarchar(255)) NULL
+  - USR_CODE_POSTAL (int(10)) NULL
+  - USR_VILLE (nvarchar(200)) NULL
+  - USR_PAYS (nvarchar(100)) NULL
+  - USR_TEL_DOMICILE (nvarchar(50)) NULL
+  - USR_TEL_PORTABLE (nvarchar(50)) NULL
+  - USR_DATE_EMB (datetime) NULL
+  - USR_DATE_NAISSANCE (datetime) NULL
+  - USR_CIN (nvarchar(200)) NULL
+  - USR_CNSS (nvarchar(200)) NULL
+  - USR_OBSERVATION (nvarchar(200)) NULL
+  - USR_FONCTION (nvarchar(100)) NULL
+  - PR_REF (nvarchar(32)) NOT NULL
+
+الجدول: ZONE
+----------------------------------------
+عدد الأعمدة: 2
+  - ZON_REF (nvarchar(32)) NOT NULL
+  - ZON_LIB (nvarchar(250)) NULL
+
+================================================================================
+ملخص إحصائي:
+================================================================================
+إجمالي عدد الجداول: 92
+إجمالي عدد الأعمدة: 951
+متوسط الأعمدة لكل جدول: 10.34
+
+أكبر 10 جداول من ناحية عدد الأعمدة:
+----------------------------------------
+  1. ROLE (174 عمود)
+  2. PARAMETRECAISSE (58 عمود)
+  3. ARTICLE (49 عمود)
+  4. Comptage_Caisse (29 عمود)
+  5. FACTURE_VNT (28 عمود)
+  6. FOURNISSEUR (24 عمود)
+  7. CLIENT (23 عمود)
+  8. CMD_VENTE (22 عمود)
+  9. UTILISATEUR (21 عمود)
+  10. CMD_VENTE_DETAIL (18 عمود)
+
+================================================================================
+تم إنتاج هذا التقرير بواسطة نظام AccessPOS Pro
+Laravel Artisan Command: db:extract-structure
+================================================================================
