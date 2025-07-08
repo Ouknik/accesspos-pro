@@ -9,6 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="{{ asset('css/modals-avancees.css') }}" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
     
@@ -899,6 +900,32 @@
                     <i class="fas fa-arrow-up me-1"></i>
                     +{{ number_format($statistiquesFinancieres['evolution_ventes'] ?? 0, 1) }}% vs mois dernier
                 </div>
+                <div class="stat-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                    <button onclick="openAdvancedModal('chiffre-affaires', 'Chiffre d\'Affaires Détaillé', 'fas fa-euro-sign')" 
+                            class="btn-details" 
+                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--success-color); background: transparent; color: var(--success-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="fas fa-chart-line me-1"></i>
+                        Voir détails
+                    </button>
+                    <button onclick="exportData('chiffre-affaires', 'pdf')" 
+                            class="btn-export" 
+                            style="padding: 0.5rem 0.75rem; border: 1px solid var(--success-light); background: var(--success-light); color: white; border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="fas fa-download"></i>
+                    </button>
+                </div>
+                <div class="stat-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                    <button onclick="openAdvancedModal('chiffre-affaires', 'Chiffre d\'Affaires Détaillé', 'fas fa-euro-sign')" 
+                            class="btn-details" 
+                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--success-color); background: transparent; color: var(--success-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="fas fa-chart-line me-1"></i>
+                        Voir détails
+                    </button>
+                    <button onclick="exportData('chiffre-affaires', 'pdf')" 
+                            class="btn-export" 
+                            style="padding: 0.5rem 0.75rem; border: 1px solid var(--success-light); background: var(--success-light); color: white; border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="fas fa-download"></i>
+                    </button>
+                </div>
             </div>
 
             <div class="stat-card financiere">
@@ -914,6 +941,19 @@
                     <i class="fas fa-receipt me-1"></i>
                     {{ number_format($statistiquesFinancieres['nb_factures_jour'] ?? 0) }} factures aujourd'hui
                 </div>
+                <div class="stat-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                    <button onclick="openAdvancedModal('ca-mois', 'Chiffre d\'Affaires du Mois', 'fas fa-calendar-month')" 
+                            class="btn-details" 
+                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--info-color); background: transparent; color: var(--info-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="fas fa-chart-line me-1"></i>
+                        Voir détails
+                    </button>
+                    <button onclick="exportData('ca-mois', 'pdf')" 
+                            class="btn-export" 
+                            style="padding: 0.5rem 0.75rem; border: 1px solid var(--info-light); background: var(--info-light); color: white; border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="fas fa-download"></i>
+                    </button>
+                </div>
             </div>
 
             <div class="stat-card financiere">
@@ -928,6 +968,19 @@
                 <div class="stat-trend trend-positive">
                     <i class="fas fa-chart-line me-1"></i>
                     Performance optimale
+                </div>
+                <div class="stat-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                    <button onclick="openAdvancedModal('ticket-moyen', 'Ticket Moyen Détaillé', 'fas fa-shopping-cart')" 
+                            class="btn-details" 
+                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--success-color); background: transparent; color: var(--success-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="fas fa-chart-line me-1"></i>
+                        Voir détails
+                    </button>
+                    <button onclick="exportData('ticket-moyen', 'pdf')" 
+                            class="btn-export" 
+                            style="padding: 0.5rem 0.75rem; border: 1px solid var(--success-light); background: var(--success-light); color: white; border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="fas fa-download"></i>
+                    </button>
                 </div>
             </div>
 
@@ -945,6 +998,27 @@
                     <i class="fas fa-exclamation-triangle me-1"></i>
                     {{ number_format($gestionStocks['articles_rupture'] ?? 0) }} en rupture
                 </div>
+                <div class="stat-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                    <button onclick="openAdvancedModal('stock-rupture', 'Articles en Rupture de Stock', 'fas fa-exclamation-triangle')" 
+                            class="btn-details" 
+                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--warning-color); background: transparent; color: var(--warning-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="fas fa-boxes me-1"></i>
+                        Articles en rupture
+                    </button>
+                </div>
+                <div class="stat-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                    <button onclick="openAdvancedModal('articles-stock', 'Détails des Articles en Stock', 'fas fa-boxes')" 
+                            class="btn-details" 
+                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--info-color); background: transparent; color: var(--info-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="fas fa-box-open me-1"></i>
+                        Voir détails
+                    </button>
+                    <button onclick="exportData('articles-stock', 'pdf')" 
+                            class="btn-export" 
+                            style="padding: 0.5rem 0.75rem; border: 1px solid var(--info-light); background: var(--info-light); color: white; border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="fas fa-download"></i>
+                    </button>
+                </div>
             </div>
 
             <div class="stat-card stock">
@@ -959,6 +1033,19 @@
                 <div class="stat-trend trend-warning">
                     <i class="fas fa-low-vision me-1"></i>
                     {{ number_format($gestionStocks['articles_stock_faible'] ?? 0) }} en stock faible
+                </div>
+                <div class="stat-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                    <button onclick="openAdvancedModal('valeur-stock', 'Valeur du Stock Détaillée', 'fas fa-warehouse')" 
+                            class="btn-details" 
+                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--info-color); background: transparent; color: var(--info-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="fas fa-chart-line me-1"></i>
+                        Voir détails
+                    </button>
+                    <button onclick="exportData('valeur-stock', 'pdf')" 
+                            class="btn-export" 
+                            style="padding: 0.5rem 0.75rem; border: 1px solid var(--info-light); background: var(--info-light); color: white; border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="fas fa-download"></i>
+                    </button>
                 </div>
             </div>
 
@@ -976,6 +1063,27 @@
                     <i class="fas fa-user-plus me-1"></i>
                     {{ number_format($gestionClientele['nouveaux_clients_mois'] ?? 0) }} nouveaux ce mois
                 </div>
+                <div class="stat-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                    <button onclick="openAdvancedModal('top-clients', 'Top Clients du Restaurant', 'fas fa-star')" 
+                            class="btn-details" 
+                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--warning-color); background: transparent; color: var(--warning-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="fas fa-crown me-1"></i>
+                        Top clients
+                    </button>
+                </div>
+                <div class="stat-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                    <button onclick="openAdvancedModal('clients-totaux', 'Détails des Clients Totaux', 'fas fa-users')" 
+                            class="btn-details" 
+                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--success-color); background: transparent; color: var(--success-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="fas fa-user-friends me-1"></i>
+                        Voir détails
+                    </button>
+                    <button onclick="exportData('clients-totaux', 'pdf')" 
+                            class="btn-export" 
+                            style="padding: 0.5rem 0.75rem; border: 1px solid var(--success-light); background: var(--success-light); color: white; border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="fas fa-download"></i>
+                    </button>
+                </div>
             </div>
 
             <div class="stat-card clientele">
@@ -990,6 +1098,19 @@
                 <div class="stat-trend trend-positive">
                     <i class="fas fa-gift me-1"></i>
                     {{ number_format($gestionClientele['points_fidelite_distribues'] ?? 0) }} points distribués
+                </div>
+                <div class="stat-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                    <button onclick="openAdvancedModal('clients-fideles', 'Détails des Clients Fidèles', 'fas fa-star')" 
+                            class="btn-details" 
+                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--success-color); background: transparent; color: var(--success-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="fas fa-gift me-1"></i>
+                        Voir détails
+                    </button>
+                    <button onclick="exportData('clients-fideles', 'pdf')" 
+                            class="btn-export" 
+                            style="padding: 0.5rem 0.75rem; border: 1px solid var(--success-light); background: var(--success-light); color: white; border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="fas fa-download"></i>
+                    </button>
                 </div>
             </div>
 
@@ -1006,6 +1127,27 @@
                 <div class="stat-trend trend-positive">
                     <i class="fas fa-calendar-check me-1"></i>
                     {{ number_format($gestionRestaurant['reservations_jour'] ?? 0) }} réservations aujourd'hui
+                </div>
+                <div class="stat-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                    <button onclick="openAdvancedModal('etat-tables', 'État des Tables en Temps Réel', 'fas fa-utensils')" 
+                            class="btn-details" 
+                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--danger-color); background: transparent; color: var(--danger-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="fas fa-table me-1"></i>
+                        Voir tables
+                    </button>
+                </div>
+                <div class="stat-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                    <button onclick="openAdvancedModal('tables-occupees', 'Détails des Tables Occupées', 'fas fa-utensils')" 
+                            class="btn-details" 
+                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--success-color); background: transparent; color: var(--success-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="fas fa-concierge-bell me-1"></i>
+                        Voir détails
+                    </button>
+                    <button onclick="exportData('tables-occupees', 'pdf')" 
+                            class="btn-export" 
+                            style="padding: 0.5rem 0.75rem; border: 1px solid var(--success-light); background: var(--success-light); color: white; border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="fas fa-download"></i>
+                    </button>
                 </div>
             </div>
         </div>
@@ -1098,6 +1240,11 @@
                             </h4>
                             <p class="chart-subtitle">Chiffre d'affaires sur les 30 derniers jours</p>
                         </div>
+                        <button onclick="openAdvancedModal('performance-horaire', 'Performance par Heure', 'fas fa-clock')" 
+                                class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-expand-arrows-alt"></i>
+                            Analyse détaillée
+                        </button>
                     </div>
                     <div class="chart-content">
                         <canvas id="evolutionVentesChart" class="chart-canvas"></canvas>
@@ -1145,6 +1292,11 @@
                             </h4>
                             <p class="chart-subtitle">Répartition des encaissements</p>
                         </div>
+                        <button onclick="openAdvancedModal('modes-paiement', 'Modes de Paiement Détaillés', 'fas fa-credit-card')" 
+                                class="btn btn-sm btn-outline-info">
+                            <i class="fas fa-expand-arrows-alt"></i>
+                            Analyse détaillée
+                        </button>
                     </div>
                     <div class="chart-content">
                         <canvas id="modesPaiementChart" class="chart-canvas"></canvas>
@@ -1302,6 +1454,12 @@
             </div>
         </div>
     </div>
+
+    <!-- Inclusion des Modals Avancées -->
+    @include('admin.modals-avancees')
+    
+    <!-- Widget de Notifications en Temps Réel -->
+    @include('admin.notification-widget')
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -1681,56 +1839,586 @@
             return Math.round(num).toLocaleString('fr-FR');
         }
 
-        function getUnit(text) {
-            if (text.includes('€')) return '€';
-            if (text.includes('%')) return '%';
-            return '';
-        }
-
-        // Actualisation automatique toutes les 5 minutes
-        setInterval(() => {
-            if (document.visibilityState === 'visible') {
-                updateLiveIndicator();
-            }
-        }, 300000);
-
-        function updateLiveIndicator() {
-            const indicator = document.querySelector('.live-indicator');
-            if (indicator) {
-                indicator.style.animation = 'none';
-                setTimeout(() => {
-                    indicator.style.animation = 'pulse 2s infinite';
-                }, 100);
-            }
-        }
-
-        // Responsive charts resize
-        window.addEventListener('resize', debounce(() => {
-            Chart.instances.forEach(chart => {
-                chart.resize();
-            });
-        }, 250));
-
-        function debounce(func, wait) {
-            let timeout;
-            return function executedFunction(...args) {
-                const later = () => {
-                    clearTimeout(timeout);
-                    func(...args);
-                };
-                clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
-            }
-        }
-
-        // Tooltip pour les badges
-        document.querySelectorAll('.badge').forEach(badge => {
-            badge.setAttribute('title', badge.textContent.trim());
-        });
-
         // Mode sombre (optionnel)
         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            document.body.classList.add('dark-mode');
+            // Ajuster les couleurs pour le mode sombre
+        }
+
+        // ===============================================================
+        // SYSTÈME AVANCÉ DE MODALS ET ANALYSES EN TEMPS RÉEL
+        // ===============================================================
+
+        // Configuration des endpoints API pour les modals
+        const modalEndpoints = {
+            'chiffre-affaires': '{{ route("admin.dashboard.chiffre-affaires-details") }}',
+            'stock-rupture': '{{ route("admin.dashboard.articles-rupture-details") }}',
+            'top-clients': '{{ route("admin.dashboard.top-clients-details") }}',
+            'performance-horaire': '{{ route("admin.dashboard.performance-horaire-details") }}',
+            'modes-paiement': '{{ route("admin.dashboard.modes-paiement-details") }}',
+            'etat-tables': '{{ route("admin.dashboard.etat-tables-details") }}'
+        };
+
+        // Fonction principale pour ouvrir les modals avancées
+        function openAdvancedModal(type, title, icon) {
+            const modal = document.getElementById('advancedModalContainer');
+            const titleElement = modal.querySelector('.modal-title-text');
+            const iconElement = modal.querySelector('.modal-icon');
+            
+            // Configuration du modal
+            titleElement.textContent = title;
+            iconElement.className = icon;
+            
+            // Affichage du modal avec animation
+            modal.style.display = 'flex';
+            modal.style.opacity = '0';
+            setTimeout(() => {
+                modal.style.opacity = '1';
+            }, 10);
+            
+            // Chargement des données
+            loadModalData(type);
+            
+            // Gestion du body scroll
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Fonction pour fermer le modal
+        function closeAdvancedModal() {
+            const modal = document.getElementById('advancedModalContainer');
+            modal.style.opacity = '0';
+            setTimeout(() => {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }, 300);
+        }
+
+        // Chargement des données du modal
+        async function loadModalData(type) {
+            const endpoint = modalEndpoints[type];
+            if (!endpoint) {
+                console.error('Endpoint non trouvé pour le type:', type);
+                return;
+            }
+
+            try {
+                showModalLoading();
+                
+                const response = await fetch(endpoint, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                // Affichage des données selon le type
+                displayModalData(type, data);
+                
+            } catch (error) {
+                console.error('Erreur lors du chargement des données:', error);
+                showModalError('Erreur lors du chargement des données. Veuillez réessayer.');
+            }
+        }
+
+        // Affichage du loading dans le modal
+        function showModalLoading() {
+            const contentContainer = document.querySelector('.modal-tab-content');
+            contentContainer.innerHTML = `
+                <div class="loading-container" style="display: flex; justify-content: center; align-items: center; height: 300px; flex-direction: column;">
+                    <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                        <span class="visually-hidden">Chargement...</span>
+                    </div>
+                    <p style="margin-top: 1rem; color: #6c757d;">Chargement des données en cours...</p>
+                </div>
+            `;
+        }
+
+        // Affichage d'erreur dans le modal
+        function showModalError(message) {
+            const contentContainer = document.querySelector('.modal-tab-content');
+            contentContainer.innerHTML = `
+                <div class="error-container" style="display: flex; justify-content: center; align-items: center; height: 300px; flex-direction: column;">
+                    <i class="fas fa-exclamation-triangle text-danger" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                    <p style="color: #dc3545; text-align: center;">${message}</p>
+                    <button onclick="location.reload()" class="btn btn-outline-primary mt-2">
+                        <i class="fas fa-sync-alt me-2"></i>Réessayer
+                    </button>
+                </div>
+            `;
+        }
+
+        // Affichage des données selon le type de modal
+        function displayModalData(type, data) {
+            const contentContainer = document.querySelector('.modal-tab-content');
+            
+            switch(type) {
+                case 'chiffre-affaires':
+                    displayChiffreAffairesData(data, contentContainer);
+                    break;
+                case 'stock-rupture':
+                    displayStockRuptureData(data, contentContainer);
+                    break;
+                case 'top-clients':
+                    displayTopClientsData(data, contentContainer);
+                    break;
+                case 'performance-horaire':
+                    displayPerformanceHoraireData(data, contentContainer);
+                    break;
+                case 'modes-paiement':
+                    displayModesPaiementData(data, contentContainer);
+                    break;
+                case 'etat-tables':
+                    displayEtatTablesData(data, contentContainer);
+                    break;
+                default:
+                    showModalError('Type de données non reconnu');
+            }
+            
+            // Mise à jour du timestamp
+            updateModalTimestamp();
+        }
+
+        // Fonctions d'affichage spécialisées pour chaque type de données
+        function displayChiffreAffairesData(data, container) {
+            container.innerHTML = `
+                <div class="advanced-analytics-container">
+                    <!-- KPIs Principaux -->
+                    <div class="kpi-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+                        <div class="kpi-card">
+                            <h4><i class="fas fa-euro-sign text-success"></i> CA Aujourd'hui</h4>
+                            <p class="kpi-value">${formatCurrency(data.ca_jour || 0)}</p>
+                            <small class="text-muted">vs ${formatCurrency(data.ca_hier || 0)} hier</small>
+                        </div>
+                        <div class="kpi-card">
+                            <h4><i class="fas fa-chart-line text-primary"></i> Évolution</h4>
+                            <p class="kpi-value ${data.evolution >= 0 ? 'text-success' : 'text-danger'}">
+                                ${data.evolution >= 0 ? '+' : ''}${data.evolution}%
+                            </p>
+                            <small class="text-muted">vs période précédente</small>
+                        </div>
+                        <div class="kpi-card">
+                            <h4><i class="fas fa-receipt text-info"></i> Tickets</h4>
+                            <p class="kpi-value">${data.nb_tickets || 0}</p>
+                            <small class="text-muted">factures aujourd'hui</small>
+                        </div>
+                        <div class="kpi-card">
+                            <h4><i class="fas fa-shopping-cart text-warning"></i> Ticket Moyen</h4>
+                            <p class="kpi-value">${formatCurrency(data.ticket_moyen || 0)}</p>
+                            <small class="text-muted">panier moyen</small>
+                        </div>
+                    </div>
+                    
+                    <!-- Graphique évolution temporelle -->
+                    <div class="chart-section">
+                        <h5><i class="fas fa-chart-area me-2"></i>Évolution du Chiffre d'Affaires</h5>
+                        <canvas id="modalChartCA" style="height: 300px;"></canvas>
+                    </div>
+                    
+                    <!-- Actions rapides -->
+                    <div class="actions-section" style="margin-top: 2rem;">
+                        <button onclick="exportModalData('chiffre-affaires', 'pdf')" class="btn btn-danger me-2">
+                            <i class="fas fa-file-pdf me-2"></i>Exporter PDF
+                        </button>
+                        <button onclick="exportModalData('chiffre-affaires', 'excel')" class="btn btn-success me-2">
+                            <i class="fas fa-file-excel me-2"></i>Exporter Excel
+                        </button>
+                        <button onclick="refreshModalData('chiffre-affaires')" class="btn btn-outline-primary">
+                            <i class="fas fa-sync-alt me-2"></i>Actualiser
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // Création du graphique après insertion du HTML
+            setTimeout(() => createModalChart('modalChartCA', data.chart_data), 100);
+        }
+
+        function displayStockRuptureData(data, container) {
+            container.innerHTML = `
+                <div class="advanced-analytics-container">
+                    <!-- Alertes critiques -->
+                    <div class="alerts-section" style="margin-bottom: 2rem;">
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>${data.articles_rupture?.length || 0} articles en rupture de stock</strong>
+                        </div>
+                        <div class="alert alert-warning">
+                            <i class="fas fa-low-vision me-2"></i>
+                            <strong>${data.articles_stock_faible?.length || 0} articles en stock faible</strong>
+                        </div>
+                    </div>
+                    
+                    <!-- Tableau des articles en rupture -->
+                    <div class="table-section">
+                        <h5><i class="fas fa-table me-2"></i>Articles en Rupture</h5>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Article</th>
+                                        <th>Stock Actuel</th>
+                                        <th>Stock Minimum</th>
+                                        <th>Dernière Vente</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${data.articles_rupture?.map(article => `
+                                        <tr>
+                                            <td>
+                                                <strong>${article.designation}</strong><br>
+                                                <small class="text-muted">${article.reference}</small>
+                                            </td>
+                                            <td><span class="badge bg-danger">${article.stock_actuel}</span></td>
+                                            <td>${article.stock_minimum}</td>
+                                            <td>${formatDate(article.derniere_vente)}</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-primary">Commander</button>
+                                            </td>
+                                        </tr>
+                                    `).join('') || '<tr><td colspan="5" class="text-center">Aucun article en rupture</td></tr>'}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function displayTopClientsData(data, container) {
+            container.innerHTML = `
+                <div class="advanced-analytics-container">
+                    <!-- Top clients grid -->
+                    <div class="clients-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+                        ${data.top_clients?.map((client, index) => `
+                            <div class="client-card" style="border: 1px solid #e9ecef; border-radius: 0.5rem; padding: 1rem;">
+                                <div class="client-rank" style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                                    <span class="badge bg-primary me-2">#${index + 1}</span>
+                                    <h6 class="mb-0">${client.nom}</h6>
+                                </div>
+                                <div class="client-stats">
+                                    <p class="mb-1"><strong>CA Total:</strong> ${formatCurrency(client.ca_total)}</p>
+                                    <p class="mb-1"><strong>Visites:</strong> ${client.nb_visites}</p>
+                                    <p class="mb-0"><strong>Dernière visite:</strong> ${formatDate(client.derniere_visite)}</p>
+                                </div>
+                                <div class="client-loyalty mt-2">
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar" style="width: ${client.taux_fidelite}%"></div>
+                                    </div>
+                                    <small class="text-muted">Fidélité: ${client.taux_fidelite}%</small>
+                                </div>
+                            </div>
+                        `).join('') || '<p class="text-center">Aucune donnée client disponible</p>'}
+                    </div>
+                </div>
+            `;
+        }
+
+        function displayPerformanceHoraireData(data, container) {
+            container.innerHTML = `
+                <div class="advanced-analytics-container">
+                    <!-- Graphique performance horaire -->
+                    <div class="chart-section">
+                        <h5><i class="fas fa-clock me-2"></i>Performance par Tranche Horaire</h5>
+                        <canvas id="modalChartPerformance" style="height: 400px;"></canvas>
+                    </div>
+                    
+                    <!-- Recommandations -->
+                    <div class="recommendations-section" style="margin-top: 2rem;">
+                        <h5><i class="fas fa-lightbulb me-2"></i>Recommandations</h5>
+                        <div class="recommendations-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                            ${data.recommandations?.map(rec => `
+                                <div class="recommendation-card alert alert-${rec.type}">
+                                    <i class="fas fa-${rec.icon} me-2"></i>
+                                    <strong>${rec.title}</strong><br>
+                                    <small>${rec.description}</small>
+                                </div>
+                            `).join('') || '<p>Aucune recommandation disponible</p>'}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            setTimeout(() => createPerformanceChart('modalChartPerformance', data.chart_data), 100);
+        }
+
+        function displayModesPaiementData(data, container) {
+            container.innerHTML = `
+                <div class="advanced-analytics-container">
+                    <!-- Répartition des paiements -->
+                    <div class="payment-overview" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+                        <div class="chart-container">
+                            <h5><i class="fas fa-chart-pie me-2"></i>Répartition des Paiements</h5>
+                            <canvas id="modalChartPaiements" style="height: 300px;"></canvas>
+                        </div>
+                        <div class="payment-stats">
+                            <h5><i class="fas fa-calculator me-2"></i>Statistiques Détaillées</h5>
+                            <div class="stats-list">
+                                ${data.modes_paiement?.map(mode => `
+                                    <div class="payment-stat-item" style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid #e9ecef;">
+                                        <span><i class="fas fa-${mode.icon} me-2"></i>${mode.nom}</span>
+                                        <div class="text-end">
+                                            <strong>${formatCurrency(mode.montant)}</strong><br>
+                                            <small class="text-muted">${mode.pourcentage}%</small>
+                                        </div>
+                                    </div>
+                                `).join('') || '<p>Aucune donnée de paiement</p>'}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            setTimeout(() => createPaymentChart('modalChartPaiements', data.chart_data), 100);
+        }
+
+        function displayEtatTablesData(data, container) {
+            container.innerHTML = `
+                <div class="advanced-analytics-container">
+                    <!-- Plan de salle -->
+                    <div class="restaurant-layout" style="margin-bottom: 2rem;">
+                        <h5><i class="fas fa-map me-2"></i>Plan de Salle en Temps Réel</h5>
+                        <div class="tables-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 1rem;">
+                            ${data.tables?.map(table => `
+                                <div class="table-item ${table.statut}" style="
+                                    border: 2px solid ${getTableStatusColor(table.statut)}; 
+                                    border-radius: 0.5rem; 
+                                    padding: 1rem; 
+                                    text-align: center; 
+                                    background: ${getTableStatusBg(table.statut)};
+                                ">
+                                    <i class="fas fa-table fa-2x mb-2" style="color: ${getTableStatusColor(table.statut)};"></i>
+                                    <h6>${table.nom}</h6>
+                                    <p class="mb-0"><small>${table.nb_couverts} places</small></p>
+                                    <span class="badge bg-${getTableStatusBadge(table.statut)}">${table.statut}</span>
+                                    ${table.duree_occupation ? `<br><small class="text-muted">${table.duree_occupation}</small>` : ''}
+                                </div>
+                            `).join('') || '<p class="text-center">Aucune table configurée</p>'}
+                        </div>
+                    </div>
+                    
+                    <!-- Statistiques d'occupation -->
+                    <div class="occupation-stats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        <div class="stat-card text-center p-3 border rounded">
+                            <h4 class="text-success">${data.stats?.taux_occupation || 0}%</h4>
+                            <p class="mb-0">Taux d'occupation</p>
+                        </div>
+                        <div class="stat-card text-center p-3 border rounded">
+                            <h4 class="text-primary">${data.stats?.temps_moyen_service || 0} min</h4>
+                            <p class="mb-0">Temps moyen de service</p>
+                        </div>
+                        <div class="stat-card text-center p-3 border rounded">
+                            <h4 class="text-warning">${data.stats?.chiffre_affaires_tables || 0}€</h4>
+                            <p class="mb-0">CA des tables</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Fonctions utilitaires
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('fr-FR', { 
+                style: 'currency', 
+                currency: 'EUR' 
+            }).format(amount || 0);
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            return new Date(dateString).toLocaleDateString('fr-FR');
+        }
+
+        function getTableStatusColor(statut) {
+            const colors = {
+                'libre': '#28a745',
+                'occupee': '#dc3545', 
+                'reservee': '#ffc107',
+                'en_preparation': '#17a2b8'
+            };
+            return colors[statut] || '#6c757d';
+        }
+
+        function getTableStatusBg(statut) {
+            const backgrounds = {
+                'libre': '#d4edda',
+                'occupee': '#f8d7da',
+                'reservee': '#fff3cd',
+                'en_preparation': '#d1ecf1'
+            };
+            return backgrounds[statut] || '#e2e3e5';
+        }
+
+        function getTableStatusBadge(statut) {
+            const badges = {
+                'libre': 'success',
+                'occupee': 'danger',
+                'reservee': 'warning',
+                'en_preparation': 'info'
+            };
+            return badges[statut] || 'secondary';
+        }
+
+        // Gestion des onglets du modal
+        document.addEventListener('DOMContentLoaded', function() {
+            // Gestion des onglets dans les modals
+            document.addEventListener('click', function(e) {
+                if (e.target.matches('.tab-item') || e.target.closest('.tab-item')) {
+                    const tabItem = e.target.closest('.tab-item');
+                    const tabName = tabItem.dataset.tab;
+                    
+                    // Retirer la classe active de tous les onglets
+                    document.querySelectorAll('.tab-item').forEach(tab => tab.classList.remove('active'));
+                    
+                    // Ajouter la classe active à l'onglet cliqué
+                    tabItem.classList.add('active');
+                    
+                    // Gérer l'affichage du contenu selon l'onglet
+                    switchModalTab(tabName);
+                }
+            });
+            
+            // Fermeture du modal avec Escape
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeAdvancedModal();
+                }
+            });
+            
+            // Fermeture du modal en cliquant en dehors
+            document.addEventListener('click', function(e) {
+                const modal = document.getElementById('advancedModalContainer');
+                if (e.target === modal) {
+                    closeAdvancedModal();
+                }
+            });
+        });
+
+        function switchModalTab(tabName) {
+            // Logique pour changer le contenu selon l'onglet sélectionné
+            const contentContainer = document.querySelector('.modal-tab-content');
+            
+            switch(tabName) {
+                case 'overview':
+                    // Affichage de la vue d'ensemble
+                    break;
+                case 'details':
+                    // Affichage des détails
+                    break;
+                case 'charts':
+                    // Affichage des graphiques
+                    break;
+                case 'actions':
+                    // Affichage des actions
+                    break;
+            }
+        }
+
+        // Fonctions d'export avancées
+        function exportModalData(type, format) {
+            const url = `{{ route('admin.dashboard.export') }}?type=${type}&format=${format}`;
+            window.open(url, '_blank');
+        }
+
+        function refreshModalData(type) {
+            loadModalData(type);
+        }
+
+        function updateModalTimestamp() {
+            const timestampElement = document.getElementById('lastUpdateTime');
+            if (timestampElement) {
+                timestampElement.textContent = new Date().toLocaleTimeString('fr-FR');
+            }
+        }
+
+        // Fonctions de création de graphiques pour les modals
+        function createModalChart(canvasId, data) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function createPerformanceChart(canvasId, data) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function createPaymentChart(canvasId, data) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Fonction d'actualisation automatique du dashboard
+        function refreshDashboard() {
+            window.location.reload();
+        }
+
+        // Fonction d'export du rapport complet
+        function exportReport() {
+            const url = '{{ route("admin.reports.generate") }}?type_rapport=dashboard&format=pdf&periode_type=jour&date_debut={{ date("Y-m-d") }}';
+            window.open(url, '_blank');
         }
     </script>
 </body>
