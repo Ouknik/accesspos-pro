@@ -66,17 +66,17 @@ Route::middleware('auth')->prefix('admin')->group(function () {
 
     // API routes pour les modals (si nécessaires dans le futur)
     Route::get('/api/chiffre-affaires-details', [TableauDeBordController::class, 'getChiffreAffairesDetails'])
-        ->name('admin.chiffre-affaires-details');
+        ->name('admin.api.chiffre-affaires-details');
     Route::get('/api/stock-rupture-details', [TableauDeBordController::class, 'getStockRuptureDetails'])
-        ->name('admin.articles-rupture-details');
+        ->name('admin.api.stock-rupture-details');
     Route::get('/api/top-clients-details', [TableauDeBordController::class, 'getTopClientsDetails'])
-        ->name('admin.top-clients-details');
+        ->name('admin.api.top-clients-details');
     Route::get('/api/performance-horaire-details', [TableauDeBordController::class, 'getPerformanceHoraireDetails'])
-        ->name('admin.performance-horaire-details');
+        ->name('admin.api.performance-horaire-details');
     Route::get('/api/modes-paiement-details', [TableauDeBordController::class, 'getModesPaiementDetails'])
-        ->name('admin.modes-paiement-details');
+        ->name('admin.api.modes-paiement-details');
     Route::get('/api/etat-tables-details', [TableauDeBordController::class, 'getEtatTablesDetails'])
-        ->name('admin.etat-tables-details');
+        ->name('admin.api.etat-tables-details');
     
     // Route pour export des données
     Route::get('/api/dashboard-export', [TableauDeBordController::class, 'exportModalData'])

@@ -67,17 +67,17 @@ class TableauDeBordController extends Controller
             // Chiffre d'affaires du jour
             $ca_du_jour = DB::table('FACTURE_VNT')
                 ->whereDate('FCTV_DATE', $aujourd_hui)
-                ->sum('FCTV_MNT_TTC') ?? 0;
+                ->sum('FCT_MNT_RGL') ?? 0;
                 
             // Chiffre d'affaires du mois
             $ca_du_mois = DB::table('FACTURE_VNT')
                 ->where('FCTV_DATE', '>=', $debut_mois)
-                ->sum('FCTV_MNT_TTC') ?? 0;
+                ->sum('FCT_MNT_RGL') ?? 0;
                 
             // Chiffre d'affaires de l'année
             $ca_de_annee = DB::table('FACTURE_VNT')
                 ->where('FCTV_DATE', '>=', $debut_annee)
-                ->sum('FCTV_MNT_TTC') ?? 0;
+                ->sum('FCT_MNT_RGL') ?? 0;
                 
             // Nombre de factures du jour
             $nb_factures_jour = DB::table('FACTURE_VNT')
@@ -90,7 +90,7 @@ class TableauDeBordController extends Controller
             // Évolution des ventes (comparaison avec mois précédent)
             $ca_mois_precedent = DB::table('FACTURE_VNT')
                 ->whereBetween('FCTV_DATE', ['2025-06-01', '2025-06-30'])
-                ->sum('FCTV_MNT_TTC') ?? 0;
+                ->sum('FCT_MNT_RGL') ?? 0;
                 
             $evolution_ventes = 0;
             if ($ca_mois_precedent > 0) {
@@ -106,7 +106,7 @@ class TableauDeBordController extends Controller
                 
             // État de la caisse
             $etat_caisse = DB::table('CAISSE')
-                ->select('CSS_LIBELLE_CAISSE', 'CSS_AVEC_AFFICHEUR')
+                ->select('CSS_LIBELLE_CAISSE', 'CSS_SOLDE_ACTUEL', 'CSS_AVEC_AFFICHEUR')
                 ->get();
 
             return [
@@ -136,7 +136,6 @@ class TableauDeBordController extends Controller
             // Valeur du stock
             $valeur_stock = DB::table('STOCK')
                 ->join('ARTICLE', 'STOCK.ART_REF', '=', 'ARTICLE.ART_REF')
-                ->whereRaw('STOCK.STK_QTE > 0 AND ARTICLE.ART_PRIX_VENTE > 0')
                 ->sum(DB::raw('STOCK.STK_QTE * ARTICLE.ART_PRIX_VENTE')) ?? 0;
                 
             // Articles en rupture
@@ -196,7 +195,7 @@ class TableauDeBordController extends Controller
                 ->whereDate('fv.FCTV_DATE', '2025-07-09')
                 ->select('c.CLT_CLIENT', 'c.CLT_REF')
                 ->selectRaw('COUNT(*) as nb_commandes')
-                ->selectRaw('SUM(fv.FCTV_MNT_TTC) as total_depense')
+                ->selectRaw('SUM(fv.FCT_MNT_RGL) as total_depense')
                 ->groupBy('c.CLT_REF', 'c.CLT_CLIENT')
                 ->orderByDesc('total_depense')
                 ->limit(10)
@@ -206,7 +205,7 @@ class TableauDeBordController extends Controller
             $depense_moyenne_client = DB::table('FACTURE_VNT as fv')
                 ->join('CLIENT as c', 'fv.CLT_REF', '=', 'c.CLT_REF')
                 ->whereDate('fv.FCTV_DATE', '2025-07-09')
-                ->avg('fv.FCTV_MNT_TTC') ?? 0;
+                ->avg('fv.FCT_MNT_RGL') ?? 0;
 
             return [
                 'nb_total_clients' => $nb_total_clients,
@@ -247,12 +246,10 @@ class TableauDeBordController extends Controller
     private function obtenirGestionRestaurant($aujourd_hui)
     {
         try {
-            // Tables occupées - استخدام البيانات الفعلية الحالية
-            $tables_occupees = DB::table('TABLE')->where('ETT_ETAT', 'LIBRE')->count() > 0 ? 
-                DB::table('TABLE')->where('ETT_ETAT', 'LIBRE')->count() - 12 : 2;
-            $tables_occupees = max(0, $tables_occupees); // التأكد من عدم وجود قيم سالبة
+            // Tables occupées
+            $tables_occupees = DB::table('TABLE')->where('ETT_ETAT', 'OCCUPEE')->count();
             
-            // Tables libres 
+            // Tables libres
             $tables_libres = DB::table('TABLE')->where('ETT_ETAT', 'LIBRE')->count();
             
             // Réservations du jour
@@ -264,10 +261,9 @@ class TableauDeBordController extends Controller
             $articles_menu_populaires = DB::table('FACTURE_VNT_DETAIL as fvd')
                 ->join('ARTICLE as a', 'fvd.ART_REF', '=', 'a.ART_REF')
                 ->join('FACTURE_VNT as fv', 'fvd.FCTV_REF', '=', 'fv.FCTV_REF')
-                ->join('SOUS_FAMILLE as sf', 'a.SFM_REF', '=', 'sf.SFM_REF')
-                ->join('FAMILLE as f', 'sf.FAM_REF', '=', 'f.FAM_REF')
+                ->join('FAMILLE as f', 'a.FAM_REF', '=', 'f.FAM_REF')
                 ->whereDate('fv.FCTV_DATE', $aujourd_hui)
-                ->where('f.FAM_LIB', 'LIKE', '%MENU%') // فلترة المنيو
+                ->where('f.FAM_DESIGNATION', 'LIKE', '%MENU%') // فلترة المنيو
                 ->select('a.ART_DESIGNATION', 'a.ART_REF')
                 ->selectRaw('SUM(fvd.FVD_QTE) as quantite_vendue')
                 ->groupBy('a.ART_REF', 'a.ART_DESIGNATION')
@@ -298,7 +294,7 @@ class TableauDeBordController extends Controller
             // Évolution des ventes sur 30 jours
             $evolution_ventes_30j = DB::table('FACTURE_VNT')
                 ->selectRaw('CAST(FCTV_DATE as DATE) as date')
-                ->selectRaw('SUM(FCTV_MNT_TTC) as total_ventes')
+                ->selectRaw('SUM(FCT_MNT_RGL) as total_ventes')
                 ->selectRaw('COUNT(*) as nb_factures')
                 ->where('FCTV_DATE', '>=', Carbon::parse($aujourd_hui)->subDays(30))
                 ->whereNotNull('FCTV_DATE')
@@ -309,13 +305,12 @@ class TableauDeBordController extends Controller
             // Répartition par famille
             $repartition_familles = DB::table('FACTURE_VNT_DETAIL as fvd')
                 ->join('ARTICLE as a', 'fvd.ART_REF', '=', 'a.ART_REF')
-                ->join('SOUS_FAMILLE as sf', 'a.SFM_REF', '=', 'sf.SFM_REF')
-                ->join('FAMILLE as f', 'sf.FAM_REF', '=', 'f.FAM_REF')
+                ->join('FAMILLE as f', 'a.FAM_REF', '=', 'f.FAM_REF')
                 ->join('FACTURE_VNT as fv', 'fvd.FCTV_REF', '=', 'fv.FCTV_REF')
                 ->whereDate('fv.FCTV_DATE', $aujourd_hui)
-                ->select('f.FAM_LIB as FAM_DESIGNATION')
+                ->select('f.FAM_DESIGNATION')
                 ->selectRaw('SUM(fvd.FVD_PRIX_VNT_TTC * fvd.FVD_QTE) as total_ventes')
-                ->groupBy('f.FAM_REF', 'f.FAM_LIB')
+                ->groupBy('f.FAM_REF', 'f.FAM_DESIGNATION')
                 ->orderByDesc('total_ventes')
                 ->get();
             
@@ -323,7 +318,7 @@ class TableauDeBordController extends Controller
             $heures_pointe = DB::table('FACTURE_VNT')
                 ->selectRaw('DATEPART(HOUR, FCTV_DATE) as heure')
                 ->selectRaw('COUNT(*) as nb_transactions')
-                ->selectRaw('SUM(FCTV_MNT_TTC) as ca_heure')
+                ->selectRaw('SUM(FCT_MNT_RGL) as ca_heure')
                 ->whereDate('FCTV_DATE', $aujourd_hui)
                 ->whereNotNull('FCTV_DATE')
                 ->groupByRaw('DATEPART(HOUR, FCTV_DATE)')
@@ -333,12 +328,12 @@ class TableauDeBordController extends Controller
             
             // Performance par caisse
             $performance_caisses = DB::table('FACTURE_VNT as fv')
-                ->join('CAISSE as c', 'fv.CSS_REF', '=', 'c.CSS_ID_CAISSE')
+                ->join('CAISSE as c', 'fv.CSS_REF', '=', 'c.CSS_REF')
                 ->whereDate('fv.FCTV_DATE', $aujourd_hui)
                 ->select('c.CSS_LIBELLE_CAISSE')
                 ->selectRaw('COUNT(*) as nb_transactions')
-                ->selectRaw('SUM(fv.FCTV_MNT_TTC) as ca_caisse')
-                ->groupBy('c.CSS_ID_CAISSE', 'c.CSS_LIBELLE_CAISSE')
+                ->selectRaw('SUM(fv.FCT_MNT_RGL) as ca_caisse')
+                ->groupBy('c.CSS_REF', 'c.CSS_LIBELLE_CAISSE')
                 ->orderByDesc('ca_caisse')
                 ->get();
 
@@ -361,9 +356,8 @@ class TableauDeBordController extends Controller
     private function obtenirGestionFinanciere($aujourd_hui, $debut_mois)
     {
         try {
-            // Solde de caisse actuel (calculé à partir des transactions)
-            $nb_caisses = DB::table('CAISSE')->count();
-            $solde_caisse_actuel = $nb_caisses * 1000; // Valeur par défaut temporaire
+            // Solde de caisse actuel
+            $solde_caisse_actuel = DB::table('CAISSE')->sum('CSS_SOLDE_ACTUEL') ?? 0;
             
             // Dépenses du jour
             $depenses_jour = DB::table('DEPENSE')
@@ -387,7 +381,7 @@ class TableauDeBordController extends Controller
             // Encaissements vs sorties
             $ca_jour = DB::table('FACTURE_VNT')
                 ->whereDate('FCTV_DATE', $aujourd_hui)
-                ->sum('FCTV_MNT_TTC') ?? 0;
+                ->sum('FCT_MNT_RGL') ?? 0;
                 
             $encaissements_vs_sorties = [
                 'encaissements' => $ca_jour,
@@ -493,7 +487,7 @@ class TableauDeBordController extends Controller
             $details = [
                 'ca_total' => DB::table('FACTURE_VNT')
                     ->whereDate('FCTV_DATE', $date)
-                    ->sum('FCTV_MNT_TTC'),
+                    ->sum('FCT_MNT_RGL'),
                     
                 'nb_factures' => DB::table('FACTURE_VNT')
                     ->whereDate('FCTV_DATE', $date)
@@ -502,7 +496,7 @@ class TableauDeBordController extends Controller
                 'ventes_par_heure' => DB::table('FACTURE_VNT')
                     ->selectRaw('DATEPART(HOUR, FCTV_DATE) as heure')
                     ->selectRaw('COUNT(*) as nb_ventes')
-                    ->selectRaw('SUM(FCTV_MNT_TTC) as ca_heure')
+                    ->selectRaw('SUM(FCT_MNT_RGL) as ca_heure')
                     ->whereDate('FCTV_DATE', $date)
                     ->groupByRaw('DATEPART(HOUR, FCTV_DATE)')
                     ->orderBy('heure')
@@ -567,500 +561,5 @@ class TableauDeBordController extends Controller
                 'message' => 'Erreur: ' . $e->getMessage()
             ], 500);
         }
-    }
-
-    /**
-     * Modal: Top Clients Détaillé
-     */
-    public function getTopClientsDetails(Request $request)
-    {
-        try {
-            $topClients = DB::table('FACTURE_VNT as f')
-                ->join('CLIENT as c', 'f.CLT_REF', '=', 'c.CLT_REF')
-                ->select('c.CLT_NOM', 'c.CLT_REF', 
-                    DB::raw('COUNT(f.FCTV_REF) as nombre_factures'),
-                    DB::raw('SUM(f.FCTV_MNT_TTC) as total_achats'),
-                    DB::raw('AVG(f.FCTV_MNT_TTC) as ticket_moyen'))
-                ->whereDate('f.FCTV_DATE', today())
-                ->groupBy('c.CLT_NOM', 'c.CLT_REF')
-                ->orderBy('total_achats', 'desc')
-                ->limit(10)
-                ->get();
-
-            $totalClients = DB::table('FACTURE_VNT as f')
-                ->join('CLIENT as c', 'f.CLT_REF', '=', 'c.CLT_REF')
-                ->whereDate('f.FCTV_DATE', today())
-                ->distinct('c.CLT_REF')
-                ->count();
-
-            return response()->json([
-                'success' => true,
-                'data' => [
-                    'clients' => $topClients,
-                    'total_clients' => $totalClients,
-                    'date' => today()->format('d/m/Y')
-                ]
-            ]);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erreur: ' . $e->getMessage()
-            ], 500);
-        }
-    }
-
-    /**
-     * Modal: Stock en Rupture Détaillé
-     */
-    public function getStockRuptureDetails(Request $request)
-    {
-        try {
-            $articlesRupture = DB::table('ARTICLE as a')
-                ->leftJoin('SOUS_FAMILLE as sf', 'a.SFM_REF', '=', 'sf.SFM_REF')
-                ->leftJoin('FAMILLE as f', 'sf.FAM_REF', '=', 'f.FAM_REF')
-                ->leftJoin('STOCK as s', 'a.ART_REF', '=', 's.ART_REF')
-                ->select('a.ART_REF', 'a.ART_DESIGNATION', 'a.ART_PV_TTC',
-                    'f.FAM_LIB as famille',
-                    'sf.SFM_LIB as sous_famille',
-                    DB::raw('ISNULL(s.STK_QTE, 0) as stock_actuel'),
-                    'a.ART_STOCK_MIN as stock_minimum',
-                    DB::raw('CASE WHEN ISNULL(s.STK_QTE, 0) = 0 THEN "Rupture Totale"
-                              WHEN ISNULL(s.STK_QTE, 0) <= a.ART_STOCK_MIN THEN "Stock Faible"
-                              ELSE "Normal" END as statut_stock'))
-                ->where(function($query) {
-                    $query->whereRaw('ISNULL(s.STK_QTE, 0) <= a.ART_STOCK_MIN')
-                          ->orWhereRaw('ISNULL(s.STK_QTE, 0) = 0');
-                })
-                ->orderByRaw('ISNULL(s.STK_QTE, 0) ASC')
-                ->limit(50)
-                ->get();
-
-            $statistiques = [
-                'rupture_totale' => $articlesRupture->where('stock_actuel', 0)->count(),
-                'stock_faible' => $articlesRupture->where('stock_actuel', '>', 0)->count(),
-                'total_articles' => $articlesRupture->count(),
-                'valeur_manquante' => $articlesRupture->sum(function($item) {
-                    return ($item->stock_minimum - $item->stock_actuel) * $item->ART_PV_TTC;
-                })
-            ];
-
-            return response()->json([
-                'success' => true,
-                'data' => [
-                    'articles_rupture' => $articlesRupture,
-                    'statistiques' => $statistiques,
-                    'date' => today()->format('d/m/Y')
-                ]
-            ]);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erreur: ' . $e->getMessage()
-            ], 500);
-        }
-    }
-
-    /**
-     * Modal: Performance Horaire Détaillée
-     */
-    public function getPerformanceHoraireDetails(Request $request)
-    {
-        try {
-            $ventesParHeure = DB::table('FACTURE_VNT')
-                ->select(
-                    DB::raw('DATEPART(HOUR, FCTV_DATE) as heure'),
-                    DB::raw('COUNT(*) as nombre_ventes'),
-                    DB::raw('SUM(FCTV_MNT_TTC) as chiffre_affaires'),
-                    DB::raw('AVG(FCTV_MNT_TTC) as ticket_moyen')
-                )
-                ->whereDate('FCTV_DATE', today())
-                ->groupBy(DB::raw('DATEPART(HOUR, FCTV_DATE)'))
-                ->orderBy('heure')
-                ->get();
-
-            $heurePointe = $ventesParHeure->sortByDesc('chiffre_affaires')->first();
-            $heureCreuse = $ventesParHeure->sortBy('chiffre_affaires')->first();
-
-            return response()->json([
-                'success' => true,
-                'data' => [
-                    'ventes_par_heure' => $ventesParHeure,
-                    'heure_pointe' => $heurePointe,
-                    'heure_creuse' => $heureCreuse,
-                    'date' => today()->format('d/m/Y')
-                ]
-            ]);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erreur: ' . $e->getMessage()
-            ], 500);
-        }
-    }
-
-    /**
-     * Modal: Modes de Paiement Détaillés
-     */
-    public function getModesPaiementDetails(Request $request)
-    {
-        try {
-            $modesPaiement = DB::table('REGLEMENT as r')
-                ->join('FACTURE_VNT as f', 'r.FCTV_REF', '=', 'f.FCTV_REF')
-                ->select('r.RGL_MODE', 
-                    DB::raw('COUNT(*) as nombre_transactions'),
-                    DB::raw('SUM(r.RGL_MNT) as montant_total'),
-                    DB::raw('AVG(r.RGL_MNT) as montant_moyen'))
-                ->whereDate('f.FCTV_DATE', today())
-                ->groupBy('r.RGL_MODE')
-                ->orderBy('montant_total', 'desc')
-                ->get();
-
-            $totalTransactions = $modesPaiement->sum('nombre_transactions');
-            $totalMontant = $modesPaiement->sum('montant_total');
-
-            return response()->json([
-                'success' => true,
-                'data' => [
-                    'modes_paiement' => $modesPaiement,
-                    'total_transactions' => $totalTransactions,
-                    'total_montant' => $totalMontant,
-                    'date' => today()->format('d/m/Y')
-                ]
-            ]);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erreur: ' . $e->getMessage()
-            ], 500);
-        }
-    }
-
-    /**
-     * Modal: État des Tables Restaurant
-     */
-    public function getEtatTablesDetails(Request $request)
-    {
-        try {
-            // Supposons que nous avons une table TABLES pour les restaurants
-            $tables = DB::table('TABLES')
-                ->select('TBL_NUM', 'TBL_STATUT', 'TBL_CAPACITE', 
-                    DB::raw('CASE WHEN TBL_STATUT = "OCCUPEE" THEN "Occupée" 
-                              WHEN TBL_STATUT = "RESERVEE" THEN "Réservée" 
-                              ELSE "Libre" END as statut_label'))
-                ->orderBy('TBL_NUM')
-                ->get();
-
-            $statistiques = [
-                'total_tables' => $tables->count(),
-                'tables_occupees' => $tables->where('TBL_STATUT', 'OCCUPEE')->count(),
-                'tables_reservees' => $tables->where('TBL_STATUT', 'RESERVEE')->count(),
-                'tables_libres' => $tables->where('TBL_STATUT', 'LIBRE')->count(),
-            ];
-
-            return response()->json([
-                'success' => true,
-                'data' => [
-                    'tables' => $tables,
-                    'statistiques' => $statistiques,
-                    'date' => today()->format('d/m/Y')
-                ]
-            ]);
-
-        } catch (\Exception $e) {
-            // Fallback si la table TABLES n'existe pas
-            return response()->json([
-                'success' => true,
-                'data' => [
-                    'tables' => [],
-                    'statistiques' => [
-                        'total_tables' => 0,
-                        'tables_occupees' => 0,
-                        'tables_reservees' => 0,
-                        'tables_libres' => 0,
-                    ],
-                    'message' => 'Module restaurant non configuré',
-                    'date' => today()->format('d/m/Y')
-                ]
-            ]);
-        }
-    }
-
-    /**
-     * تصدير بيانات المودال
-     */
-    public function exportModalData(Request $request)
-    {
-        try {
-            $type = $request->input('type');
-            $format = $request->input('format', 'json');
-            
-            $data = [];
-            $filename = '';
-            
-            switch ($type) {
-                case 'chiffre-affaires':
-                    $data = $this->getChiffreAffairesExportData();
-                    $filename = 'chiffre_affaires_' . date('Y-m-d');
-                    break;
-                    
-                case 'articles-rupture':
-                    $data = $this->getArticlesRuptureExportData();
-                    $filename = 'articles_rupture_' . date('Y-m-d');
-                    break;
-                    
-                case 'top-clients':
-                    $data = $this->getTopClientsExportData();
-                    $filename = 'top_clients_' . date('Y-m-d');
-                    break;
-                    
-                case 'performance-horaire':
-                    $data = $this->getPerformanceHoraireExportData();
-                    $filename = 'performance_horaire_' . date('Y-m-d');
-                    break;
-                    
-                case 'modes-paiement':
-                    $data = $this->getModesPaiementExportData();
-                    $filename = 'modes_paiement_' . date('Y-m-d');
-                    break;
-                    
-                case 'etat-tables':
-                    $data = $this->getEtatTablesExportData();
-                    $filename = 'etat_tables_' . date('Y-m-d');
-                    break;
-                    
-                default:
-                    return response()->json(['error' => 'Type de données non supporté'], 400);
-            }
-            
-            if ($format === 'csv') {
-                return $this->exportToCSV($data, $filename);
-            } elseif ($format === 'excel') {
-                return $this->exportToExcel($data, $filename);
-            } else {
-                return response()->json($data);
-            }
-            
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Erreur lors de l\'export: ' . $e->getMessage()], 500);
-        }
-    }
-    
-    /**
-     * بيانات التصدير لرقم الأعمال
-     */
-    private function getChiffreAffairesExportData()
-    {
-        try {
-            $ventes = DB::table('FACTURE_VENTE as fv')
-                ->select([
-                    'fv.FV_NUMERO as numero_facture',
-                    'fv.FV_DATE as date_vente',
-                    'fv.FV_TOTAL_HT as total_ht',
-                    'fv.FV_TOTAL_TTC as total_ttc',
-                    'c.CLT_CLIENT as client'
-                ])
-                ->leftJoin('CLIENT as c', 'fv.FV_CLIENT', '=', 'c.CLT_CODE')
-                ->whereDate('fv.FV_DATE', '2025-07-09')
-                ->orderBy('fv.FV_DATE', 'desc')
-                ->get()
-                ->toArray();
-                
-            return $ventes;
-        } catch (\Exception $e) {
-            return [];
-        }
-    }
-    
-    /**
-     * بيانات التصدير للمقالات المنقطعة
-     */
-    private function getArticlesRuptureExportData()
-    {
-        try {
-            $articles = DB::table('ARTICLE as a')
-                ->select([
-                    'a.ART_CODE as code',
-                    'a.ART_DESIGNATION as designation',
-                    'sf.SFM_LIB as sous_famille',
-                    'f.FAM_LIB as famille',
-                    'a.ART_STOCK_PHYSIQUE as stock_actuel',
-                    'a.ART_STOCK_MINI as stock_minimum'
-                ])
-                ->leftJoin('SOUS_FAMILLE as sf', 'a.ART_SFM_REF', '=', 'sf.SFM_REF')
-                ->leftJoin('FAMILLE as f', 'sf.SFM_FAM_REF', '=', 'f.FAM_REF')
-                ->whereRaw('CAST(a.ART_STOCK_PHYSIQUE AS DECIMAL(10,2)) <= CAST(a.ART_STOCK_MINI AS DECIMAL(10,2))')
-                ->orderBy('a.ART_DESIGNATION')
-                ->get()
-                ->toArray();
-                
-            return $articles;
-        } catch (\Exception $e) {
-            return [];
-        }
-    }
-    
-    /**
-     * بيانات التصدير لأفضل العملاء
-     */
-    private function getTopClientsExportData()
-    {
-        try {
-            $clients = DB::table('FACTURE_VENTE as fv')
-                ->select([
-                    'c.CLT_CLIENT as nom_client',
-                    DB::raw('COUNT(fv.FV_ID) as nombre_achats'),
-                    DB::raw('SUM(CAST(fv.FV_TOTAL_TTC AS DECIMAL(15,2))) as total_depense')
-                ])
-                ->leftJoin('CLIENT as c', 'fv.FV_CLIENT', '=', 'c.CLT_CODE')
-                ->whereDate('fv.FV_DATE', '2025-07-09')
-                ->groupBy('c.CLT_CLIENT', 'c.CLT_CODE')
-                ->orderBy('total_depense', 'desc')
-                ->limit(10)
-                ->get()
-                ->toArray();
-                
-            return $clients;
-        } catch (\Exception $e) {
-            return [];
-        }
-    }
-    
-    /**
-     * بيانات التصدير للأداء بالساعة
-     */
-    private function getPerformanceHoraireExportData()
-    {
-        try {
-            $performance = DB::table('FACTURE_VENTE as fv')
-                ->select([
-                    DB::raw('DATEPART(HOUR, fv.FV_DATE) as heure'),
-                    DB::raw('COUNT(fv.FV_ID) as nombre_ventes'),
-                    DB::raw('SUM(CAST(fv.FV_TOTAL_TTC AS DECIMAL(15,2))) as chiffre_affaires')
-                ])
-                ->whereDate('fv.FV_DATE', '2025-07-09')
-                ->groupBy(DB::raw('DATEPART(HOUR, fv.FV_DATE)'))
-                ->orderBy('heure')
-                ->get()
-                ->toArray();
-                
-            return $performance;
-        } catch (\Exception $e) {
-            return [];
-        }
-    }
-    
-    /**
-     * بيانات التصدير لطرق الدفع
-     */
-    private function getModesPaiementExportData()
-    {
-        try {
-            $paiements = DB::table('REGLEMENT as r')
-                ->select([
-                    'r.REG_TYPE_REGLEMENT as mode_paiement',
-                    DB::raw('COUNT(r.REG_ID) as nombre_transactions'),
-                    DB::raw('SUM(CAST(r.REG_MONTANT AS DECIMAL(15,2))) as montant_total')
-                ])
-                ->whereDate('r.REG_DATE', '2025-07-09')
-                ->groupBy('r.REG_TYPE_REGLEMENT')
-                ->orderBy('montant_total', 'desc')
-                ->get()
-                ->toArray();
-                
-            return $paiements;
-        } catch (\Exception $e) {
-            return [];
-        }
-    }
-    
-    /**
-     * بيانات التصدير لحالة الطاولات
-     */
-    private function getEtatTablesExportData()
-    {
-        try {
-            // نظراً لعدم وجود جدول TABLES، سنرجع بيانات وهمية
-            return [
-                ['numero_table' => '1', 'statut' => 'Libre', 'capacite' => '4'],
-                ['numero_table' => '2', 'statut' => 'Occupée', 'capacite' => '6'],
-                ['numero_table' => '3', 'statut' => 'Réservée', 'capacite' => '2'],
-            ];
-        } catch (\Exception $e) {
-            return [];
-        }
-    }
-    
-    /**
-     * تصدير البيانات بصيغة CSV
-     */
-    private function exportToCSV($data, $filename)
-    {
-        if (empty($data)) {
-            return response()->json(['error' => 'Aucune donnée à exporter'], 400);
-        }
-        
-        $headers = [
-            'Content-Type' => 'text/csv',
-            'Content-Disposition' => 'attachment; filename="' . $filename . '.csv"',
-        ];
-        
-        $callback = function() use ($data) {
-            $file = fopen('php://output', 'w');
-            
-            // En-têtes CSV
-            if (!empty($data)) {
-                fputcsv($file, array_keys((array)$data[0]));
-                
-                // Données
-                foreach ($data as $row) {
-                    fputcsv($file, (array)$row);
-                }
-            }
-            
-            fclose($file);
-        };
-        
-        return response()->stream($callback, 200, $headers);
-    }
-    
-    /**
-     * تصدير البيانات بصيغة Excel (CSV متقدم)
-     */
-    private function exportToExcel($data, $filename)
-    {
-        // بالنسبة لـ Excel، سنستخدم CSV مع UTF-8 BOM للدعم المحسن
-        if (empty($data)) {
-            return response()->json(['error' => 'Aucune donnée à exporter'], 400);
-        }
-        
-        $headers = [
-            'Content-Type' => 'application/vnd.ms-excel',
-            'Content-Disposition' => 'attachment; filename="' . $filename . '.xls"',
-        ];
-        
-        $callback = function() use ($data) {
-            $file = fopen('php://output', 'w');
-            
-            // UTF-8 BOM للـ Excel
-            fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
-            
-            // En-têtes
-            if (!empty($data)) {
-                fputcsv($file, array_keys((array)$data[0]), "\t");
-                
-                // Données
-                foreach ($data as $row) {
-                    fputcsv($file, (array)$row, "\t");
-                }
-            }
-            
-            fclose($file);
-        };
-        
-        return response()->stream($callback, 200, $headers);
     }
 }

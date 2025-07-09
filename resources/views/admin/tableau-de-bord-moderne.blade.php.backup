@@ -868,7 +868,7 @@
                                 onmouseout="this.style.background='rgba(255,255,255,0.1)'">
                             <i class="fas fa-sign-out-alt me-1"></i>
                             Déconnexion
-                        </a>
+                        </button>
                     </form>
                     <div style="color: rgba(255,255,255,0.8); font-size: 0.875rem;">
                         Dernière mise à jour: {{ now()->format('d/m/Y H:i') }}
@@ -901,17 +901,17 @@
                     +{{ number_format($statistiquesFinancieres['evolution_ventes'] ?? 0, 1) }}% vs mois dernier
                 </div>
                 <div class="stat-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
-                    <a href="{{ route('admin.dashboard.chiffre-affaires') }}" target="_blank"
+                    <button onclick="openAdvancedModal('chiffre-affaires', 'Chiffre d\'Affaires Détaillé', 'fas fa-euro-sign')" 
                             class="btn-details" 
-                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--success-color); background: transparent; color: var(--success-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: flex; align-items: center; justify-content: center;">
-                        <i class="fas fa-external-link-alt me-1"></i>
+                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--success-color); background: transparent; color: var(--success-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="fas fa-chart-line me-1"></i>
                         Voir détails
-                    </a>
-                    <a onclick="exportData('chiffre-affaires', 'pdf')" 
+                    </button>
+                    <button onclick="exportData('chiffre-affaires', 'pdf')" 
                             class="btn-export" 
                             style="padding: 0.5rem 0.75rem; border: 1px solid var(--success-light); background: var(--success-light); color: white; border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
                         <i class="fas fa-download"></i>
-                    </a>
+                    </button>
                 </div>
             </div>
 
@@ -929,17 +929,17 @@
                     {{ number_format($statistiquesFinancieres['nb_factures_jour'] ?? 0) }} factures aujourd'hui
                 </div>
                 <div class="stat-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
-                    <a href="{{ route('admin.dashboard.chiffre-affaires') }}?periode=mois" target="_blank"
+                    <button onclick="openAdvancedModal('ca-mois', 'Chiffre d\'Affaires du Mois', 'fas fa-calendar-month')" 
                             class="btn-details" 
-                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--info-color); background: transparent; color: var(--info-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: flex; align-items: center; justify-content: center;">
-                        <i class="fas fa-external-link-alt me-1"></i>
+                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--info-color); background: transparent; color: var(--info-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="fas fa-chart-line me-1"></i>
                         Voir détails
-                    </a>
-                    <a onclick="exportData('ca-mois', 'pdf')" 
+                    </button>
+                    <button onclick="exportData('ca-mois', 'pdf')" 
                             class="btn-export" 
                             style="padding: 0.5rem 0.75rem; border: 1px solid var(--info-light); background: var(--info-light); color: white; border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
                         <i class="fas fa-download"></i>
-                    </a>
+                    </button>
                 </div>
             </div>
 
@@ -957,17 +957,17 @@
                     Performance optimale
                 </div>
                 <div class="stat-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
-                    <a href="{{ route('admin.dashboard.chiffre-affaires') }}?type=ticket-moyen" target="_blank"
+                    <button onclick="openAdvancedModal('ticket-moyen', 'Ticket Moyen Détaillé', 'fas fa-shopping-cart')" 
                             class="btn-details" 
-                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--success-color); background: transparent; color: var(--success-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: flex; align-items: center; justify-content: center;">
-                        <i class="fas fa-external-link-alt me-1"></i>
+                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--success-color); background: transparent; color: var(--success-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="fas fa-chart-line me-1"></i>
                         Voir détails
-                    </a>
-                    <a onclick="exportData('ticket-moyen', 'pdf')" 
+                    </button>
+                    <button onclick="exportData('ticket-moyen', 'pdf')" 
                             class="btn-export" 
                             style="padding: 0.5rem 0.75rem; border: 1px solid var(--success-light); background: var(--success-light); color: white; border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
                         <i class="fas fa-download"></i>
-                    </a>
+                    </button>
                 </div>
             </div>
 
@@ -986,25 +986,25 @@
                     {{ number_format($gestionStocks['articles_rupture'] ?? 0) }} en rupture
                 </div>
                 <div class="stat-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
-                    <a href="{{ route('admin.dashboard.stock-rupture') }}" target="_blank"
+                    <button onclick="openAdvancedModal('stock-rupture', 'Articles en Rupture de Stock', 'fas fa-exclamation-triangle')" 
                             class="btn-details" 
-                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--warning-color); background: transparent; color: var(--warning-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: flex; align-items: center; justify-content: center;">
-                        <i class="fas fa-external-link-alt me-1"></i>
+                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--warning-color); background: transparent; color: var(--warning-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="fas fa-boxes me-1"></i>
                         Articles en rupture
-                    </a>
+                    </button>
                 </div>
                 <div class="stat-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
-                    <a href="{{ route('admin.dashboard.stock-rupture') }}?type=stock" target="_blank" 
+                    <button onclick="openAdvancedModal('articles-stock', 'Détails des Articles en Stock', 'fas fa-boxes')" 
                             class="btn-details" 
-                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--info-color); background: transparent; color: var(--info-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: flex; align-items: center; justify-content: center;">
+                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--info-color); background: transparent; color: var(--info-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
                         <i class="fas fa-box-open me-1"></i>
                         Voir détails
-                    </a>
-                    <a onclick="exportData('articles-stock', 'pdf')" 
+                    </button>
+                    <button onclick="exportData('articles-stock', 'pdf')" 
                             class="btn-export" 
                             style="padding: 0.5rem 0.75rem; border: 1px solid var(--info-light); background: var(--info-light); color: white; border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
                         <i class="fas fa-download"></i>
-                    </a>
+                    </button>
                 </div>
             </div>
 
@@ -1022,17 +1022,17 @@
                     {{ number_format($gestionStocks['articles_stock_faible'] ?? 0) }} en stock faible
                 </div>
                 <div class="stat-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
-                    <a href="{{ route('admin.dashboard.stock-rupture') }}?type=valeur" target="_blank" 
+                    <button onclick="openAdvancedModal('valeur-stock', 'Valeur du Stock Détaillée', 'fas fa-warehouse')" 
                             class="btn-details" 
-                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--info-color); background: transparent; color: var(--info-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: flex; align-items: center; justify-content: center;">
+                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--info-color); background: transparent; color: var(--info-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
                         <i class="fas fa-chart-line me-1"></i>
                         Voir détails
-                    </a>
-                    <a onclick="exportData('valeur-stock', 'pdf')" 
+                    </button>
+                    <button onclick="exportData('valeur-stock', 'pdf')" 
                             class="btn-export" 
                             style="padding: 0.5rem 0.75rem; border: 1px solid var(--info-light); background: var(--info-light); color: white; border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
                         <i class="fas fa-download"></i>
-                    </a>
+                    </button>
                 </div>
             </div>
 
@@ -1051,25 +1051,25 @@
                     {{ number_format($gestionClientele['nouveaux_clients_mois'] ?? 0) }} nouveaux ce mois
                 </div>
                 <div class="stat-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
-                    <a href="{{ route('admin.dashboard.top-clients') }}" target="_blank" 
+                    <button onclick="openAdvancedModal('top-clients', 'Top Clients du Restaurant', 'fas fa-star')" 
                             class="btn-details" 
-                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--warning-color); background: transparent; color: var(--warning-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: flex; align-items: center; justify-content: center;">
+                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--warning-color); background: transparent; color: var(--warning-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
                         <i class="fas fa-crown me-1"></i>
                         Top clients
-                    </a>
+                    </button>
                 </div>
                 <div class="stat-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
-                    <a href="{{ route('admin.dashboard.top-clients') }}?type=totaux" target="_blank" 
+                    <button onclick="openAdvancedModal('clients-totaux', 'Détails des Clients Totaux', 'fas fa-users')" 
                             class="btn-details" 
-                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--success-color); background: transparent; color: var(--success-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: flex; align-items: center; justify-content: center;">
+                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--success-color); background: transparent; color: var(--success-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
                         <i class="fas fa-user-friends me-1"></i>
                         Voir détails
-                    </a>
-                    <a onclick="exportData('clients-totaux', 'pdf')" 
+                    </button>
+                    <button onclick="exportData('clients-totaux', 'pdf')" 
                             class="btn-export" 
                             style="padding: 0.5rem 0.75rem; border: 1px solid var(--success-light); background: var(--success-light); color: white; border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
                         <i class="fas fa-download"></i>
-                    </a>
+                    </button>
                 </div>
             </div>
 
@@ -1087,17 +1087,17 @@
                     {{ number_format($gestionClientele['points_fidelite_distribues'] ?? 0) }} points distribués
                 </div>
                 <div class="stat-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
-                    <a href="{{ route('admin.dashboard.top-clients') }}?type=fideles" target="_blank" 
+                    <button onclick="openAdvancedModal('clients-fideles', 'Détails des Clients Fidèles', 'fas fa-star')" 
                             class="btn-details" 
-                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--success-color); background: transparent; color: var(--success-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: flex; align-items: center; justify-content: center;">
+                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--success-color); background: transparent; color: var(--success-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
                         <i class="fas fa-gift me-1"></i>
                         Voir détails
-                    </a>
-                    <a onclick="exportData('clients-fideles', 'pdf')" 
+                    </button>
+                    <button onclick="exportData('clients-fideles', 'pdf')" 
                             class="btn-export" 
                             style="padding: 0.5rem 0.75rem; border: 1px solid var(--success-light); background: var(--success-light); color: white; border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
                         <i class="fas fa-download"></i>
-                    </a>
+                    </button>
                 </div>
             </div>
 
@@ -1116,25 +1116,25 @@
                     {{ number_format($gestionRestaurant['reservations_jour'] ?? 0) }} réservations aujourd'hui
                 </div>
                 <div class="stat-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
-                    <a href="{{ route('admin.dashboard.etat-tables') }}" target="_blank" 
+                    <button onclick="openAdvancedModal('etat-tables', 'État des Tables en Temps Réel', 'fas fa-utensils')" 
                             class="btn-details" 
-                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--danger-color); background: transparent; color: var(--danger-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: flex; align-items: center; justify-content: center;">
+                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--danger-color); background: transparent; color: var(--danger-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
                         <i class="fas fa-table me-1"></i>
                         Voir tables
-                    </a>
+                    </button>
                 </div>
                 <div class="stat-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
-                    <a href="{{ route('admin.dashboard.etat-tables') }}?type=occupees" target="_blank" 
+                    <button onclick="openAdvancedModal('tables-occupees', 'Détails des Tables Occupées', 'fas fa-utensils')" 
                             class="btn-details" 
-                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--success-color); background: transparent; color: var(--success-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: flex; align-items: center; justify-content: center;">
+                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--success-color); background: transparent; color: var(--success-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
                         <i class="fas fa-concierge-bell me-1"></i>
                         Voir détails
-                    </a>
-                    <a onclick="exportData('tables-occupees', 'pdf')" 
+                    </button>
+                    <button onclick="exportData('tables-occupees', 'pdf')" 
                             class="btn-export" 
                             style="padding: 0.5rem 0.75rem; border: 1px solid var(--success-light); background: var(--success-light); color: white; border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
                         <i class="fas fa-download"></i>
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>
@@ -1169,7 +1169,7 @@
                             <p style="margin: 0; font-size: 0.875rem; color: var(--gray-600);">Rapport journalier</p>
                         </div>
                     </div>
-                </a>
+                </button>
             </form>
 
             <!-- État du Stock -->
@@ -1193,7 +1193,7 @@
                             <p style="margin: 0; font-size: 0.875rem; color: var(--gray-600);">Inventaire actuel</p>
                         </div>
                     </div>
-                </a>
+                </button>
             </form>
 
             <!-- Base Clients -->
@@ -1217,7 +1217,7 @@
                             <p style="margin: 0; font-size: 0.875rem; color: var(--gray-600);">Analyse clientèle</p>
                         </div>
                     </div>
-                </a>
+                </button>
             </form>
 
             <!-- Rapport Financier -->
@@ -1241,7 +1241,7 @@
                             <p style="margin: 0; font-size: 0.875rem; color: var(--gray-600);">Analyse financière</p>
                         </div>
                     </div>
-                </a>
+                </button>
             </form>
         </div>
     </div>
@@ -1259,11 +1259,11 @@
                             </h4>
                             <p class="chart-subtitle">Chiffre d'affaires sur les 30 derniers jours</p>
                         </div>
-                        <a href="{{ route('admin.dashboard.performance-horaire') }}" target="_blank" 
+                        <button onclick="openAdvancedModal('performance-horaire', 'Performance par Heure', 'fas fa-clock')" 
                                 class="btn btn-sm btn-outline-primary">
                             <i class="fas fa-expand-arrows-alt"></i>
                             Analyse détaillée
-                        </a>
+                        </button>
                     </div>
                     <div class="chart-content">
                         <canvas id="evolutionVentesChart" class="chart-canvas"></canvas>
@@ -1311,11 +1311,11 @@
                             </h4>
                             <p class="chart-subtitle">Répartition des encaissements</p>
                         </div>
-                        <a href="{{ route('admin.dashboard.modes-paiement') }}" target="_blank" 
+                        <button onclick="openAdvancedModal('modes-paiement', 'Modes de Paiement Détaillés', 'fas fa-credit-card')" 
                                 class="btn btn-sm btn-outline-info">
                             <i class="fas fa-expand-arrows-alt"></i>
                             Analyse détaillée
-                        </a>
+                        </button>
                     </div>
                     <div class="chart-content">
                         <canvas id="modesPaiementChart" class="chart-canvas"></canvas>
@@ -1482,9 +1482,9 @@
                     <i class="modal-icon fas fa-chart-line" style="font-size: 1.5rem; color: var(--primary-color);"></i>
                     <h2 class="modal-title-text" style="margin: 0; color: var(--gray-800); font-size: 1.5rem;">Titre du Modal</h2>
                 </div>
-                <a onclick="closeAdvancedModal()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--gray-600);">
+                <button onclick="closeAdvancedModal()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--gray-600);">
                     <i class="fas fa-times"></i>
-                </a>
+                </button>
             </div>
             <div id="modalContent" style="min-height: 200px;">
                 <div id="modalLoading" style="display: none; text-align: center; padding: 3rem;">
@@ -2120,6 +2120,768 @@
             a.click();
             window.URL.revokeObjectURL(url);
         };
+
+        // Fonction d'export du rapport complet
+        function exportReport() {
+            const url = '{{ route("admin.reports.generate") }}?type_rapport=dashboard&format=pdf&periode_type=jour&date_debut={{ date("Y-m-d") }}';
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>
+            'chiffre-affaires': '{{ route("admin.chiffre-affaires-details") }}',
+            'stock-rupture': '{{ route("admin.articles-rupture-details") }}',
+            'top-clients': '{{ route("admin.top-clients-details") }}',
+            'performance-horaire': '{{ route("admin.performance-horaire-details") }}',
+            'modes-paiement': '{{ route("admin.modes-paiement-details") }}',
+            'etat-tables': '{{ route("admin.etat-tables-details") }}'
+        };
+
+        // Fonction principale pour ouvrir les modals avancées - تعريف عام في window
+        window.openAdvancedModal = function(type, title, icon) {
+            const modal = document.getElementById('advancedModalContainer');
+            const titleElement = modal.querySelector('.modal-title-text');
+            const iconElement = modal.querySelector('.modal-icon');
+            
+            // Configuration du modal
+            titleElement.textContent = title;
+            iconElement.className = icon;
+            
+            // Affichage du modal avec animation
+            modal.style.display = 'flex';
+            modal.style.opacity = '0';
+            setTimeout(() => {
+                modal.style.opacity = '1';
+            }, 10);
+            
+            // Chargement des données
+            loadModalData(type);
+            
+            // Gestion du body scroll
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Fonction pour fermer le modal
+        function closeAdvancedModal() {
+            const modal = document.getElementById('advancedModalContainer');
+            modal.style.opacity = '0';
+            setTimeout(() => {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }, 300);
+        }
+
+        // Chargement des données du modal
+        async function loadModalData(type) {
+            const endpoint = modalEndpoints[type];
+            if (!endpoint) {
+                console.error('Endpoint non trouvé pour le type:', type);
+                return;
+            }
+
+            try {
+                showModalLoading();
+                
+                const response = await fetch(endpoint, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                // Affichage des données selon le type
+                displayModalData(type, data);
+                
+            } catch (error) {
+                console.error('Erreur lors du chargement des données:', error);
+                showModalError('Erreur lors du chargement des données. Veuillez réessayer.');
+            }
+        }
+
+        // Affichage du loading dans le modal
+        function showModalLoading() {
+            const loadingElement = document.getElementById('modalLoading');
+            const dataElement = document.querySelector('.modal-tab-content');
+            const errorElement = document.getElementById('modalError');
+            
+            if (loadingElement) loadingElement.style.display = 'block';
+            if (dataElement) dataElement.style.display = 'none';
+            if (errorElement) errorElement.style.display = 'none';
+        }
+
+        // Affichage d'erreur dans le modal
+        function showModalError(message) {
+            const loadingElement = document.getElementById('modalLoading');
+            const dataElement = document.querySelector('.modal-tab-content');
+            const errorElement = document.getElementById('modalError');
+            
+            if (loadingElement) loadingElement.style.display = 'none';
+            if (dataElement) dataElement.style.display = 'none';
+            if (errorElement) {
+                errorElement.style.display = 'block';
+                const errorMessage = errorElement.querySelector('p');
+                if (errorMessage) {
+                    errorMessage.textContent = message;
+                }
+            }
+        }
+
+        // Affichage des données selon le type de modal
+        function displayModalData(type, data) {
+            const loadingElement = document.getElementById('modalLoading');
+            const dataElement = document.querySelector('.modal-tab-content');
+            const errorElement = document.getElementById('modalError');
+            
+            // إخفاء loading وerror
+            if (loadingElement) loadingElement.style.display = 'none';
+            if (errorElement) errorElement.style.display = 'none';
+            if (dataElement) dataElement.style.display = 'block';
+            
+            const contentContainer = dataElement;
+            
+            switch(type) {
+                case 'chiffre-affaires':
+                    displayChiffreAffairesData(data, contentContainer);
+                    break;
+                case 'stock-rupture':
+                    displayStockRuptureData(data, contentContainer);
+                    break;
+                case 'top-clients':
+                    displayTopClientsData(data, contentContainer);
+                    break;
+                case 'performance-horaire':
+                    displayPerformanceHoraireData(data, contentContainer);
+                    break;
+                case 'modes-paiement':
+                    displayModesPaiementData(data, contentContainer);
+                    break;
+                case 'etat-tables':
+                    displayEtatTablesData(data, contentContainer);
+                    break;
+                default:
+                    contentContainer.innerHTML = `
+                        <div style="text-align: center; padding: 3rem;">
+                            <i class="fas fa-exclamation-triangle text-warning" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                            <p style="color: #856404;">Type de données non reconnu: ${type}</p>
+                        </div>
+                    `;
+            }
+            
+            // Mise à jour du timestamp
+            updateModalTimestamp();
+        }
+
+        // Fonctions d'affichage spécialisées pour chaque type de données
+        function displayChiffreAffairesData(data, container) {
+            const caData = data.data || {};
+            
+            container.innerHTML = `
+                <div class="advanced-analytics-container">
+                    <!-- KPIs Principaux -->
+                    <div class="kpi-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+                        <div class="kpi-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 0.5rem; text-align: center;">
+                            <h4 style="color: #28a745; margin-bottom: 0.5rem;"><i class="fas fa-euro-sign"></i> CA Total</h4>
+                            <p class="kpi-value" style="font-size: 1.8rem; font-weight: bold; margin-bottom: 0.5rem;">${(caData.ca_total || 0).toLocaleString('fr-FR')} DH</p>
+                            <small style="color: #6c757d;">Chiffre d'affaires du jour</small>
+                        </div>
+                        <div class="kpi-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 0.5rem; text-align: center;">
+                            <h4 style="color: #007bff; margin-bottom: 0.5rem;"><i class="fas fa-receipt"></i> Factures</h4>
+                            <p class="kpi-value" style="font-size: 1.8rem; font-weight: bold; margin-bottom: 0.5rem;">${caData.nb_factures || 0}</p>
+                            <small style="color: #6c757d;">Nombre de factures</small>
+                        </div>
+                        <div class="kpi-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 0.5rem; text-align: center;">
+                            <h4 style="color: #ffc107; margin-bottom: 0.5rem;"><i class="fas fa-calculator"></i> Ticket Moyen</h4>
+                            <p class="kpi-value" style="font-size: 1.8rem; font-weight: bold; margin-bottom: 0.5rem;">${((caData.ca_total || 0) / (caData.nb_factures || 1)).toLocaleString('fr-FR')} DH</p>
+                            <small style="color: #6c757d;">Panier moyen</small>
+                        </div>
+                    </div>
+                    
+                    <!-- Tableaux de données -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                        <!-- Ventes par heure -->
+                        <div>
+                            <h5 style="margin-bottom: 1rem;"><i class="fas fa-clock me-2"></i>Ventes par Heure</h5>
+                            <div style="max-height: 300px; overflow-y: auto;">
+                                <table style="width: 100%; border-collapse: collapse;">
+                                    <thead>
+                                        <tr style="background: #f8f9fa;">
+                                            <th style="padding: 0.75rem; border: 1px solid #dee2e6;">Heure</th>
+                                            <th style="padding: 0.75rem; border: 1px solid #dee2e6;">Ventes</th>
+                                            <th style="padding: 0.75rem; border: 1px solid #dee2e6;">CA</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${(caData.ventes_par_heure || []).map(item => `
+                                            <tr>
+                                                <td style="padding: 0.5rem; border: 1px solid #dee2e6; text-align: center;">${item.heure}h</td>
+                                                <td style="padding: 0.5rem; border: 1px solid #dee2e6; text-align: center;">${item.nb_ventes}</td>
+                                                <td style="padding: 0.5rem; border: 1px solid #dee2e6; text-align: right;">${(item.ca_heure || 0).toLocaleString('fr-FR')} DH</td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <!-- Top articles -->
+                        <div>
+                            <h5 style="margin-bottom: 1rem;"><i class="fas fa-trophy me-2"></i>Top Articles</h5>
+                            <div style="max-height: 300px; overflow-y: auto;">
+                                <table style="width: 100%; border-collapse: collapse;">
+                                    <thead>
+                                        <tr style="background: #f8f9fa;">
+                                            <th style="padding: 0.75rem; border: 1px solid #dee2e6;">Article</th>
+                                            <th style="padding: 0.75rem; border: 1px solid #dee2e6;">Qté</th>
+                                            <th style="padding: 0.75rem; border: 1px solid #dee2e6;">CA</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${(caData.top_articles || []).map(item => `
+                                            <tr>
+                                                <td style="padding: 0.5rem; border: 1px solid #dee2e6;">${item.ART_DESIGNATION || 'N/A'}</td>
+                                                <td style="padding: 0.5rem; border: 1px solid #dee2e6; text-align: center;">${item.quantite || 0}</td>
+                                                <td style="padding: 0.5rem; border: 1px solid #dee2e6; text-align: right;">${(item.ca_article || 0).toLocaleString('fr-FR')} DH</td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Actions rapides -->
+                    <div style="margin-top: 2rem; text-align: center;">
+                        <button onclick="exportModalData('chiffre-affaires', 'csv')" style="margin: 0.5rem; padding: 0.75rem 1.5rem; background: #28a745; color: white; border: none; border-radius: 0.25rem; cursor: pointer;">
+                            <i class="fas fa-file-csv me-2"></i>Exporter CSV
+                        </button>
+                        <button onclick="refreshModalData('chiffre-affaires')" style="margin: 0.5rem; padding: 0.75rem 1.5rem; background: #007bff; color: white; border: none; border-radius: 0.25rem; cursor: pointer;">
+                            <i class="fas fa-sync-alt me-2"></i>Actualiser
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function displayStockRuptureData(data, container) {
+            const stockData = data.data || {};
+            const articles = stockData.articles_rupture || [];
+            
+            container.innerHTML = `
+                <div class="advanced-analytics-container">
+                    <!-- Alertes -->
+                    <div style="margin-bottom: 2rem;">
+                        <div style="background: #f8d7da; color: #721c24; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem;">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>${articles.length} articles nécessitent votre attention</strong>
+                        </div>
+                    </div>
+                    
+                    <!-- Tableau des articles -->
+                    <div>
+                        <h5 style="margin-bottom: 1rem;"><i class="fas fa-boxes me-2"></i>Articles en Rupture ou Stock Faible</h5>
+                        <div style="max-height: 400px; overflow-y: auto;">
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <thead style="position: sticky; top: 0; background: #f8f9fa;">
+                                    <tr>
+                                        <th style="padding: 0.75rem; border: 1px solid #dee2e6; text-align: left;">Article</th>
+                                        <th style="padding: 0.75rem; border: 1px solid #dee2e6; text-align: center;">Stock Actuel</th>
+                                        <th style="padding: 0.75rem; border: 1px solid #dee2e6; text-align: center;">Stock Min</th>
+                                        <th style="padding: 0.75rem; border: 1px solid #dee2e6; text-align: center;">Statut</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${articles.length > 0 ? articles.map(article => {
+                                        const stockActuel = article.ART_STOCK_PHYSIQUE || 0;
+                                        const stockMin = article.ART_STOCK_MINI || 0;
+                                        const isRupture = stockActuel <= 0;
+                                        const isStockFaible = stockActuel > 0 && stockActuel <= stockMin;
+                                        
+                                        return `
+                                            <tr style="background: ${isRupture ? '#f8d7da' : isStockFaible ? '#fff3cd' : '#d4edda'};">
+                                                <td style="padding: 0.75rem; border: 1px solid #dee2e6;">
+                                                    <strong>${article.ART_DESIGNATION || 'N/A'}</strong><br>
+                                                    <small style="color: #6c757d;">${article.sous_famille || ''} - ${article.famille || ''}</small>
+                                                </td>
+                                                <td style="padding: 0.75rem; border: 1px solid #dee2e6; text-align: center;">
+                                                    <span style="font-weight: bold; color: ${isRupture ? '#dc3545' : isStockFaible ? '#856404' : '#155724'};">
+                                                        ${stockActuel}
+                                                    </span>
+                                                </td>
+                                                <td style="padding: 0.75rem; border: 1px solid #dee2e6; text-align: center;">${stockMin}</td>
+                                                <td style="padding: 0.75rem; border: 1px solid #dee2e6; text-align: center;">
+                                                    <span style="
+                                                        padding: 0.25rem 0.5rem; 
+                                                        border-radius: 0.25rem; 
+                                                        font-size: 0.75rem; 
+                                                        font-weight: bold;
+                                                        background: ${isRupture ? '#dc3545' : isStockFaible ? '#ffc107' : '#28a745'};
+                                                        color: white;
+                                                    ">
+                                                        ${isRupture ? 'RUPTURE' : isStockFaible ? 'STOCK FAIBLE' : 'OK'}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        `;
+                                    }).join('') : `
+                                        <tr>
+                                            <td colspan="4" style="padding: 2rem; text-align: center; color: #6c757d;">
+                                                <i class="fas fa-check-circle" style="font-size: 2rem; margin-bottom: 1rem; display: block; color: #28a745;"></i>
+                                                Aucun article en rupture de stock
+                                            </td>
+                                        </tr>
+                                    `}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Actions -->
+                    <div style="margin-top: 2rem; text-align: center;">
+                        <button onclick="exportModalData('stock-rupture', 'csv')" style="margin: 0.5rem; padding: 0.75rem 1.5rem; background: #dc3545; color: white; border: none; border-radius: 0.25rem; cursor: pointer;">
+                            <i class="fas fa-file-csv me-2"></i>Exporter Liste
+                        </button>
+                        <button onclick="refreshModalData('stock-rupture')" style="margin: 0.5rem; padding: 0.75rem 1.5rem; background: #007bff; color: white; border: none; border-radius: 0.25rem; cursor: pointer;">
+                            <i class="fas fa-sync-alt me-2"></i>Actualiser
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function displayTopClientsData(data, container) {
+            container.innerHTML = `
+                <div class="advanced-analytics-container">
+                    <!-- Top clients grid -->
+                    <div class="clients-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+                        ${data.top_clients?.map((client, index) => `
+                            <div class="client-card" style="border: 1px solid #e9ecef; border-radius: 0.5rem; padding: 1rem;">
+                                <div class="client-rank" style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                                    <span class="badge bg-primary me-2">#${index + 1}</span>
+                                    <h6 class="mb-0">${client.nom}</h6>
+                                </div>
+                                <div class="client-stats">
+                                    <p class="mb-1"><strong>CA Total:</strong> ${formatCurrency(client.ca_total)}</p>
+                                    <p class="mb-1"><strong>Visites:</strong> ${client.nb_visites}</p>
+                                    <p class="mb-0"><strong>Dernière visite:</strong> ${formatDate(client.derniere_visite)}</p>
+                                </div>
+                                <div class="client-loyalty mt-2">
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar" style="width: ${client.taux_fidelite}%"></div>
+                                    </div>
+                                    <small class="text-muted">Fidélité: ${client.taux_fidelite}%</small>
+                                </div>
+                            </div>
+                        `).join('') || '<p class="text-center">Aucune donnée client disponible</p>'}
+                    </div>
+                </div>
+            `;
+        }
+
+        function displayPerformanceHoraireData(data, container) {
+            container.innerHTML = `
+                <div class="advanced-analytics-container">
+                    <!-- Graphique performance horaire -->
+                    <div class="chart-section">
+                        <h5><i class="fas fa-clock me-2"></i>Performance par Tranche Horaire</h5>
+                        <canvas id="modalChartPerformance" style="height: 400px;"></canvas>
+                    </div>
+                    
+                    <!-- Recommandations -->
+                    <div class="recommendations-section" style="margin-top: 2rem;">
+                        <h5><i class="fas fa-lightbulb me-2"></i>Recommandations</h5>
+                        <div class="recommendations-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                            ${data.recommandations?.map(rec => `
+                                <div class="recommendation-card alert alert-${rec.type}">
+                                    <i class="fas fa-${rec.icon} me-2"></i>
+                                    <strong>${rec.title}</strong><br>
+                                    <small>${rec.description}</small>
+                                </div>
+                            `).join('') || '<p>Aucune recommandation disponible</p>'}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            setTimeout(() => createPerformanceChart('modalChartPerformance', data.chart_data), 100);
+        }
+
+        function displayModesPaiementData(data, container) {
+            container.innerHTML = `
+                <div class="advanced-analytics-container">
+                    <!-- Répartition des paiements -->
+                    <div class="payment-overview" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+                        <div class="chart-container">
+                            <h5><i class="fas fa-chart-pie me-2"></i>Répartition des Paiements</h5>
+                            <canvas id="modalChartPaiements" style="height: 300px;"></canvas>
+                        </div>
+                        <div class="payment-stats">
+                            <h5><i class="fas fa-calculator me-2"></i>Statistiques Détaillées</h5>
+                            <div class="stats-list">
+                                ${data.modes_paiement?.map(mode => `
+                                    <div class="payment-stat-item" style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid #e9ecef;">
+                                        <span><i class="fas fa-${mode.icon} me-2"></i>${mode.nom}</span>
+                                        <div class="text-end">
+                                            <strong>${formatCurrency(mode.montant)}</strong><br>
+                                            <small class="text-muted">${mode.pourcentage}%</small>
+                                        </div>
+                                    </div>
+                                `).join('') || '<p>Aucune donnée de paiement</p>'}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            setTimeout(() => createPaymentChart('modalChartPaiements', data.chart_data), 100);
+        }
+
+        function displayEtatTablesData(data, container) {
+            container.innerHTML = `
+                <div class="advanced-analytics-container">
+                    <!-- Plan de salle -->
+                    <div class="restaurant-layout" style="margin-bottom: 2rem;">
+                        <h5><i class="fas fa-map me-2"></i>Plan de Salle en Temps Réel</h5>
+                        <div class="tables-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 1rem;">
+                            ${data.tables?.map(table => `
+                                <div class="table-item ${table.statut}" style="
+                                    border: 2px solid ${getTableStatusColor(table.statut)}; 
+                                    border-radius: 0.5rem; 
+                                    padding: 1rem; 
+                                    text-align: center; 
+                                    background: ${getTableStatusBg(table.statut)};
+                                ">
+                                    <i class="fas fa-table fa-2x mb-2" style="color: ${getTableStatusColor(table.statut)};"></i>
+                                    <h6>${table.nom}</h6>
+                                    <p class="mb-0"><small>${table.nb_couverts} places</small></p>
+                                    <span class="badge bg-${getTableStatusBadge(table.statut)}">${table.statut}</span>
+                                    ${table.duree_occupation ? `<br><small class="text-muted">${table.duree_occupation}</small>` : ''}
+                                </div>
+                            `).join('') || '<p class="text-center">Aucune table configurée</p>'}
+                        </div>
+                    </div>
+                    
+                    <!-- Statistiques d'occupation -->
+                    <div class="occupation-stats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        <div class="stat-card text-center p-3 border rounded">
+                            <h4 class="text-success">${data.stats?.taux_occupation || 0}%</h4>
+                            <p class="mb-0">Taux d'occupation</p>
+                        </div>
+                        <div class="stat-card text-center p-3 border rounded">
+                            <h4 class="text-primary">${data.stats?.temps_moyen_service || 0} min</h4>
+                            <p class="mb-0">Temps moyen de service</p>
+                        </div>
+                        <div class="stat-card text-center p-3 border rounded">
+                            <h4 class="text-warning">${data.stats?.chiffre_affaires_tables || 0}€</h4>
+                            <p class="mb-0">CA des tables</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Fonctions utilitaires
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('fr-FR', { 
+                style: 'decimal',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2 
+            }).format(amount || 0) + ' DH';
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            return new Date(dateString).toLocaleDateString('fr-FR');
+        }
+
+        function getTableStatusColor(statut) {
+            const colors = {
+                'libre': '#28a745',
+                'occupee': '#dc3545', 
+                'reservee': '#ffc107',
+                'en_preparation': '#17a2b8'
+            };
+            return colors[statut] || '#6c757d';
+        }
+
+        function getTableStatusBg(statut) {
+            const backgrounds = {
+                'libre': '#d4edda',
+                'occupee': '#f8d7da',
+                'reservee': '#fff3cd',
+                'en_preparation': '#d1ecf1'
+            };
+            return backgrounds[statut] || '#e2e3e5';
+        }
+
+        function getTableStatusBadge(statut) {
+            const badges = {
+                'libre': 'success',
+                'occupee': 'danger',
+                'reservee': 'warning',
+                'en_preparation': 'info'
+            };
+            return badges[statut] || 'secondary';
+        }
+
+        // Gestion des onglets du modal
+        document.addEventListener('DOMContentLoaded', function() {
+            // Gestion des onglets dans les modals
+            document.addEventListener('click', function(e) {
+                if (e.target.matches('.tab-item') || e.target.closest('.tab-item')) {
+                    const tabItem = e.target.closest('.tab-item');
+                    const tabName = tabItem.dataset.tab;
+                    
+                    // Retirer la classe active de tous les onglets
+                    document.querySelectorAll('.tab-item').forEach(tab => tab.classList.remove('active'));
+                    
+                    // Ajouter la classe active à l'onglet cliqué
+                    tabItem.classList.add('active');
+                    
+                    // Gérer l'affichage du contenu selon l'onglet
+                    switchModalTab(tabName);
+                }
+            });
+            
+            // Fermeture du modal avec Escape
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeAdvancedModal();
+                }
+            });
+            
+            // Fermeture du modal en cliquant en dehors
+            document.addEventListener('click', function(e) {
+                const modal = document.getElementById('advancedModalContainer');
+                if (e.target === modal) {
+                    closeAdvancedModal();
+                }
+            });
+        });
+
+        function switchModalTab(tabName) {
+            // Logique pour changer le contenu selon l'onglet sélectionné
+            const contentContainer = document.querySelector('.modal-tab-content');
+            
+            switch(tabName) {
+                case 'overview':
+                    // Affichage de la vue d'ensemble
+                    break;
+                case 'details':
+                    // Affichage des détails
+                    break;
+                case 'charts':
+                    // Affichage des graphiques
+                    break;
+                case 'actions':
+                    // Affichage des actions
+                    break;
+            }
+        }
+
+        // Fonctions d'export avancées
+        function exportModalData(type, format) {
+            // إنشاء وتحميل البيانات كملف
+            const data = getCurrentModalData();
+            if (!data) {
+                alert('Aucune donnée à exporter');
+                return;
+            }
+            
+            const filename = `${type}_${new Date().toISOString().slice(0, 10)}.${format}`;
+            
+            if (format === 'csv') {
+                exportToCSV(data, filename);
+            } else if (format === 'json') {
+                exportToJSON(data, filename);
+            } else {
+                alert('Format d\'export non supporté: ' + format);
+            }
+        }
+        
+        // Fonction exportData pour les boutons dans les cartes
+        function exportData(type, format) {
+            // استخدام الـ route الصحيح للتصدير
+            const url = '{{ route("admin.export-modal-data") }}';
+            
+            // إنشاء form لإرسال البيانات
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = url;
+            form.style.display = 'none';
+            
+            // إضافة CSRF token
+            const csrfToken = document.querySelector('meta[name="csrf-token"]');
+            if (csrfToken) {
+                const csrfInput = document.createElement('input');
+                csrfInput.type = 'hidden';
+                csrfInput.name = '_token';
+                csrfInput.value = csrfToken.getAttribute('content');
+                form.appendChild(csrfInput);
+            }
+            
+            // إضافة نوع البيانات
+            const typeInput = document.createElement('input');
+            typeInput.type = 'hidden';
+            typeInput.name = 'type';
+            typeInput.value = type;
+            form.appendChild(typeInput);
+            
+            // إضافة نوع التصدير
+            const formatInput = document.createElement('input');
+            formatInput.type = 'hidden';
+            formatInput.name = 'format';
+            formatInput.value = format;
+            form.appendChild(formatInput);
+            
+            // إضافة الـ form إلى الصفحة وإرساله
+            document.body.appendChild(form);
+            form.submit();
+            document.body.removeChild(form);
+        }
+        
+        // Fonction pour exporter en CSV
+        function exportToCSV(data, filename) {
+            let csvContent = '';
+            
+            if (Array.isArray(data) && data.length > 0) {
+                // En-têtes
+                const headers = Object.keys(data[0]);
+                csvContent += headers.join(',') + '\n';
+                
+                // Données
+                data.forEach(row => {
+                    const values = headers.map(header => {
+                        const value = row[header];
+                        return typeof value === 'string' ? `"${value}"` : value;
+                    });
+                    csvContent += values.join(',') + '\n';
+                });
+            }
+            
+            downloadFile(csvContent, filename, 'text/csv');
+        }
+        
+        // Fonction pour exporter en JSON
+        function exportToJSON(data, filename) {
+            const jsonContent = JSON.stringify(data, null, 2);
+            downloadFile(jsonContent, filename, 'application/json');
+        }
+        
+        // Fonction pour télécharger un fichier
+        function downloadFile(content, filename, mimeType) {
+            const blob = new Blob([content], { type: mimeType });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+        
+        // Fonction pour obtenir les données actuelles du modal
+        function getCurrentModalData() {
+            // Cette fonction devrait retourner les données actuellement affichées dans le modal
+            // Pour l'instant, on retourne des données d'exemple
+            return [
+                { date: '2025-07-09', type: 'Export', valeur: 'Données du tableau de bord' }
+            ];
+        }
+
+        function refreshModalData(type) {
+            loadModalData(type);
+        }
+
+        function updateModalTimestamp() {
+            const timestampElement = document.getElementById('lastUpdateTime');
+            if (timestampElement) {
+                timestampElement.textContent = new Date().toLocaleTimeString('fr-FR');
+            }
+        }
+
+        // Fonctions de création de graphiques pour les modals
+        function createModalChart(canvasId, data) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function createPerformanceChart(canvasId, data) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function createPaymentChart(canvasId, data) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Fonction d'actualisation automatique du dashboard
+        function refreshDashboard() {
+            window.location.reload();
+        }
 
         // Fonction d'export du rapport complet
         function exportReport() {

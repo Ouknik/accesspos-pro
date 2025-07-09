@@ -868,7 +868,7 @@
                                 onmouseout="this.style.background='rgba(255,255,255,0.1)'">
                             <i class="fas fa-sign-out-alt me-1"></i>
                             Déconnexion
-                        </a>
+                        </button>
                     </form>
                     <div style="color: rgba(255,255,255,0.8); font-size: 0.875rem;">
                         Dernière mise à jour: {{ now()->format('d/m/Y H:i') }}
@@ -901,17 +901,17 @@
                     +{{ number_format($statistiquesFinancieres['evolution_ventes'] ?? 0, 1) }}% vs mois dernier
                 </div>
                 <div class="stat-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
-                    <a href="{{ route('admin.dashboard.chiffre-affaires') }}" target="_blank"
+                    <button onclick="openAdvancedModal('chiffre-affaires', 'Chiffre d\'Affaires Détaillé', 'fas fa-euro-sign')" 
                             class="btn-details" 
-                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--success-color); background: transparent; color: var(--success-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: flex; align-items: center; justify-content: center;">
-                        <i class="fas fa-external-link-alt me-1"></i>
+                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--success-color); background: transparent; color: var(--success-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="fas fa-chart-line me-1"></i>
                         Voir détails
-                    </a>
-                    <a onclick="exportData('chiffre-affaires', 'pdf')" 
+                    </button>
+                    <button onclick="exportData('chiffre-affaires', 'pdf')" 
                             class="btn-export" 
                             style="padding: 0.5rem 0.75rem; border: 1px solid var(--success-light); background: var(--success-light); color: white; border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
                         <i class="fas fa-download"></i>
-                    </a>
+                    </button>
                 </div>
             </div>
 
@@ -929,17 +929,17 @@
                     {{ number_format($statistiquesFinancieres['nb_factures_jour'] ?? 0) }} factures aujourd'hui
                 </div>
                 <div class="stat-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
-                    <a href="{{ route('admin.dashboard.chiffre-affaires') }}?periode=mois" target="_blank"
+                    <button onclick="openAdvancedModal('ca-mois', 'Chiffre d\'Affaires du Mois', 'fas fa-calendar-month')" 
                             class="btn-details" 
-                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--info-color); background: transparent; color: var(--info-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: flex; align-items: center; justify-content: center;">
-                        <i class="fas fa-external-link-alt me-1"></i>
+                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--info-color); background: transparent; color: var(--info-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="fas fa-chart-line me-1"></i>
                         Voir détails
-                    </a>
-                    <a onclick="exportData('ca-mois', 'pdf')" 
+                    </button>
+                    <button onclick="exportData('ca-mois', 'pdf')" 
                             class="btn-export" 
                             style="padding: 0.5rem 0.75rem; border: 1px solid var(--info-light); background: var(--info-light); color: white; border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
                         <i class="fas fa-download"></i>
-                    </a>
+                    </button>
                 </div>
             </div>
 
@@ -957,17 +957,17 @@
                     Performance optimale
                 </div>
                 <div class="stat-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
-                    <a href="{{ route('admin.dashboard.chiffre-affaires') }}?type=ticket-moyen" target="_blank"
+                    <button onclick="openAdvancedModal('ticket-moyen', 'Ticket Moyen Détaillé', 'fas fa-shopping-cart')" 
                             class="btn-details" 
-                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--success-color); background: transparent; color: var(--success-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: flex; align-items: center; justify-content: center;">
-                        <i class="fas fa-external-link-alt me-1"></i>
+                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--success-color); background: transparent; color: var(--success-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="fas fa-chart-line me-1"></i>
                         Voir détails
-                    </a>
-                    <a onclick="exportData('ticket-moyen', 'pdf')" 
+                    </button>
+                    <button onclick="exportData('ticket-moyen', 'pdf')" 
                             class="btn-export" 
                             style="padding: 0.5rem 0.75rem; border: 1px solid var(--success-light); background: var(--success-light); color: white; border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
                         <i class="fas fa-download"></i>
-                    </a>
+                    </button>
                 </div>
             </div>
 
@@ -986,25 +986,25 @@
                     {{ number_format($gestionStocks['articles_rupture'] ?? 0) }} en rupture
                 </div>
                 <div class="stat-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
-                    <a href="{{ route('admin.dashboard.stock-rupture') }}" target="_blank"
+                    <button onclick="openAdvancedModal('stock-rupture', 'Articles en Rupture de Stock', 'fas fa-exclamation-triangle')" 
                             class="btn-details" 
-                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--warning-color); background: transparent; color: var(--warning-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: flex; align-items: center; justify-content: center;">
-                        <i class="fas fa-external-link-alt me-1"></i>
+                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--warning-color); background: transparent; color: var(--warning-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="fas fa-boxes me-1"></i>
                         Articles en rupture
-                    </a>
+                    </button>
                 </div>
                 <div class="stat-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
-                    <a href="{{ route('admin.dashboard.stock-rupture') }}?type=stock" target="_blank" 
+                    <button onclick="openAdvancedModal('articles-stock', 'Détails des Articles en Stock', 'fas fa-boxes')" 
                             class="btn-details" 
-                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--info-color); background: transparent; color: var(--info-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: flex; align-items: center; justify-content: center;">
+                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--info-color); background: transparent; color: var(--info-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
                         <i class="fas fa-box-open me-1"></i>
                         Voir détails
-                    </a>
-                    <a onclick="exportData('articles-stock', 'pdf')" 
+                    </button>
+                    <button onclick="exportData('articles-stock', 'pdf')" 
                             class="btn-export" 
                             style="padding: 0.5rem 0.75rem; border: 1px solid var(--info-light); background: var(--info-light); color: white; border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
                         <i class="fas fa-download"></i>
-                    </a>
+                    </button>
                 </div>
             </div>
 
@@ -1022,17 +1022,17 @@
                     {{ number_format($gestionStocks['articles_stock_faible'] ?? 0) }} en stock faible
                 </div>
                 <div class="stat-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
-                    <a href="{{ route('admin.dashboard.stock-rupture') }}?type=valeur" target="_blank" 
+                    <button onclick="openAdvancedModal('valeur-stock', 'Valeur du Stock Détaillée', 'fas fa-warehouse')" 
                             class="btn-details" 
-                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--info-color); background: transparent; color: var(--info-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: flex; align-items: center; justify-content: center;">
+                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--info-color); background: transparent; color: var(--info-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
                         <i class="fas fa-chart-line me-1"></i>
                         Voir détails
-                    </a>
-                    <a onclick="exportData('valeur-stock', 'pdf')" 
+                    </button>
+                    <button onclick="exportData('valeur-stock', 'pdf')" 
                             class="btn-export" 
                             style="padding: 0.5rem 0.75rem; border: 1px solid var(--info-light); background: var(--info-light); color: white; border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
                         <i class="fas fa-download"></i>
-                    </a>
+                    </button>
                 </div>
             </div>
 
@@ -1051,25 +1051,25 @@
                     {{ number_format($gestionClientele['nouveaux_clients_mois'] ?? 0) }} nouveaux ce mois
                 </div>
                 <div class="stat-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
-                    <a href="{{ route('admin.dashboard.top-clients') }}" target="_blank" 
+                    <button onclick="openAdvancedModal('top-clients', 'Top Clients du Restaurant', 'fas fa-star')" 
                             class="btn-details" 
-                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--warning-color); background: transparent; color: var(--warning-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: flex; align-items: center; justify-content: center;">
+                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--warning-color); background: transparent; color: var(--warning-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
                         <i class="fas fa-crown me-1"></i>
                         Top clients
-                    </a>
+                    </button>
                 </div>
                 <div class="stat-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
-                    <a href="{{ route('admin.dashboard.top-clients') }}?type=totaux" target="_blank" 
+                    <button onclick="openAdvancedModal('clients-totaux', 'Détails des Clients Totaux', 'fas fa-users')" 
                             class="btn-details" 
-                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--success-color); background: transparent; color: var(--success-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: flex; align-items: center; justify-content: center;">
+                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--success-color); background: transparent; color: var(--success-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
                         <i class="fas fa-user-friends me-1"></i>
                         Voir détails
-                    </a>
-                    <a onclick="exportData('clients-totaux', 'pdf')" 
+                    </button>
+                    <button onclick="exportData('clients-totaux', 'pdf')" 
                             class="btn-export" 
                             style="padding: 0.5rem 0.75rem; border: 1px solid var(--success-light); background: var(--success-light); color: white; border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
                         <i class="fas fa-download"></i>
-                    </a>
+                    </button>
                 </div>
             </div>
 
@@ -1087,17 +1087,17 @@
                     {{ number_format($gestionClientele['points_fidelite_distribues'] ?? 0) }} points distribués
                 </div>
                 <div class="stat-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
-                    <a href="{{ route('admin.dashboard.top-clients') }}?type=fideles" target="_blank" 
+                    <button onclick="openAdvancedModal('clients-fideles', 'Détails des Clients Fidèles', 'fas fa-star')" 
                             class="btn-details" 
-                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--success-color); background: transparent; color: var(--success-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: flex; align-items: center; justify-content: center;">
+                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--success-color); background: transparent; color: var(--success-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
                         <i class="fas fa-gift me-1"></i>
                         Voir détails
-                    </a>
-                    <a onclick="exportData('clients-fideles', 'pdf')" 
+                    </button>
+                    <button onclick="exportData('clients-fideles', 'pdf')" 
                             class="btn-export" 
                             style="padding: 0.5rem 0.75rem; border: 1px solid var(--success-light); background: var(--success-light); color: white; border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
                         <i class="fas fa-download"></i>
-                    </a>
+                    </button>
                 </div>
             </div>
 
@@ -1116,25 +1116,25 @@
                     {{ number_format($gestionRestaurant['reservations_jour'] ?? 0) }} réservations aujourd'hui
                 </div>
                 <div class="stat-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
-                    <a href="{{ route('admin.dashboard.etat-tables') }}" target="_blank" 
+                    <button onclick="openAdvancedModal('etat-tables', 'État des Tables en Temps Réel', 'fas fa-utensils')" 
                             class="btn-details" 
-                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--danger-color); background: transparent; color: var(--danger-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: flex; align-items: center; justify-content: center;">
+                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--danger-color); background: transparent; color: var(--danger-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
                         <i class="fas fa-table me-1"></i>
                         Voir tables
-                    </a>
+                    </button>
                 </div>
                 <div class="stat-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
-                    <a href="{{ route('admin.dashboard.etat-tables') }}?type=occupees" target="_blank" 
+                    <button onclick="openAdvancedModal('tables-occupees', 'Détails des Tables Occupées', 'fas fa-utensils')" 
                             class="btn-details" 
-                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--success-color); background: transparent; color: var(--success-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: flex; align-items: center; justify-content: center;">
+                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--success-color); background: transparent; color: var(--success-color); border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
                         <i class="fas fa-concierge-bell me-1"></i>
                         Voir détails
-                    </a>
-                    <a onclick="exportData('tables-occupees', 'pdf')" 
+                    </button>
+                    <button onclick="exportData('tables-occupees', 'pdf')" 
                             class="btn-export" 
                             style="padding: 0.5rem 0.75rem; border: 1px solid var(--success-light); background: var(--success-light); color: white; border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
                         <i class="fas fa-download"></i>
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>
@@ -1169,7 +1169,7 @@
                             <p style="margin: 0; font-size: 0.875rem; color: var(--gray-600);">Rapport journalier</p>
                         </div>
                     </div>
-                </a>
+                </button>
             </form>
 
             <!-- État du Stock -->
@@ -1193,7 +1193,7 @@
                             <p style="margin: 0; font-size: 0.875rem; color: var(--gray-600);">Inventaire actuel</p>
                         </div>
                     </div>
-                </a>
+                </button>
             </form>
 
             <!-- Base Clients -->
@@ -1217,7 +1217,7 @@
                             <p style="margin: 0; font-size: 0.875rem; color: var(--gray-600);">Analyse clientèle</p>
                         </div>
                     </div>
-                </a>
+                </button>
             </form>
 
             <!-- Rapport Financier -->
@@ -1241,7 +1241,7 @@
                             <p style="margin: 0; font-size: 0.875rem; color: var(--gray-600);">Analyse financière</p>
                         </div>
                     </div>
-                </a>
+                </button>
             </form>
         </div>
     </div>
@@ -1259,11 +1259,11 @@
                             </h4>
                             <p class="chart-subtitle">Chiffre d'affaires sur les 30 derniers jours</p>
                         </div>
-                        <a href="{{ route('admin.dashboard.performance-horaire') }}" target="_blank" 
+                        <button onclick="openAdvancedModal('performance-horaire', 'Performance par Heure', 'fas fa-clock')" 
                                 class="btn btn-sm btn-outline-primary">
                             <i class="fas fa-expand-arrows-alt"></i>
                             Analyse détaillée
-                        </a>
+                        </button>
                     </div>
                     <div class="chart-content">
                         <canvas id="evolutionVentesChart" class="chart-canvas"></canvas>
@@ -1311,11 +1311,11 @@
                             </h4>
                             <p class="chart-subtitle">Répartition des encaissements</p>
                         </div>
-                        <a href="{{ route('admin.dashboard.modes-paiement') }}" target="_blank" 
+                        <button onclick="openAdvancedModal('modes-paiement', 'Modes de Paiement Détaillés', 'fas fa-credit-card')" 
                                 class="btn btn-sm btn-outline-info">
                             <i class="fas fa-expand-arrows-alt"></i>
                             Analyse détaillée
-                        </a>
+                        </button>
                     </div>
                     <div class="chart-content">
                         <canvas id="modesPaiementChart" class="chart-canvas"></canvas>
@@ -1482,9 +1482,9 @@
                     <i class="modal-icon fas fa-chart-line" style="font-size: 1.5rem; color: var(--primary-color);"></i>
                     <h2 class="modal-title-text" style="margin: 0; color: var(--gray-800); font-size: 1.5rem;">Titre du Modal</h2>
                 </div>
-                <a onclick="closeAdvancedModal()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--gray-600);">
+                <button onclick="closeAdvancedModal()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--gray-600);">
                     <i class="fas fa-times"></i>
-                </a>
+                </button>
             </div>
             <div id="modalContent" style="min-height: 200px;">
                 <div id="modalLoading" style="display: none; text-align: center; padding: 3rem;">
