@@ -1196,56 +1196,31 @@
                 </a>
             </form>
 
-            <!-- Base Clients -->
-            <form method="POST" action="{{ route('admin.reports.generate') }}" style="margin: 0;">
-                @csrf
-                <input type="hidden" name="type_rapport" value="clients">
-                <input type="hidden" name="periode_type" value="jour">
-                <input type="hidden" name="date_debut" value="{{ date('Y-m-d') }}">
-                <input type="hidden" name="format" value="view">
-                
-                <button type="submit" class="quick-report-card"
-                       style="background: white; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 1.5rem; color: var(--gray-700); transition: all 0.3s ease; display: block; width: 100%; text-align: left; cursor: pointer;"
-                       onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='var(--shadow-lg)'"
-                       onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--shadow-sm)'">
-                    <div style="display: flex; align-items: center; margin-bottom: 0.75rem;">
-                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, var(--warning-color), var(--warning-light)); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
-                            <i class="fas fa-users" style="color: white; font-size: 1.1rem;"></i>
-                        </div>
-                        <div>
-                            <h4 style="margin: 0; font-size: 1rem; font-weight: 600; color: var(--gray-800);">Base Clients</h4>
-                            <p style="margin: 0; font-size: 0.875rem; color: var(--gray-600);">Analyse clientèle</p>
-                        </div>
-                    </div>
-                </a>
-            </form>
-
-            <!-- Rapport Financier -->
-            <form method="POST" action="{{ route('admin.reports.generate') }}" style="margin: 0;">
-                @csrf
-                <input type="hidden" name="type_rapport" value="financier">
-                <input type="hidden" name="periode_type" value="jour">
-                <input type="hidden" name="date_debut" value="{{ date('Y-m-d') }}">
-                <input type="hidden" name="format" value="view">
-                
-                <button type="submit" class="quick-report-card"
-                       style="background: white; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 1.5rem; color: var(--gray-700); transition: all 0.3s ease; display: block; width: 100%; text-align: left; cursor: pointer;"
-                       onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='var(--shadow-lg)'"
-                       onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--shadow-sm)'">
-                    <div style="display: flex; align-items: center; margin-bottom: 0.75rem;">
-                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, var(--primary-color), var(--primary-light)); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
-                            <i class="fas fa-chart-pie" style="color: white; font-size: 1.1rem;"></i>
-                        </div>
-                        <div>
-                            <h4 style="margin: 0; font-size: 1rem; font-weight: 600; color: var(--gray-800);">Rapport Financier</h4>
-                            <p style="margin: 0; font-size: 0.875rem; color: var(--gray-600);">Analyse financière</p>
-                        </div>
-                    </div>
-                </a>
-            </form>
-        </div>
+           
     </div>
 </div>
+
+
+ <!-- Gestion des Produits -->
+            <a href="{{ route('admin.articles.index') }}" class="quick-report-card"
+               style="background: white; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 1.5rem; color: var(--gray-700); transition: all 0.3s ease; display: block; width: 100%; text-decoration: none;"
+               onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='var(--shadow-lg)'"
+               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--shadow-sm)'">
+                <div style="display: flex; align-items: center; margin-bottom: 0.75rem;">
+                    <div style="width: 40px; height: 40px; background: linear-gradient(135deg, var(--warning-color), var(--warning-light)); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                        <i class="fas fa-shopping-bag" style="color: white; font-size: 1.1rem;"></i>
+                    </div>
+                    <div>
+                        <h4 style="margin: 0; font-size: 1rem; font-weight: 600; color: var(--gray-800);">إدارة المنتجات</h4>
+                        <p style="margin: 0; font-size: 0.875rem; color: var(--gray-600);">إضافة وتعديل المنتجات</p>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 0.75rem; color: var(--gray-500);">إدارة شاملة للمخزون</span>
+                    <i class="fas fa-arrow-right" style="color: var(--gray-400); font-size: 0.875rem;"></i>
+                </div>
+            </a>
+        </div>
 
         <!-- Graphiques et Analyses -->
         <div class="charts-section">

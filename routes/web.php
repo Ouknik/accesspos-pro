@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ArticleController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Admin\TableauDeBordController;
@@ -24,6 +25,10 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     // Route principale du tableau de bord
     Route::get('/tableau-de-bord-moderne', [TableauDeBordController::class, 'index'])
         ->name('admin.tableau-de-bord-moderne');
+    
+    // Alias pour admin.dashboard
+    Route::get('/dashboard', [TableauDeBordController::class, 'index'])
+        ->name('admin.dashboard');
     
     // Routes pour les pages de détails (nouvelles pages séparées)
     Route::get('/details/chiffre-affaires', function() {
@@ -62,6 +67,32 @@ Route::middleware('auth')->prefix('admin')->group(function () {
         Route::get('/complet', [ReportController::class, 'rapportComplet'])->name('complet');
         Route::get('/complet/pdf', [ReportController::class, 'rapportCompletPDF'])->name('complet.pdf');
         Route::get('/rapide', [ReportController::class, 'rapportRapide'])->name('rapide');
+    });
+
+    // Routes pour la gestion des articles/produits
+    Route::prefix('articles')->name('admin.articles.')->group(function () {
+        // Routes de base CRUD
+        Route::get('/', [ArticleController::class, 'index'])->name('index');
+        Route::get('/create', [ArticleController::class, 'create'])->name('create');
+        Route::post('/', [ArticleController::class, 'store'])->name('store');
+        Route::get('/{article}', [ArticleController::class, 'show'])->name('show');
+        Route::get('/{article}/edit', [ArticleController::class, 'edit'])->name('edit');
+        Route::put('/{article}', [ArticleController::class, 'update'])->name('update');
+        
+        // Routes administrateur uniquement (protection renforcée)
+        Route::middleware('admin')->group(function () {
+            Route::patch('/{article}/toggle-status', [ArticleController::class, 'toggleStatus'])->name('toggle-status');
+            Route::post('/{article}/add-stock', [ArticleController::class, 'addStock'])->name('add-stock');
+        });
+        
+        // Routes d'analyse et rapports
+        Route::get('/analytics/dashboard', [ArticleController::class, 'analyticsDashboard'])->name('analytics');
+        Route::get('/export', [ArticleController::class, 'export'])->name('export');
+        
+        // API pour récupération données dynamiques
+        Route::get('/api/families', [ArticleController::class, 'getFamilies'])->name('api.families');
+        Route::get('/api/sub-families/{family}', [ArticleController::class, 'getSubFamilies'])->name('api.sub-families');
+        Route::get('/api/stats', [ArticleController::class, 'getStats'])->name('api.stats');
     });
 
     // API routes pour les modals (si nécessaires dans le futur)

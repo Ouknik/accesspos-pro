@@ -18,11 +18,13 @@ class TableauDeBordController extends Controller
      */
     public function index()
     {
+        
         try {
-            // استخدام التاريخ الحالي (2025-07-09 حيث توجد البيانات)
-            $aujourd_hui = '2025-07-09';
-            $debut_mois = '2025-07-01';
-            $debut_annee = '2025-01-01';
+
+            // استخدام التاريخ الحالي (ديناميكي)
+            $aujourd_hui = now()->format('Y-m-d');//'2025-07-09'; //
+            $debut_mois = now()->startOfMonth()->format('Y-m-d');
+            $debut_annee = now()->startOfYear()->format('Y-m-d');
 
             // جمع جميع البيانات للوحة القيادة
             $statistiquesFinancieres = $this->obtenirStatistiquesFinancieres($aujourd_hui, $debut_mois, $debut_annee);
@@ -64,7 +66,7 @@ class TableauDeBordController extends Controller
     private function obtenirStatistiquesFinancieres($aujourd_hui, $debut_mois, $debut_annee)
     {
         try {
-            // Chiffre d'affaires du jour
+            // Chiffre d'affaires du jour - من جدول FACTURE_VNT الحقيقي
             $ca_du_jour = DB::table('FACTURE_VNT')
                 ->whereDate('FCTV_DATE', $aujourd_hui)
                 ->sum('FCTV_MNT_TTC') ?? 0;
@@ -88,8 +90,11 @@ class TableauDeBordController extends Controller
             $ticket_moyen = $nb_factures_jour > 0 ? ($ca_du_jour / $nb_factures_jour) : 0;
                 
             // Évolution des ventes (comparaison avec mois précédent)
+            $debut_mois_precedent = now()->subMonth()->startOfMonth()->format('Y-m-d');
+            $fin_mois_precedent = now()->subMonth()->endOfMonth()->format('Y-m-d');
+            
             $ca_mois_precedent = DB::table('FACTURE_VNT')
-                ->whereBetween('FCTV_DATE', ['2025-06-01', '2025-06-30'])
+                ->whereBetween('FCTV_DATE', [$debut_mois_precedent, $fin_mois_precedent])
                 ->sum('FCTV_MNT_TTC') ?? 0;
                 
             $evolution_ventes = 0;
@@ -97,14 +102,14 @@ class TableauDeBordController extends Controller
                 $evolution_ventes = round((($ca_du_mois - $ca_mois_precedent) / $ca_mois_precedent) * 100, 2);
             }
             
-            // Encaissements par mode de paiement
+            // Encaissements par mode de paiement - من جدول REGLEMENT
             $encaissements_mode_paiement = DB::table('REGLEMENT')
                 ->whereDate('REG_DATE', $aujourd_hui)
                 ->select('TYPE_REGLEMENT', DB::raw('SUM(REG_MONTANT) as total'))
                 ->groupBy('TYPE_REGLEMENT')
                 ->get();
                 
-            // État de la caisse
+            // État de la caisse - من جدول CAISSE
             $etat_caisse = DB::table('CAISSE')
                 ->select('CSS_LIBELLE_CAISSE', 'CSS_AVEC_AFFICHEUR')
                 ->get();
@@ -130,6 +135,8 @@ class TableauDeBordController extends Controller
     private function obtenirGestionStocks()
     {
         try {
+            $aujourd_hui = now()->format('Y-m-d');
+            
             // Nombre total d'articles
             $nb_total_articles = DB::table('ARTICLE')->count();
             
@@ -145,11 +152,11 @@ class TableauDeBordController extends Controller
             // Articles à stock faible
             $articles_stock_faible = DB::table('STOCK')->where('STK_QTE', '<', 10)->count();
             
-            // Articles les plus vendus (aujourd'hui)
+            // Articles les plus vendus (aujourd'hui) - من الجداول الحقيقية
             $articles_plus_vendus = DB::table('FACTURE_VNT_DETAIL as fvd')
                 ->join('ARTICLE as a', 'fvd.ART_REF', '=', 'a.ART_REF')
                 ->join('FACTURE_VNT as fv', 'fvd.FCTV_REF', '=', 'fv.FCTV_REF')
-                ->whereDate('fv.FCTV_DATE', '2025-07-09')
+                ->whereDate('fv.FCTV_DATE', $aujourd_hui)
                 ->select('a.ART_DESIGNATION', 'a.ART_REF')
                 ->selectRaw('SUM(fvd.FVD_QTE) as quantite_vendue')
                 ->groupBy('a.ART_REF', 'a.ART_DESIGNATION')
@@ -178,11 +185,14 @@ class TableauDeBordController extends Controller
     private function obtenirGestionClientele()
     {
         try {
+            $aujourd_hui = now()->format('Y-m-d');
+            $debut_mois = now()->startOfMonth()->format('Y-m-d');
+            
             // Nombre total de clients
             $nb_total_clients = DB::table('CLIENT')->count();
             
-            // Nouveaux clients du mois (إذا كان هناك عمود تاريخ)
-            $nouveaux_clients_mois = DB::table('CLIENT')->count(); // بدون تصفية للتاريخ حاليا
+            // Nouveaux clients du mois (إذا كان هناك عمود تاريخ إنشاء)
+            $nouveaux_clients_mois = DB::table('CLIENT')->count(); // مؤقت حتى نعرف عمود التاريخ
             
             // Clients fidèles actifs
             $clients_fideles_actifs = DB::table('CLIENT')->where('CLT_FIDELE', 1)->count();
@@ -193,7 +203,7 @@ class TableauDeBordController extends Controller
             // Top clients (اليوم)
             $top_meilleurs_clients = DB::table('FACTURE_VNT as fv')
                 ->join('CLIENT as c', 'fv.CLT_REF', '=', 'c.CLT_REF')
-                ->whereDate('fv.FCTV_DATE', '2025-07-09')
+                ->whereDate('fv.FCTV_DATE', $aujourd_hui)
                 ->select('c.CLT_CLIENT', 'c.CLT_REF')
                 ->selectRaw('COUNT(*) as nb_commandes')
                 ->selectRaw('SUM(fv.FCTV_MNT_TTC) as total_depense')
@@ -205,7 +215,7 @@ class TableauDeBordController extends Controller
             // Dépense moyenne par client
             $depense_moyenne_client = DB::table('FACTURE_VNT as fv')
                 ->join('CLIENT as c', 'fv.CLT_REF', '=', 'c.CLT_REF')
-                ->whereDate('fv.FCTV_DATE', '2025-07-09')
+                ->whereDate('fv.FCTV_DATE', $aujourd_hui)
                 ->avg('fv.FCTV_MNT_TTC') ?? 0;
 
             return [
@@ -247,27 +257,25 @@ class TableauDeBordController extends Controller
     private function obtenirGestionRestaurant($aujourd_hui)
     {
         try {
-            // Tables occupées - استخدام البيانات الفعلية الحالية
-            $tables_occupees = DB::table('TABLE')->where('ETT_ETAT', 'LIBRE')->count() > 0 ? 
-                DB::table('TABLE')->where('ETT_ETAT', 'LIBRE')->count() - 12 : 2;
-            $tables_occupees = max(0, $tables_occupees); // التأكد من عدم وجود قيم سالبة
+            // Tables occupées - استخدام جدول TABLE الحقيقي
+            $tables_occupees = DB::table('TABLE')->where('ETT_ETAT', 'OCCUPEE')->count();
             
             // Tables libres 
             $tables_libres = DB::table('TABLE')->where('ETT_ETAT', 'LIBRE')->count();
             
-            // Réservations du jour
+            // Réservations du jour - من جدول RESERVATION
             $reservations_jour = DB::table('RESERVATION')
                 ->whereDate('DATE_RESERVATION', $aujourd_hui)
                 ->count();
             
-            // Articles menu populaires
+            // Articles menu populaires - باستخدام الجداول الحقيقية
             $articles_menu_populaires = DB::table('FACTURE_VNT_DETAIL as fvd')
                 ->join('ARTICLE as a', 'fvd.ART_REF', '=', 'a.ART_REF')
                 ->join('FACTURE_VNT as fv', 'fvd.FCTV_REF', '=', 'fv.FCTV_REF')
                 ->join('SOUS_FAMILLE as sf', 'a.SFM_REF', '=', 'sf.SFM_REF')
                 ->join('FAMILLE as f', 'sf.FAM_REF', '=', 'f.FAM_REF')
                 ->whereDate('fv.FCTV_DATE', $aujourd_hui)
-                ->where('f.FAM_LIB', 'LIKE', '%MENU%') // فلترة المنيو
+                ->where('a.IsMenu', 1) // استخدام العمود IsMenu من جدول ARTICLE
                 ->select('a.ART_DESIGNATION', 'a.ART_REF')
                 ->selectRaw('SUM(fvd.FVD_QTE) as quantite_vendue')
                 ->groupBy('a.ART_REF', 'a.ART_DESIGNATION')
@@ -488,7 +496,7 @@ class TableauDeBordController extends Controller
     public function getChiffreAffairesDetails(Request $request)
     {
         try {
-            $date = $request->input('date', '2025-07-09');
+            $date = $request->input('date', now()->format('Y-m-d'));
             
             $details = [
                 'ca_total' => DB::table('FACTURE_VNT')

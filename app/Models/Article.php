@@ -14,40 +14,41 @@ class Article extends Model
 {
     use HasFactory;
     
+    // استخدام قاعدة البيانات SQL Server الحقيقية فقط
     protected $connection = 'sqlsrv';
     protected $table = 'ARTICLE';
     protected $primaryKey = 'ART_REF';
+    protected $keyType = 'string';
+    public $incrementing = false;
     public $timestamps = false;
     
     protected $fillable = [
-        'art_ref',
-        'sfm_ref',
-        'frn_reference',
-        'art_designation',
-        'art_tva_achat',
-        'art_tva_vente',
-        'art_prix_achat',
-        'art_prix_vente',
-        'art_libelle_ticket',
-        'art_style',
-        'art_description',
-        'art_stock_min',
-        'art_stock_max',
-        'art_stockable',
-        'art_achat',
-        'art_vente',
-        'art_plu',
-        'art_dernier_pa',
-        'art_date_creation',
-        'art_date_modification'
+        'ART_REF',
+        'SFM_REF',
+        'FRN_REFERENCE',
+        'ART_DESIGNATION',
+        'ART_TVA_ACHAT',
+        'ART_TVA_VENTE',
+        'ART_PRIX_ACHAT',
+        'ART_PRIX_VENTE',
+        'ART_LIBELLE_TICKET',
+        'ART_DESCRIPTION',
+        'ART_STOCK_MIN',
+        'ART_STOCK_MAX',
+        'ART_STOCKABLE',
+        'ART_ACHAT',
+        'ART_VENTE',
+        'ART_PLU',
+        'IsMenu',
+        'IsIngredient'
     ];
     
     protected $casts = [
-        'art_tva_achat' => 'integer',
-        'art_tva_vente' => 'decimal:2',
-        'art_prix_achat' => 'decimal:2',
-        'art_prix_vente' => 'decimal:2',
-        'art_stock_min' => 'integer',
+        'ART_TVA_ACHAT' => 'integer',
+        'ART_TVA_VENTE' => 'decimal:2',
+        'ART_PRIX_ACHAT' => 'decimal:2',
+        'ART_PRIX_VENTE' => 'decimal:2',
+        'ART_STOCK_MIN' => 'integer',
         'art_stock_max' => 'integer',
         'art_stockable' => 'boolean',
         'art_achat' => 'boolean',
