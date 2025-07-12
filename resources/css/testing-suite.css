@@ -1,0 +1,534 @@
+/* AccessPos Pro - Testing Suite Styles */
+
+/* Test Mode Indicator */
+.test-mode::before {
+    content: "TEST MODE";
+    position: fixed;
+    top: 0;
+    right: 0;
+    background: #ff6b35;
+    color: white;
+    padding: 4px 8px;
+    font-size: 10px;
+    font-weight: bold;
+    z-index: 10000;
+    border-bottom-left-radius: 4px;
+}
+
+/* Test Console */
+.test-console {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-top: 2px solid #4e73df;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 9999;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 12px;
+    max-height: 40vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.test-console-header {
+    background: #4e73df;
+    color: white;
+    padding: 8px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #3d5bcc;
+}
+
+.test-console-header h4 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.test-console-controls {
+    display: flex;
+    gap: 4px;
+}
+
+.test-console-controls .btn {
+    padding: 4px 8px;
+    font-size: 10px;
+    border-radius: 3px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.test-console-controls .btn:hover {
+    opacity: 0.9;
+}
+
+.test-console-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 200px;
+    max-height: 300px;
+}
+
+/* Test Tabs */
+.test-tabs {
+    display: flex;
+    background: #f8f9fc;
+    border-bottom: 1px solid #e3e6f0;
+}
+
+.test-tab {
+    padding: 8px 16px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 11px;
+    color: #6c757d;
+    transition: all 0.2s;
+}
+
+.test-tab:hover {
+    background: #e9ecef;
+    color: #495057;
+}
+
+.test-tab.active {
+    background: #fff;
+    color: #4e73df;
+    border-bottom: 2px solid #4e73df;
+}
+
+/* Test Content */
+.test-content {
+    flex: 1;
+    overflow: hidden;
+}
+
+.test-tab-content {
+    display: none;
+    height: 100%;
+    overflow-y: auto;
+    padding: 12px;
+}
+
+.test-tab-content.active {
+    display: block;
+}
+
+/* Test Results */
+#test-results-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.test-result {
+    border: 1px solid #e3e6f0;
+    border-radius: 4px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+}
+
+.test-result.passed {
+    border-left: 4px solid #1cc88a;
+}
+
+.test-result.failed {
+    border-left: 4px solid #e74a3b;
+}
+
+.test-result:hover {
+    border-color: #4e73df;
+}
+
+.test-result-header {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    background: #f8f9fc;
+    cursor: pointer;
+    gap: 8px;
+}
+
+.test-result-icon {
+    width: 16px;
+    text-align: center;
+}
+
+.test-result.passed .test-result-icon {
+    color: #1cc88a;
+}
+
+.test-result.failed .test-result-icon {
+    color: #e74a3b;
+}
+
+.test-result-name {
+    flex: 1;
+    font-weight: 500;
+    color: #5a5c69;
+}
+
+.test-result-duration {
+    font-size: 10px;
+    color: #858796;
+    background: #e9ecef;
+    padding: 2px 6px;
+    border-radius: 10px;
+}
+
+.test-result-details {
+    padding: 8px 12px;
+    background: #fff;
+    color: #6c757d;
+    font-size: 11px;
+    border-top: 1px solid #f0f0f0;
+}
+
+/* Performance Metrics */
+#performance-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+}
+
+.performance-metric {
+    background: #f8f9fc;
+    border: 1px solid #e3e6f0;
+    border-radius: 4px;
+    padding: 12px;
+}
+
+.performance-metric-title {
+    font-weight: 600;
+    color: #5a5c69;
+    margin-bottom: 4px;
+    font-size: 11px;
+    text-transform: uppercase;
+}
+
+.performance-metric-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: #4e73df;
+}
+
+.performance-metric-unit {
+    font-size: 10px;
+    color: #858796;
+    margin-left: 2px;
+}
+
+.performance-metric-status {
+    margin-top: 4px;
+    font-size: 10px;
+}
+
+.performance-metric-status.good {
+    color: #1cc88a;
+}
+
+.performance-metric-status.warning {
+    color: #f6c23e;
+}
+
+.performance-metric-status.error {
+    color: #e74a3b;
+}
+
+/* Error Log */
+#error-log {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+
+.error-entry {
+    display: flex;
+    padding: 4px 0;
+    border-bottom: 1px solid #f0f0f0;
+    gap: 8px;
+}
+
+.error-entry:last-child {
+    border-bottom: none;
+}
+
+.error-time {
+    color: #858796;
+    font-size: 10px;
+    white-space: nowrap;
+    width: 80px;
+}
+
+.error-message {
+    color: #e74a3b;
+    font-size: 11px;
+    flex: 1;
+}
+
+/* Coverage Report */
+#coverage-report {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 12px;
+}
+
+.coverage-item {
+    background: #f8f9fc;
+    border: 1px solid #e3e6f0;
+    border-radius: 4px;
+    padding: 12px;
+}
+
+.coverage-title {
+    font-weight: 600;
+    color: #5a5c69;
+    margin-bottom: 8px;
+    font-size: 12px;
+}
+
+.coverage-bar {
+    background: #e9ecef;
+    border-radius: 10px;
+    height: 6px;
+    overflow: hidden;
+    margin-bottom: 4px;
+}
+
+.coverage-progress {
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+.coverage-progress.high {
+    background: #1cc88a;
+}
+
+.coverage-progress.medium {
+    background: #f6c23e;
+}
+
+.coverage-progress.low {
+    background: #e74a3b;
+}
+
+.coverage-percentage {
+    font-size: 10px;
+    color: #858796;
+    text-align: right;
+}
+
+/* Test Console Stats */
+.test-console-stats {
+    background: #f8f9fc;
+    border-top: 1px solid #e3e6f0;
+    padding: 6px 12px;
+    display: flex;
+    gap: 16px;
+    font-size: 10px;
+}
+
+.test-stat {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.stat-label {
+    color: #858796;
+    font-weight: 500;
+}
+
+.stat-value {
+    font-weight: 600;
+    color: #5a5c69;
+}
+
+.stat-value.text-success {
+    color: #1cc88a;
+}
+
+.stat-value.text-danger {
+    color: #e74a3b;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .test-console {
+        max-height: 50vh;
+    }
+    
+    .test-console-controls {
+        flex-wrap: wrap;
+        gap: 2px;
+    }
+    
+    .test-console-controls .btn {
+        padding: 3px 6px;
+        font-size: 9px;
+    }
+    
+    .test-console-header h4 {
+        font-size: 12px;
+    }
+    
+    .test-tabs {
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    
+    .test-tab {
+        padding: 6px 12px;
+        font-size: 10px;
+    }
+    
+    #performance-metrics {
+        grid-template-columns: 1fr;
+    }
+    
+    .test-console-stats {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    .test-console {
+        background: #2d3748;
+        border-top-color: #4e73df;
+        color: #e9ecef;
+    }
+    
+    .test-tabs {
+        background: #1a202c;
+        border-bottom-color: #4a5568;
+    }
+    
+    .test-tab {
+        color: #a0aec0;
+    }
+    
+    .test-tab:hover {
+        background: #2d3748;
+        color: #e9ecef;
+    }
+    
+    .test-tab.active {
+        background: #2d3748;
+        color: #4e73df;
+    }
+    
+    .test-result {
+        border-color: #4a5568;
+        background: #2d3748;
+    }
+    
+    .test-result-header {
+        background: #1a202c;
+    }
+    
+    .test-result-name {
+        color: #e9ecef;
+    }
+    
+    .test-result-details {
+        background: #2d3748;
+        color: #a0aec0;
+        border-top-color: #4a5568;
+    }
+    
+    .performance-metric,
+    .coverage-item {
+        background: #1a202c;
+        border-color: #4a5568;
+    }
+    
+    .performance-metric-title,
+    .coverage-title {
+        color: #e9ecef;
+    }
+    
+    .test-console-stats {
+        background: #1a202c;
+        border-top-color: #4a5568;
+    }
+    
+    .error-message {
+        color: #fed7d7;
+    }
+}
+
+/* Animation Effects */
+.test-result {
+    animation: slideInUp 0.3s ease-out;
+}
+
+@keyframes slideInUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.test-console {
+    animation: slideInUp 0.5s ease-out;
+}
+
+/* Loading States */
+.test-running {
+    position: relative;
+    opacity: 0.7;
+}
+
+.test-running::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #4e73df;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Accessibility Enhancements */
+.test-console:focus-within {
+    box-shadow: 0 -4px 12px rgba(78, 115, 223, 0.3);
+}
+
+.test-result:focus-within {
+    outline: 2px solid #4e73df;
+    outline-offset: 2px;
+}
+
+.test-tab:focus {
+    outline: 2px solid #4e73df;
+    outline-offset: -2px;
+}
+
+/* Print Styles */
+@media print {
+    .test-console {
+        display: none !important;
+    }
+    
+    .test-mode::before {
+        display: none !important;
+    }
+}

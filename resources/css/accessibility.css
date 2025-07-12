@@ -1,0 +1,771 @@
+/* AccessPos Pro - Accessibility (A11y) Enhancements */
+
+/* ============================
+   FOCUS MANAGEMENT
+   ============================*/
+
+/* Enhanced focus indicators */
+:focus {
+    outline: 2px solid #4e73df !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0 0 3px rgba(78, 115, 223, 0.2) !important;
+}
+
+/* Focus visible for keyboard navigation */
+:focus:not(:focus-visible) {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+:focus-visible {
+    outline: 2px solid #4e73df !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0 0 3px rgba(78, 115, 223, 0.2) !important;
+}
+
+/* Skip links */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 6px;
+    background: #000;
+    color: #fff;
+    padding: 8px 16px;
+    text-decoration: none;
+    z-index: 9999;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: top 0.3s ease;
+}
+
+.skip-link:focus {
+    top: 6px;
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Focus trap for modals */
+.modal[aria-hidden="false"] {
+    isolation: isolate;
+}
+
+/* ============================
+   SCREEN READER OPTIMIZATIONS
+   ============================*/
+
+/* Screen reader only content */
+.sr-only {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+.sr-only-focusable:focus {
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    padding: inherit !important;
+    margin: inherit !important;
+    overflow: visible !important;
+    clip: auto !important;
+    white-space: normal !important;
+}
+
+/* Live regions for dynamic content */
+.live-region {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+/* ============================
+   KEYBOARD NAVIGATION
+   ============================*/
+
+/* Keyboard navigation indicators */
+.keyboard-nav .nav-link:focus,
+.keyboard-nav .btn:focus,
+.keyboard-nav .form-control:focus {
+    outline: 3px solid #4e73df;
+    outline-offset: 2px;
+    z-index: 10;
+    position: relative;
+}
+
+/* Tab navigation improvements */
+.tab-container {
+    position: relative;
+}
+
+.tab-container [role="tablist"] {
+    display: flex;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.tab-container [role="tab"] {
+    padding: 0.75rem 1rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.tab-container [role="tab"]:hover {
+    background-color: #f8f9fc;
+}
+
+.tab-container [role="tab"][aria-selected="true"] {
+    border-bottom-color: #4e73df;
+    background-color: #fff;
+}
+
+.tab-container [role="tabpanel"] {
+    padding: 1rem;
+}
+
+.tab-container [role="tabpanel"]:focus {
+    outline: 2px solid #4e73df;
+    outline-offset: -2px;
+}
+
+/* ============================
+   COLOR AND CONTRAST
+   ============================*/
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .card {
+        border: 2px solid;
+    }
+    
+    .btn {
+        border: 2px solid;
+        font-weight: bold;
+    }
+    
+    .table th,
+    .table td {
+        border: 1px solid;
+    }
+    
+    .sidebar .nav-link {
+        border-bottom: 1px solid;
+    }
+    
+    .form-control {
+        border: 2px solid;
+    }
+}
+
+/* Color blindness support */
+.colorblind-friendly {
+    /* Use patterns and shapes alongside colors */
+    position: relative;
+}
+
+.status-success::before {
+    content: "✓ ";
+    font-weight: bold;
+}
+
+.status-error::before {
+    content: "✗ ";
+    font-weight: bold;
+}
+
+.status-warning::before {
+    content: "⚠ ";
+    font-weight: bold;
+}
+
+.status-info::before {
+    content: "ℹ ";
+    font-weight: bold;
+}
+
+/* ============================
+   MOTION AND ANIMATION
+   ============================*/
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    
+    .carousel {
+        scroll-behavior: auto !important;
+    }
+    
+    .modal {
+        transition: none !important;
+    }
+    
+    .collapse {
+        transition: none !important;
+    }
+}
+
+/* ============================
+   FONT AND TEXT
+   ============================*/
+
+/* Font size preferences */
+@media (prefers-font-size: large) {
+    body {
+        font-size: 1.25rem;
+        line-height: 1.6;
+    }
+    
+    .btn {
+        padding: 1rem 1.5rem;
+        font-size: 1.1rem;
+    }
+    
+    .form-control {
+        padding: 1rem;
+        font-size: 1.1rem;
+    }
+}
+
+/* Improved readability */
+.readable-text {
+    font-family: 'Open Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    letter-spacing: 0.5px;
+    word-spacing: 2px;
+}
+
+/* ============================
+   FORM ACCESSIBILITY
+   ============================*/
+
+/* Form labels and descriptions */
+.form-group label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.form-group .form-text {
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: #6c757d;
+}
+
+/* Required field indicators */
+.required::after {
+    content: " *";
+    color: #dc3545;
+    font-weight: bold;
+}
+
+/* Error states */
+.form-control.is-invalid {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.invalid-feedback {
+    display: block;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: #dc3545;
+}
+
+.invalid-feedback::before {
+    content: "⚠ ";
+    font-weight: bold;
+}
+
+/* Success states */
+.form-control.is-valid {
+    border-color: #28a745;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+
+.valid-feedback {
+    display: block;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: #28a745;
+}
+
+.valid-feedback::before {
+    content: "✓ ";
+    font-weight: bold;
+}
+
+/* ============================
+   TABLE ACCESSIBILITY
+   ============================*/
+
+/* Table headers and captions */
+.table caption {
+    padding: 0.75rem;
+    color: #6c757d;
+    text-align: left;
+    caption-side: top;
+    font-weight: 600;
+}
+
+.table th {
+    font-weight: 600;
+    background-color: #f8f9fc;
+}
+
+.table th[aria-sort] {
+    cursor: pointer;
+    user-select: none;
+}
+
+.table th[aria-sort]::after {
+    content: " ↕";
+    opacity: 0.5;
+}
+
+.table th[aria-sort="ascending"]::after {
+    content: " ↑";
+    opacity: 1;
+}
+
+.table th[aria-sort="descending"]::after {
+    content: " ↓";
+    opacity: 1;
+}
+
+/* Row selection indicators */
+.table tbody tr[aria-selected="true"] {
+    background-color: rgba(78, 115, 223, 0.1);
+    border-left: 3px solid #4e73df;
+}
+
+/* ============================
+   MODAL ACCESSIBILITY
+   ============================*/
+
+/* Modal focus management */
+.modal {
+    isolation: isolate;
+}
+
+.modal-dialog {
+    margin: 1.75rem auto;
+    max-width: 500px;
+    position: relative;
+}
+
+.modal-content {
+    position: relative;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 0.3rem;
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.5);
+    outline: 0;
+}
+
+.modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 1rem;
+    border-bottom: 1px solid #dee2e6;
+    border-top-left-radius: calc(0.3rem - 1px);
+    border-top-right-radius: calc(0.3rem - 1px);
+}
+
+.modal-title {
+    margin-bottom: 0;
+    line-height: 1.5;
+    font-weight: 600;
+}
+
+.modal-body {
+    position: relative;
+    flex: 1 1 auto;
+    padding: 1rem;
+}
+
+/* ============================
+   NAVIGATION ACCESSIBILITY
+   ============================*/
+
+/* Navigation landmarks */
+.sidebar {
+    isolation: isolate;
+}
+
+.sidebar nav {
+    padding: 1rem 0;
+}
+
+.sidebar .nav-item {
+    margin-bottom: 0.25rem;
+}
+
+.sidebar .nav-link {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    border-radius: 0.35rem;
+    margin: 0 0.5rem;
+    transition: all 0.15s ease-in-out;
+}
+
+.sidebar .nav-link:hover,
+.sidebar .nav-link:focus {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.1);
+    text-decoration: none;
+}
+
+.sidebar .nav-link.active {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.sidebar .nav-link i {
+    margin-right: 0.5rem;
+    width: 1rem;
+    text-align: center;
+}
+
+/* ============================
+   ALERT AND NOTIFICATION ACCESSIBILITY
+   ============================*/
+
+/* Alert role and aria attributes */
+.alert {
+    position: relative;
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+}
+
+.alert[role="alert"] {
+    /* Announced immediately by screen readers */
+    font-weight: 600;
+}
+
+.alert[role="status"] {
+    /* Announced at next opportunity by screen readers */
+    font-weight: 500;
+}
+
+.alert-dismissible {
+    padding-right: 4rem;
+}
+
+.alert-dismissible .btn-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 2;
+    padding: 1.25rem 1.25rem;
+}
+
+/* Toast notifications */
+.toast-container {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1055;
+}
+
+.toast {
+    max-width: 350px;
+    overflow: hidden;
+    font-size: 0.875rem;
+    background-color: rgba(255, 255, 255, 0.85);
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+    border-radius: 0.25rem;
+    opacity: 0;
+}
+
+.toast:not(:last-child) {
+    margin-bottom: 0.75rem;
+}
+
+.toast.showing {
+    opacity: 1;
+}
+
+.toast.show {
+    display: block;
+    opacity: 1;
+}
+
+.toast.hide {
+    display: none;
+}
+
+/* ============================
+   LOADING AND PROGRESS ACCESSIBILITY
+   ============================*/
+
+/* Progress bars */
+.progress {
+    display: flex;
+    height: 1rem;
+    overflow: hidden;
+    font-size: 0.75rem;
+    background-color: #e9ecef;
+    border-radius: 0.25rem;
+}
+
+.progress-bar {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    background-color: #007bff;
+    transition: width 0.6s ease;
+}
+
+/* Loading spinners */
+.spinner-border {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    vertical-align: text-bottom;
+    border: 0.25em solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spinner-border 0.75s linear infinite;
+}
+
+@keyframes spinner-border {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Loading states */
+.loading {
+    position: relative;
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.loading::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 1rem;
+    height: 1rem;
+    margin: -0.5rem 0 0 -0.5rem;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #007bff;
+    border-radius: 50%;
+    animation: spinner-border 1s linear infinite;
+}
+
+/* ============================
+   RESPONSIVE ACCESSIBILITY
+   ============================*/
+
+/* Mobile accessibility improvements */
+@media (max-width: 768px) {
+    /* Larger touch targets */
+    .btn {
+        min-height: 44px;
+        min-width: 44px;
+        padding: 0.75rem 1rem;
+    }
+    
+    .form-control {
+        min-height: 44px;
+        font-size: 16px; /* Prevent zoom on iOS */
+    }
+    
+    .nav-link {
+        min-height: 44px;
+        padding: 0.75rem 1rem;
+    }
+    
+    /* Improved spacing for touch */
+    .card {
+        margin-bottom: 1.5rem;
+    }
+    
+    .modal-dialog {
+        margin: 0.5rem;
+        max-width: none;
+        width: calc(100% - 1rem);
+    }
+}
+
+/* ============================
+   DARK MODE ACCESSIBILITY
+   ============================*/
+
+@media (prefers-color-scheme: dark) {
+    .dark-mode-auto {
+        background-color: #1a1a1a;
+        color: #e9ecef;
+    }
+    
+    .dark-mode-auto .card {
+        background-color: #2d3748;
+        border-color: #4a5568;
+        color: #e9ecef;
+    }
+    
+    .dark-mode-auto .form-control {
+        background-color: #2d3748;
+        border-color: #4a5568;
+        color: #e9ecef;
+    }
+    
+    .dark-mode-auto .form-control:focus {
+        background-color: #2d3748;
+        border-color: #63b3ed;
+        color: #e9ecef;
+        box-shadow: 0 0 0 0.2rem rgba(99, 179, 237, 0.25);
+    }
+    
+    .dark-mode-auto .btn-primary {
+        background-color: #3182ce;
+        border-color: #3182ce;
+    }
+    
+    .dark-mode-auto .btn-primary:hover {
+        background-color: #2c5aa0;
+        border-color: #2c5aa0;
+    }
+    
+    .dark-mode-auto .table {
+        color: #e9ecef;
+    }
+    
+    .dark-mode-auto .table th {
+        background-color: #2d3748;
+        border-color: #4a5568;
+    }
+    
+    .dark-mode-auto .table td {
+        border-color: #4a5568;
+    }
+}
+
+/* ============================
+   PRINT ACCESSIBILITY
+   ============================*/
+
+@media print {
+    /* High contrast for print */
+    .card {
+        border: 2px solid #000 !important;
+    }
+    
+    .table th,
+    .table td {
+        border: 1px solid #000 !important;
+    }
+    
+    /* Hide interactive elements */
+    .btn,
+    .modal,
+    .tooltip,
+    .popover,
+    .navbar,
+    .sidebar {
+        display: none !important;
+    }
+    
+    /* Print-friendly typography */
+    body {
+        font-size: 12pt !important;
+        line-height: 1.5 !important;
+        color: #000 !important;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+        color: #000 !important;
+        page-break-after: avoid;
+    }
+    
+    .card {
+        page-break-inside: avoid;
+    }
+    
+    .table {
+        page-break-inside: auto;
+    }
+    
+    .table tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+    }
+}
+
+/* ============================
+   UTILITIES
+   ============================*/
+
+/* Visually hidden but available to screen readers */
+.visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+.visually-hidden-focusable:focus {
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    padding: inherit !important;
+    margin: inherit !important;
+    overflow: visible !important;
+    clip: auto !important;
+    white-space: normal !important;
+}
+
+/* Focus within indicator */
+.focus-within:focus-within {
+    outline: 2px solid #4e73df;
+    outline-offset: 2px;
+}
+
+/* Text selection */
+::selection {
+    background-color: rgba(78, 115, 223, 0.3);
+    color: #000;
+}
+
+::-moz-selection {
+    background-color: rgba(78, 115, 223, 0.3);
+    color: #000;
+}

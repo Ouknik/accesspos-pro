@@ -6,53 +6,86 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Admin\TableauDeBordController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 
 // Routes d'authentification
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-// Page d'accueil - Redirection vers le tableau de bord moderne
+// Routes de réinitialisation de mot de passe
+Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])
+    ->name('password.request');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])
+    ->name('password.email');
+Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])
+    ->name('password.reset');
+Route::post('/reset-password', [ResetPasswordController::class, 'reset'])
+    ->name('password.update');
+
+// Page d'accueil - Redirection vers le tableau de bord moderne SB Admin
 Route::get('/', function () {
     if (Auth::check()) {
-        return redirect('/admin/tableau-de-bord-moderne');
+        return redirect('/admin/dashboard');
     }
     return redirect('/login');
 });
 
 // Tableau de Bord Moderne Professionnel - Protégé par l'authentification
 Route::middleware('auth')->prefix('admin')->group(function () {
-    // Route principale du tableau de bord
-    Route::get('/tableau-de-bord-moderne', [TableauDeBordController::class, 'index'])
-        ->name('admin.tableau-de-bord-moderne');
-    
-    // Alias pour admin.dashboard
+    // Route principale du tableau de bord - SB Admin
     Route::get('/dashboard', [TableauDeBordController::class, 'index'])
         ->name('admin.dashboard');
     
-    // Routes pour les pages de détails (nouvelles pages séparées)
+    // Route pour tableau-de-bord-moderne (compatibility)
+    Route::get('/tableau-de-bord-moderne', [TableauDeBordController::class, 'index'])
+        ->name('admin.tableau-de-bord-moderne');
+    
+    // Testing Routes - TASK 13
+    Route::get('/test-pages', function() {
+        return view('admin.test-pages-sb-admin');
+    })->name('admin.test-pages');
+    
+    Route::get('/responsive-test', function() {
+        return view('admin.responsive-test-sb-admin');
+    })->name('admin.responsive-test');
+    
+    Route::get('/forms-test', function() {
+        return view('admin.forms-test-sb-admin');
+    })->name('admin.forms-test');
+    
+    Route::get('/javascript-test', function() {
+        return view('admin.javascript-test-sb-admin');
+    })->name('admin.javascript-test');
+    
+    Route::get('/console-errors-test', function() {
+        return view('admin.console-errors-test-sb-admin');
+    })->name('admin.console-errors-test');
+    
+    // Routes pour les pages de détails (versions SB Admin)
     Route::get('/details/chiffre-affaires', function() {
-        return view('admin.chiffre-affaires-details');
+        return view('admin.chiffre-affaires-details-sb-admin');
     })->name('admin.dashboard.chiffre-affaires');
     
     Route::get('/details/stock-rupture', function() {
-        return view('admin.stock-rupture-details');
+        return view('admin.stock-rupture-details-sb-admin');
     })->name('admin.dashboard.stock-rupture');
     
     Route::get('/details/top-clients', function() {
-        return view('admin.top-clients-details');
+        return view('admin.top-clients-details-sb-admin');
     })->name('admin.dashboard.top-clients');
     
     Route::get('/details/performance-horaire', function() {
-        return view('admin.performance-horaire-details');
+        return view('admin.performance-horaire-details-sb-admin');
     })->name('admin.dashboard.performance-horaire');
     
     Route::get('/details/modes-paiement', function() {
-        return view('admin.modes-paiement-details');
+        return view('admin.modes-paiement-details-sb-admin');
     })->name('admin.dashboard.modes-paiement');
     
     Route::get('/details/etat-tables', function() {
-        return view('admin.etat-tables-details');
+        return view('admin.etat-tables-details-sb-admin');
     })->name('admin.dashboard.etat-tables');
     
     // API endpoint pour les données en temps réel

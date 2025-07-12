@@ -12,7 +12,7 @@ class LoginController extends Controller
 {
     public function showLoginForm()
     {
-        return view('auth.login');
+        return view('auth.login-sb-admin');
     }
 
     public function login(Request $request)
@@ -53,7 +53,7 @@ class LoginController extends Controller
             Auth::login($user, $request->filled('remember'));
             $request->session()->regenerate();
             
-            return redirect()->intended('/admin/tableau-de-bord-moderne')
+            return redirect()->intended('/admin/dashboard')
                 ->with('success', 'Connexion réussie ! Bienvenue ' . $user->name . '.');
         }
 

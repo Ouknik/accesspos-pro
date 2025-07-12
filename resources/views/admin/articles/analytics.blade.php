@@ -57,7 +57,7 @@
     <!-- Navigation breadcrumb -->
     <nav aria-label="breadcrumb" class="mb-4">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">لوحة التحكم</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.tableau-de-bord-moderne') }}">لوحة التحكم</a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.articles.index') }}">إدارة المنتجات</a></li>
             <li class="breadcrumb-item active">التحليلات</li>
         </ol>

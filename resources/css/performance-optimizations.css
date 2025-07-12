@@ -1,0 +1,288 @@
+/* AccessPos Pro - Performance Optimizations CSS */
+
+/* ==============================
+   CRITICAL RENDERING PATH OPTIMIZATIONS
+   ==============================*/
+
+/* Preload key fonts */
+@font-face {
+    font-family: 'Nunito';
+    font-display: swap;
+    font-weight: 300 800;
+    src: url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap');
+}
+
+/* Critical above-the-fold styles */
+.critical-content {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.2s ease-in-out;
+}
+
+/* Lazy loading placeholder */
+.lazy-placeholder {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* ==============================
+   CSS OPTIMIZATIONS
+   ==============================*/
+
+/* Reduce repaints and reflows */
+* {
+    box-sizing: border-box;
+}
+
+.optimized-transform {
+    transform: translateZ(0);
+    will-change: transform;
+}
+
+/* GPU acceleration for animations */
+.accelerated {
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+/* ==============================
+   LOADING INDICATORS
+   ==============================*/
+
+/* Main loader */
+.main-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.3s ease-out;
+}
+
+.main-loader.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* SB Admin Spinner */
+.sb-admin-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #4e73df;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Page transition loader */
+.page-transition {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(to right, #4e73df, #1cc88a);
+    z-index: 9998;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease-out;
+}
+
+.page-transition.loading {
+    animation: progress 2s ease-out;
+}
+
+@keyframes progress {
+    0% { transform: scaleX(0); }
+    50% { transform: scaleX(0.7); }
+    100% { transform: scaleX(1); }
+}
+
+/* Button loading state */
+.btn-loading {
+    position: relative;
+    color: transparent !important;
+    cursor: not-allowed;
+}
+
+.btn-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 16px;
+    margin: -8px 0 0 -8px;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 0.8s linear infinite;
+}
+
+/* ==============================
+   OPTIMIZED COMPONENTS
+   ==============================*/
+
+/* DataTable loading optimization */
+.dataTables_processing {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    width: auto !important;
+    margin: 0 !important;
+    transform: translate(-50%, -50%) !important;
+    background: rgba(255, 255, 255, 0.9) !important;
+    border: 1px solid #ddd !important;
+    border-radius: 4px !important;
+    padding: 10px 20px !important;
+}
+
+/* Chart loading optimization */
+.chart-container {
+    position: relative;
+    min-height: 300px;
+}
+
+.chart-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Modal optimization */
+.modal {
+    display: none;
+}
+
+.modal.show {
+    display: block;
+    animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* ==============================
+   MOBILE PERFORMANCE
+   ==============================*/
+
+/* Touch optimization */
+.touch-optimized {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+/* Scroll optimization */
+.smooth-scroll {
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ==============================
+   ACCESSIBILITY IMPROVEMENTS
+   ==============================*/
+
+/* Focus indicators */
+.focus-visible {
+    outline: 2px solid #4e73df;
+    outline-offset: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    .card {
+        border: 2px solid #000;
+    }
+    
+    .btn {
+        border: 2px solid;
+    }
+}
+
+/* ==============================
+   PRINT OPTIMIZATIONS
+   ==============================*/
+
+@media print {
+    .sidebar,
+    .topbar,
+    .footer,
+    .btn,
+    .modal {
+        display: none !important;
+    }
+    
+    .content-wrapper {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    .card {
+        break-inside: avoid;
+        box-shadow: none !important;
+        border: 1px solid #000 !important;
+    }
+}
+
+/* ==============================
+   MEMORY OPTIMIZATION
+   ==============================*/
+
+/* Limit animations on low-end devices */
+@media (max-width: 768px) and (max-height: 1024px) {
+    .animation-heavy {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* Image optimization */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Contain layout shifts */
+.layout-stable {
+    contain: layout style paint;
+}

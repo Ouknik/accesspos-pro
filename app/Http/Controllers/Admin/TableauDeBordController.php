@@ -35,7 +35,7 @@ class TableauDeBordController extends Controller
             $graphiquesAnalyses = $this->obtenirGraphiquesAnalyses($aujourd_hui);
             $gestionFinanciere = $this->obtenirGestionFinanciere($aujourd_hui, $debut_mois);
 
-            return view('admin.tableau-de-bord-moderne', compact(
+            return view('admin.dashboard-sb-admin', compact(
                 'statistiquesFinancieres',
                 'gestionStocks',
                 'gestionClientele',
@@ -47,7 +47,7 @@ class TableauDeBordController extends Controller
             
         } catch (\Exception $e) {
             // في حالة وجود خطأ، إرجاع قيم افتراضية
-            return view('admin.tableau-de-bord-moderne', [
+            return view('admin.dashboard-sb-admin', [
                 'statistiquesFinancieres' => $this->retournerValeursParDefaut('financier'),
                 'gestionStocks' => $this->retournerValeursParDefaut('stock'),
                 'gestionClientele' => $this->retournerValeursParDefaut('clientele'),

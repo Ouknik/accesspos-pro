@@ -686,7 +686,7 @@ class ArticleController extends Controller
             // الحصول على العائلات للفلتر
             $familles = DB::table('FAMILLE')->orderBy('FAM_LIB')->get();
 
-            return view('admin.articles.analytics', compact('analytics', 'familles'));
+            return view('admin.articles.analytics-sb-admin', compact('analytics', 'familles'));
 
         } catch (\Exception $e) {
             return redirect()->route('admin.articles.index')
@@ -752,20 +752,45 @@ class ArticleController extends Controller
      */
     private function getArticlesStats()
     {
-        return [
-            'total' => DB::table('ARTICLE')->count(),
-            'actifs' => DB::table('ARTICLE')->where('ART_VENTE', 1)->count(),
-            'rupture' => DB::table('STOCK')
-                ->join('ARTICLE', 'STOCK.ART_REF', '=', 'ARTICLE.ART_REF')
-                ->where('STOCK.STK_QTE', '<=', 0)
-                ->where('ARTICLE.ART_STOCKABLE', 1)
-                ->count(),
-            'stock_faible' => DB::table('STOCK as s')
-                ->join('ARTICLE as a', 's.ART_REF', '=', 'a.ART_REF')
-                ->whereRaw('s.STK_QTE <= a.ART_STOCK_MIN')
-                ->where('s.STK_QTE', '>', 0)
-                ->count(),
-        ];
+        try {
+            $total = DB::table('ARTICLE')->count();
+            $active = DB::table('ARTICLE')->where('ART_VENTE', 1)->count();
+            
+            // Calculer stock faible et valeur du stock
+            $lowStockCount = 0;
+            $stockValue = 0;
+            
+            $articles = DB::table('ARTICLE')->where('ART_STOCKABLE', 1)->get();
+            
+            foreach ($articles as $article) {
+                $stock = DB::table('STOCK')
+                    ->where('ART_REF', $article->ART_REF)
+                    ->sum('STK_QTE') ?? 0;
+                
+                if ($stock <= $article->ART_STOCK_MIN && $stock > 0) {
+                    $lowStockCount++;
+                }
+                
+                if ($article->ART_PRIX_ACHAT) {
+                    $stockValue += $stock * $article->ART_PRIX_ACHAT;
+                }
+            }
+            
+            return [
+                'total' => $total,
+                'active' => $active,
+                'low_stock' => $lowStockCount,
+                'stock_value' => $stockValue,
+            ];
+        } catch (\Exception $e) {
+            Log::error('Erreur dans getArticlesStats: ' . $e->getMessage());
+            return [
+                'total' => 0,
+                'active' => 0,
+                'low_stock' => 0,
+                'stock_value' => 0,
+            ];
+        }
     }
 
     /**

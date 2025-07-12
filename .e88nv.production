@@ -1,0 +1,206 @@
+# ===================================
+# إعدادات الإنتاج - AccessPos Pro
+# ===================================
+
+APP_NAME="AccessPos Pro"
+APP_ENV=production
+APP_KEY=
+APP_DEBUG=false
+APP_URL=https://your-domain.com
+APP_TIMEZONE=UTC
+
+# ===================================
+# إعدادات قاعدة البيانات
+# ===================================
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=accesspos_pro
+DB_USERNAME=accesspos_user
+DB_PASSWORD=your_secure_password
+
+# ===================================
+# إعدادات الكاش والجلسات
+# ===================================
+CACHE_DRIVER=redis
+FILESYSTEM_DISK=public
+QUEUE_CONNECTION=redis
+SESSION_DRIVER=redis
+SESSION_LIFETIME=120
+SESSION_ENCRYPT=true
+SESSION_PATH=/
+SESSION_DOMAIN=your-domain.com
+SESSION_SECURE_COOKIES=true
+
+# ===================================
+# إعدادات Redis
+# ===================================
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=null
+REDIS_PORT=6379
+REDIS_CLIENT=phpredis
+
+# ===================================
+# إعدادات البريد الإلكتروني
+# ===================================
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.your-provider.com
+MAIL_PORT=587
+MAIL_USERNAME=noreply@your-domain.com
+MAIL_PASSWORD=your_mail_password
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=noreply@your-domain.com
+MAIL_FROM_NAME="${APP_NAME}"
+
+# ===================================
+# إعدادات الأمان
+# ===================================
+# CSRF Protection
+CSRF_TOKEN_LIFETIME=7200
+
+# Rate Limiting
+RATE_LIMIT_PER_MINUTE=60
+API_RATE_LIMIT_PER_MINUTE=120
+
+# Password Security
+PASSWORD_MIN_LENGTH=8
+PASSWORD_REQUIRE_NUMBERS=true
+PASSWORD_REQUIRE_SYMBOLS=true
+PASSWORD_REQUIRE_UPPERCASE=true
+
+# ===================================
+# إعدادات الـ Logging
+# ===================================
+LOG_CHANNEL=stack
+LOG_DEPRECATIONS_CHANNEL=null
+LOG_LEVEL=warning
+LOG_MAX_FILES=30
+
+# ===================================
+# إعدادات الأداء
+# ===================================
+# Asset Versioning للـ cache busting
+ASSET_VERSION=v2.0.1
+
+# CDN Settings (إن وجد)
+CDN_URL=
+ASSET_URL=
+
+# Image Optimization
+IMAGE_DRIVER=gd
+IMAGE_QUALITY=85
+IMAGE_MAX_WIDTH=1920
+IMAGE_MAX_HEIGHT=1080
+
+# ===================================
+# إعدادات AccessPos المخصصة
+# ===================================
+# Business Settings
+BUSINESS_NAME="AccessPos Pro"
+BUSINESS_ADDRESS="123 Business St, City"
+BUSINESS_PHONE="+123 456 789"
+BUSINESS_EMAIL="info@your-domain.com"
+
+# Tax Settings
+TAX_RATE=0.20
+CURRENCY=EUR
+CURRENCY_SYMBOL=€
+
+# Backup Settings
+BACKUP_ENABLED=true
+BACKUP_SCHEDULE="0 2 * * *"
+BACKUP_RETENTION_DAYS=30
+
+# ===================================
+# إعدادات الحماية الإضافية
+# ===================================
+# HTTPS Settings
+FORCE_HTTPS=true
+HSTS_ENABLED=true
+HSTS_MAX_AGE=31536000
+
+# Security Headers
+CONTENT_SECURITY_POLICY_ENABLED=true
+X_FRAME_OPTIONS=DENY
+X_CONTENT_TYPE_OPTIONS=nosniff
+X_XSS_PROTECTION="1; mode=block"
+
+# ===================================
+# إعدادات التجميع (Bundle)
+# ===================================
+VITE_APP_NAME="${APP_NAME}"
+VITE_APP_ENV="${APP_ENV}"
+VITE_APP_URL="${APP_URL}"
+
+# JS/CSS Minification
+VITE_ENABLE_MINIFICATION=true
+VITE_ENABLE_TREESHAKING=true
+VITE_ENABLE_COMPRESSION=true
+
+# ===================================
+# إعدادات المراقبة
+# ===================================
+# Performance Monitoring
+ENABLE_QUERY_LOG=false
+ENABLE_PERFORMANCE_MONITORING=true
+SLOW_QUERY_THRESHOLD=1000
+
+# Error Tracking
+ERROR_TRACKING_ENABLED=true
+ERROR_TRACKING_SERVICE=sentry
+SENTRY_LARAVEL_DSN=
+
+# ===================================
+# إعدادات النسخ الاحتياطي
+# ===================================
+# Database Backup
+DB_BACKUP_ENABLED=true
+DB_BACKUP_PATH=/var/backups/accesspos
+DB_BACKUP_COMPRESSION=gzip
+
+# File Backup  
+FILE_BACKUP_ENABLED=true
+FILE_BACKUP_PATH=/var/backups/accesspos/files
+
+# ===================================
+# معلومات الإصدار
+# ===================================
+APP_VERSION=2.0.1
+BUILD_DATE=2024-12-01
+LAST_UPDATE=2024-12-01
+
+# SB Admin Template Version
+TEMPLATE_VERSION=4.2.0
+BOOTSTRAP_VERSION=4.6.2
+JQUERY_VERSION=3.6.4
+
+# ===================================
+# إعدادات إضافية للـ Production
+# ===================================
+# Maintenance Mode
+MAINTENANCE_MODE=false
+MAINTENANCE_SECRET=
+
+# API Settings
+API_VERSION=v2
+API_RATE_LIMIT=1000
+API_TIMEOUT=30
+
+# Session Security
+SESSION_SAME_SITE=strict
+SESSION_HTTP_ONLY=true
+
+# Upload Limits
+MAX_UPLOAD_SIZE=10240
+ALLOWED_FILE_TYPES=jpg,jpeg,png,pdf,doc,docx,xls,xlsx
+
+# ===================================
+# تعليمات الإعداد
+# ===================================
+# 1. انسخ هذا الملف إلى .env في الـ production server
+# 2. قم بتحديث جميع القيم المطلوبة
+# 3. أنشئ APP_KEY باستخدام: php artisan key:generate
+# 4. قم بتشغيل: php artisan config:cache
+# 5. قم بتشغيل: php artisan route:cache
+# 6. قم بتشغيل: php artisan view:cache
+# 7. قم بتشغيل: npm run build

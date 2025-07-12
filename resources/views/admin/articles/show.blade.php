@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+@extends('layouts.sb-admin')
 
 @section('title', 'Détails du produit - ' . $article->ART_DESIGNATION)
 
