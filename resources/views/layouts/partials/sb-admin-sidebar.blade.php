@@ -148,10 +148,7 @@
     <!-- Divider -->
     <hr class="sidebar-divider">
 
-    <!-- Heading -->
-    <div class="sidebar-heading">
-        Système
-    </div>
+    
 
     <!-- Nav Item - Paramètres -->
     @if(Route::has('admin.parametres.index'))
@@ -208,51 +205,16 @@
     </li>
     @endif
 
-    <!-- Nav Item - Tests & QA (TASK 13) -->
-    <li class="nav-item {{ request()->routeIs('admin.*-test') ? 'active' : '' }}">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTesting"
-            aria-expanded="{{ request()->routeIs('admin.*-test') ? 'true' : 'false' }}" aria-controls="collapseTesting">
-            <i class="fas fa-fw fa-flask"></i>
-            <span>Tests & Qualité</span>
-        </a>
-        <div id="collapseTesting" class="collapse {{ request()->routeIs('admin.*-test') ? 'show' : '' }}" aria-labelledby="headingTesting" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Tests Fonctionnels:</h6>
-                {{-- <a class="collapse-item {{ request()->routeIs('admin.test-pages') ? 'active' : '' }}" href="{{ route('admin.test-pages') }}">
-                    <i class="fas fa-globe"></i> Test des Pages
-                </a> --}}
-                {{-- <a class="collapse-item {{ request()->routeIs('admin.responsive-test') ? 'active' : '' }}" href="{{ route('admin.responsive-test') }}">
-                    <i class="fas fa-mobile-alt"></i> Test Responsive
-                </a> --}}
-                {{-- <a class="collapse-item {{ request()->routeIs('admin.forms-test') ? 'active' : '' }}" href="{{ route('admin.forms-test') }}">
-                    <i class="fas fa-clipboard-list"></i> Test des Forms
-                </a> --}}
-                <div class="collapse-divider"></div>
-                <h6 class="collapse-header">Tests Techniques:</h6>
-                {{-- <a class="collapse-item {{ request()->routeIs('admin.javascript-test') ? 'active' : '' }}" href="{{ route('admin.javascript-test') }}">
-                    <i class="fab fa-js-square"></i> Test JavaScript
-                </a>
-                <a class="collapse-item {{ request()->routeIs('admin.console-errors-test') ? 'active' : '' }}" href="{{ route('admin.console-errors-test') }}">
-                    <i class="fas fa-bug"></i> Erreurs Console
-                </a> --}}
-            </div>
-        </div>
-    </li>
+   
 
-    <!-- Divider -->
-    <hr class="sidebar-divider d-none d-md-block">
+  
 
     <!-- Sidebar Toggler (Sidebar) -->
     <div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
     </div>
 
-    <!-- Sidebar Message -->
-    <div class="sidebar-card d-none d-lg-flex">
-        <img class="sidebar-card-illustration mb-2" src="{{ asset('startbootstrap-sb-admin-2-gh-pages/img/undraw_rocket.svg') }}" alt="...">
-        <p class="text-center mb-2"><strong>AccessPos Pro</strong> est votre solution complète de gestion!</p>
-        <a class="btn btn-success btn-sm" href="#" data-toggle="modal" data-target="#supportModal">Support technique</a>
-    </div>
+    
 
 </ul>
 

@@ -57,10 +57,10 @@
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                            Actifs
+                            Produits Actifs
                         </div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800">
-                            {{ $stats['actifs'] ?? 0 }}
+                            {{ $stats['active'] ?? 0 }}
                         </div>
                     </div>
                     <div class="col-auto">
@@ -81,7 +81,7 @@
                             Stock Faible
                         </div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800">
-                            {{ $stats['stock_faible'] ?? 0 }}
+                            {{ $stats['low_stock'] ?? 0 }}
                         </div>
                     </div>
                     <div class="col-auto">
@@ -92,21 +92,21 @@
         </div>
     </div>
 
-    {{-- Rupture de Stock --}}
+    {{-- Valeur du Stock --}}
     <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-danger shadow h-100 py-2">
+        <div class="card border-left-info shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                            Rupture de Stock
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                            Valeur du Stock
                         </div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800">
-                            {{ $stats['rupture'] ?? 0 }}
+                            {{ number_format($stats['stock_value'] ?? 0, 2) }} DA
                         </div>
                     </div>
                     <div class="col-auto">
-                        <i class="fas fa-times-circle fa-2x text-gray-300"></i>
+                        <i class="fas fa-money-bill-wave fa-2x text-gray-300"></i>
                     </div>
                 </div>
             </div>
@@ -146,14 +146,14 @@
 
                 {{-- Filtre par catégorie --}}
                 <div class="col-md-3 mb-3">
-                    <label for="category_id" class="form-label">Catégorie</label>
-                    <select class="form-control" id="category_id" name="category_id">
-                        <option value="">Toutes les catégories</option>
-                        @if(isset($categories))
-                            @foreach($categories as $category)
-                                <option value="{{ $category->id }}" 
-                                        {{ request('category_id') == $category->id ? 'selected' : '' }}>
-                                    {{ $category->nom }}
+                    <label for="famille" class="form-label">Famille</label>
+                    <select class="form-control" id="famille" name="famille">
+                        <option value="">Toutes les familles</option>
+                        @if(isset($familles))
+                            @foreach($familles as $famille)
+                                <option value="{{ $famille->FAM_REF }}" 
+                                        {{ request('famille') == $famille->FAM_REF ? 'selected' : '' }}>
+                                    {{ $famille->FAM_LIB }}
                                 </option>
                             @endforeach
                         @endif
@@ -162,11 +162,11 @@
 
                 {{-- Filtre par statut --}}
                 <div class="col-md-2 mb-3">
-                    <label for="status" class="form-label">Statut</label>
-                    <select class="form-control" id="status" name="status">
+                    <label for="statut" class="form-label">Statut</label>
+                    <select class="form-control" id="statut" name="statut">
                         <option value="">Tous</option>
-                        <option value="actif" {{ request('status') == 'actif' ? 'selected' : '' }}>Actif</option>
-                        <option value="inactif" {{ request('status') == 'inactif' ? 'selected' : '' }}>Inactif</option>
+                        <option value="1" {{ request('statut') == '1' ? 'selected' : '' }}>Actif</option>
+                        <option value="0" {{ request('statut') == '0' ? 'selected' : '' }}>Inactif</option>
                     </select>
                 </div>
 
@@ -196,38 +196,6 @@
     </div>
 </div>
 
-{{-- Actions en Lot --}}
-<div class="card shadow mb-4">
-    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-        <h6 class="m-0 font-weight-bold text-primary">
-            <i class="fas fa-tasks"></i>
-            Actions en Lot
-        </h6>
-        <div class="btn-group" role="group">
-            <button type="button" class="btn btn-sm btn-success" onclick="exportSelected('excel')">
-                <i class="fas fa-file-excel"></i>
-                Excel
-            </button>
-            <button type="button" class="btn btn-sm btn-danger" onclick="exportSelected('pdf')">
-                <i class="fas fa-file-pdf"></i>
-                PDF
-            </button>
-            <button type="button" class="btn btn-sm btn-warning" onclick="activateSelected()">
-                <i class="fas fa-toggle-on"></i>
-                Activer
-            </button>
-            <button type="button" class="btn btn-sm btn-secondary" onclick="deactivateSelected()">
-                <i class="fas fa-toggle-off"></i>
-                Désactiver
-            </button>
-        </div>
-    </div>
-    <div class="card-body">
-        <div id="bulk-actions-info" class="alert alert-info" style="display: none;">
-            <span id="selected-count">0</span> produit(s) sélectionné(s)
-        </div>
-    </div>
-</div>
 
 {{-- Tableau des Produits --}}
 <div class="card shadow mb-4">
@@ -238,10 +206,14 @@
         </h6>
         <div class="d-flex align-items-center">
             <span class="text-muted mr-3">
-                @if(isset($articles) && is_object($articles) && method_exists($articles, 'total'))
-                    {{ $articles->total() }} produit(s) au total
-                @elseif(isset($articles) && is_array($articles))
-                    {{ count($articles) }} produit(s) au total
+                @if(isset($articles))
+                    @if(is_object($articles) && method_exists($articles, 'total'))
+                        {{ $articles->total() }} produit(s) au total
+                    @elseif(is_countable($articles))
+                        {{ count($articles) }} produit(s) au total
+                    @else
+                        0 produit(s) au total
+                    @endif
                 @else
                     0 produit(s) au total
                 @endif
@@ -296,49 +268,35 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if(isset($articles))
-                        @php
-                            $articlesArray = is_object($articles) && method_exists($articles, 'getIterator') ? $articles : (is_array($articles) ? $articles : []);
-                            $hasArticles = is_object($articles) ? (method_exists($articles, 'count') ? $articles->count() > 0 : count($articles) > 0) : (is_array($articles) ? count($articles) > 0 : false);
-                        @endphp
-                        
-                        @if($hasArticles)
-                            @foreach($articlesArray as $article)
+                    @if(isset($articles) && count($articles) > 0)
+                        @foreach($articles as $article)
                             <tr>
                             <td>
                                 <div class="custom-control custom-checkbox">
                                     <input type="checkbox" 
                                            class="custom-control-input article-checkbox" 
-                                           id="check{{ $article->id }}"
-                                           value="{{ $article->id }}">
-                                    <label class="custom-control-label" for="check{{ $article->id }}"></label>
+                                           id="check{{ $article->ART_REF }}"
+                                           value="{{ $article->ART_REF }}">
+                                    <label class="custom-control-label" for="check{{ $article->ART_REF }}"></label>
                                 </div>
                             </td>
                             <td>
-                                @if($article->image)
-                                    <img src="{{ asset('storage/' . $article->image) }}" 
-                                         alt="{{ $article->nom }}" 
-                                         class="img-thumbnail" 
-                                         style="width: 50px; height: 50px; object-fit: cover;">
-                                @else
-                                    <div class="bg-gray-200 d-flex align-items-center justify-content-center" 
-                                         style="width: 50px; height: 50px; border-radius: 4px;">
-                                        <i class="fas fa-image text-gray-400"></i>
-                                    </div>
-                                @endif
+                                {{-- Pas d'images dans la structure actuelle --}}
+                                <div class="bg-gray-200 d-flex align-items-center justify-content-center" 
+                                     style="width: 50px; height: 50px; border-radius: 4px;">
+                                    <i class="fas fa-image text-gray-400"></i>
+                                </div>
                             </td>
                             <td>
-                                <div class="font-weight-bold">{{ $article->nom ?? 'N/A' }}</div>
-                                @if($article->description)
-                                    <div class="text-xs text-muted">
-                                        {{ Str::limit($article->description, 50) }}
-                                    </div>
-                                @endif
+                                <div class="font-weight-bold">{{ $article->ART_DESIGNATION ?? 'N/A' }}</div>
+                                <div class="text-xs text-muted">
+                                    Réf: {{ $article->ART_REF }}
+                                </div>
                             </td>
                             <td>
-                                @if($article->category)
+                                @if($article->famille)
                                     <span class="badge badge-secondary">
-                                        {{ $article->category->nom }}
+                                        {{ $article->famille }}
                                     </span>
                                 @else
                                     <span class="text-muted">-</span>
@@ -346,18 +304,18 @@
                             </td>
                             <td>
                                 <div class="font-weight-bold text-success">
-                                    {{ number_format($article->prix ?? 0, 2) }} DH
+                                    {{ number_format($article->ART_PRIX_VENTE ?? 0, 2) }} DA
                                 </div>
-                                @if($article->prix_achat)
+                                @if($article->ART_PRIX_ACHAT)
                                     <div class="text-xs text-muted">
-                                        Achat: {{ number_format($article->prix_achat, 2) }} DH
+                                        Achat: {{ number_format($article->ART_PRIX_ACHAT, 2) }} DA
                                     </div>
                                 @endif
                             </td>
                             <td>
                                 @php
-                                    $stock = $article->stock ?? 0;
-                                    $seuil_alerte = $article->seuil_alerte ?? 10;
+                                    $stock = $article->stock_total ?? 0;
+                                    $seuil_alerte = $article->ART_STOCK_MIN ?? 10;
                                 @endphp
                                 
                                 @if($stock <= 0)
@@ -378,7 +336,7 @@
                                 @endif
                             </td>
                             <td>
-                                @if($article->statut == 'actif')
+                                @if($article->ART_VENTE == 1)
                                     <span class="badge badge-success">
                                         <i class="fas fa-check-circle"></i>
                                         Actif
@@ -392,12 +350,12 @@
                             </td>
                             <td>
                                 <div class="btn-group" role="group">
-                                    <a href="{{ route('admin.articles.show', $article->id) }}" 
+                                    <a href="{{ route('admin.articles.show', $article->ART_REF) }}" 
                                        class="btn btn-info btn-sm" 
                                        title="Voir">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <a href="{{ route('admin.articles.edit', $article->id) }}" 
+                                    <a href="{{ route('admin.articles.edit', $article->ART_REF) }}" 
                                        class="btn btn-warning btn-sm" 
                                        title="Modifier">
                                         <i class="fas fa-edit"></i>
@@ -405,27 +363,13 @@
                                     <button type="button" 
                                             class="btn btn-danger btn-sm" 
                                             title="Supprimer"
-                                            onclick="confirmDelete({{ $article->id }}, '{{ $article->nom }}')">
+                                            onclick="confirmDelete('{{ $article->ART_REF }}', '{{ $article->ART_DESIGNATION }}')">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </div>
                             </td>
                         </tr>
                         @endforeach
-                        @else
-                            <tr>
-                                <td colspan="8" class="text-center py-4">
-                                    <div class="text-muted">
-                                        <i class="fas fa-box fa-3x mb-3"></i>
-                                        <p class="mb-0">Aucun produit trouvé</p>
-                                        <a href="{{ route('admin.articles.create') }}" class="btn btn-primary btn-sm mt-2">
-                                            <i class="fas fa-plus"></i>
-                                            Ajouter le premier produit
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endif
                     @else
                         <tr>
                             <td colspan="8" class="text-center py-4">
@@ -446,19 +390,21 @@
 
         {{-- Pagination --}}
         @if(isset($articles) && is_object($articles) && method_exists($articles, 'hasPages') && $articles->hasPages())
-            <div class="d-flex justify-content-between align-items-center mt-3">
+            <div class="d-flex justify-content-between align-items-center mt-4">
                 <div class="text-muted">
-                    Affichage de {{ $articles->firstItem() }} à {{ $articles->lastItem() }} 
-                    sur {{ $articles->total() }} résultats
+                    <small>
+                        Affichage de {{ $articles->firstItem() }} à {{ $articles->lastItem() }} 
+                        sur {{ $articles->total() }} résultats
+                    </small>
                 </div>
                 <div>
-                    {{ $articles->appends(request()->query())->links() }}
+                    {{ $articles->appends(request()->query())->links('pagination.sb-admin') }}
                 </div>
             </div>
-        @elseif(isset($articles) && is_array($articles) && count($articles) > 0)
-            <div class="d-flex justify-content-center mt-3">
+        @elseif(isset($articles) && count($articles) > 0)
+            <div class="d-flex justify-content-center mt-4">
                 <div class="text-muted">
-                    {{ count($articles) }} produit(s) affiché(s)
+                    <small>{{ count($articles) }} produit(s) affiché(s)</small>
                 </div>
             </div>
         @endif
@@ -555,9 +501,9 @@ function updateBulkActions() {
     $('#selectAll').prop('checked', selected === total && total > 0);
 }
 
-function confirmDelete(id, name) {
+function confirmDelete(artRef, name) {
     $('#productName').text(name);
-    $('#deleteForm').attr('action', '{{ route("admin.articles.index") }}/' + id);
+    $('#deleteForm').attr('action', '/admin/articles/' + artRef);
     $('#deleteModal').modal('show');
 }
 

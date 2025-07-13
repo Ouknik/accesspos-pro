@@ -98,35 +98,51 @@
             border-radius: 10rem;
         }
         
-        .dropdown-list {
-            max-height: 300px;
-            overflow-y: auto;
+        /* Custom Pagination Styles */
+        .pagination {
+            margin-bottom: 0;
         }
         
-        .notification-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: var(--accesspos-danger);
+        .pagination .page-link {
+            color: var(--accesspos-primary);
+            border: 1px solid #e3e6f0;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.875rem;
+        }
+        
+        .pagination .page-link:hover {
+            color: var(--accesspos-primary-dark);
+            background-color: #f8f9fc;
+            border-color: #d1d3e2;
+        }
+        
+        .pagination .page-item.active .page-link {
+            background-color: var(--accesspos-primary);
+            border-color: var(--accesspos-primary);
             color: white;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            font-size: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
         
-        .chart-container {
-            position: relative;
-            height: 300px;
-            width: 100%;
+        .pagination .page-item.disabled .page-link {
+            color: #6c757d;
+            background-color: #fff;
+            border-color: #e3e6f0;
         }
         
-        .stats-card {
-            border-radius: 15px;
-            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+        /* Table responsive improvements */
+        .table-responsive {
+            border-radius: 0.35rem;
+        }
+        
+        .table thead th {
+            background-color: #f8f9fc;
+            border-bottom: 1px solid #e3e6f0;
+            font-weight: 600;
+            color: #5a5c69;
+            vertical-align: middle;
+        }
+        
+        .table tbody tr:hover {
+            background-color: rgba(78, 115, 223, 0.05);
         }
         
         .loading-overlay {

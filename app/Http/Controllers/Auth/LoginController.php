@@ -18,23 +18,25 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'login' => 'required|string',
+            'email' => 'required|string',
             'password' => 'required|string'
         ], [
-            'login.required' => 'Le nom d\'utilisateur est obligatoire.',
+            'email.required' => 'Le nom d\'utilisateur est obligatoire.',
             'password.required' => 'Le mot de passe est obligatoire.'
         ]);
 
-        // Find user by login - more flexible search
-        $user = User::where('USR_LOGIN', $credentials['login'])
-                   ->orWhere('USR_LOGIN', 'LIKE', '%' . $credentials['login'] . '%')
+        $loginField = $credentials['email']; // Can be username or email
+
+        // Find user by login - support both username and email format
+        $user = User::where('USR_LOGIN', $loginField)
+                   ->orWhere('USR_LOGIN', 'LIKE', '%' . $loginField . '%')
                    ->whereNotNull('USR_LOGIN')
                    ->where('USR_LOGIN', '!=', '')
                    ->first();
 
         if (!$user) {
             // Try case-insensitive search
-            $user = User::whereRaw('LOWER(USR_LOGIN) = ?', [strtolower($credentials['login'])])
+            $user = User::whereRaw('LOWER(USR_LOGIN) = ?', [strtolower($loginField)])
                        ->whereNotNull('USR_LOGIN')
                        ->where('USR_LOGIN', '!=', '')
                        ->first();
@@ -42,8 +44,8 @@ class LoginController extends Controller
 
         if (!$user) {
             return back()->withErrors([
-                'login' => 'Aucun utilisateur trouvé avec ce nom d\'utilisateur.',
-            ])->onlyInput('login');
+                'email' => 'Aucun utilisateur trouvé avec ce nom d\'utilisateur.',
+            ])->onlyInput('email');
         }
 
         // Check password (assuming it's stored as plain text or simple hash)
@@ -59,7 +61,7 @@ class LoginController extends Controller
 
         return back()->withErrors([
             'password' => 'Le mot de passe est incorrect.',
-        ])->onlyInput('login');
+        ])->onlyInput('email');
     }
 
     /**

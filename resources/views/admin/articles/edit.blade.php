@@ -1,75 +1,293 @@
+
+
 @extends('layouts.sb-admin')
 
 @section('title', 'Modifier le produit - ' . $article->ART_DESIGNATION)
 
+@section('page-heading')
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h1 class="h3 mb-0 text-gray-800">
+            <i class="fas fa-edit text-primary"></i>
+            Modifier le Produit
+        </h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 small">
+                <li class="breadcrumb-item"><a href="{{ route('admin.tableau-de-bord-moderne') }}">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('admin.articles.index') }}">Produits</a></li>
+                <li class="breadcrumb-item active">Modifier - {{ $article->ART_DESIGNATION }}</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="btn-group">
+        <a href="{{ route('admin.articles.show', $article->ART_REF) }}" class="btn btn-info btn-sm">
+            <i class="fas fa-eye"></i> Détails
+        </a>
+        <a href="{{ route('admin.articles.index') }}" class="btn btn-secondary btn-sm">
+            <i class="fas fa-arrow-left"></i> Retour
+        </a>
+    </div>
+</div>
+@endsection
+
 @section('styles')
 <style>
     .form-section { 
-        background: #f8f9fa; 
-        border-radius: 10px; 
-        padding: 20px; 
-        margin-bottom: 20px; 
-        border-left: 4px solid #28a745;
+        background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+        border-radius: 15px; 
+        padding: 0; 
+        margin-bottom: 25px; 
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e3ebf0;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
+    
+    .form-section:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    }
+    
+    .section-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 20px 25px;
+        margin: 0;
+        border-bottom: none;
+    }
+    
     .section-title { 
-        color: #28a745; 
-        font-weight: bold; 
-        margin-bottom: 15px; 
+        color: white;
+        font-weight: 700; 
+        margin-bottom: 5px; 
         display: flex; 
         align-items: center; 
+        font-size: 1.1rem;
     }
-    .section-title i { margin-right: 8px; }
-    .required { color: #dc3545; }
-    .help-text { font-size: 0.875rem; color: #6c757d; }
+    
+    .section-title i { 
+        margin-right: 12px; 
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        font-size: 1rem;
+    }
+    
+    .section-subtitle {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.875rem;
+        margin: 0;
+        font-weight: 400;
+    }
+    
+    .section-body {
+        padding: 25px;
+        background: white;
+    }
+    
+    .required { 
+        color: #e74c3c; 
+        font-weight: bold;
+    }
+    
+    .help-text { 
+        font-size: 0.8rem; 
+        color: #6c757d; 
+        margin-top: 5px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .help-text i {
+        margin-right: 5px;
+        color: #007bff;
+    }
+    
     .stock-alert { 
-        background: #fff3cd; 
-        border: 1px solid #ffeaa7; 
-        border-radius: 5px; 
-        padding: 10px; 
-        margin: 10px 0; 
+        background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+        border: 1px solid #f0ad4e; 
+        border-radius: 10px; 
+        padding: 15px; 
+        margin: 15px 0;
+        box-shadow: 0 5px 15px rgba(240, 173, 78, 0.2);
     }
+    
     .change-indicator {
         position: relative;
+        transition: all 0.3s ease;
+        border-radius: 8px;
+        padding: 10px;
+        margin: 5px 0;
     }
+    
     .change-indicator.modified {
-        border-left: 3px solid #ffc107;
-        background-color: #fff8e1;
+        border-left: 4px solid #ffc107;
+        background: linear-gradient(135deg, #fff8e1 0%, #fffbee 100%);
+        box-shadow: 0 5px 15px rgba(255, 193, 7, 0.2);
+        transform: translateX(3px);
     }
+    
     .original-value {
-        font-size: 0.875rem;
+        font-size: 0.8rem;
         color: #6c757d;
         font-style: italic;
+        margin-top: 5px;
+        padding: 5px 10px;
+        background: #f8f9fa;
+        border-radius: 5px;
+        border-left: 3px solid #dee2e6;
+    }
+    
+    .form-control, .form-select {
+        border-radius: 8px;
+        border: 2px solid #e3ebf0;
+        padding: 12px 15px;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        transform: translateY(-1px);
+    }
+    
+    .form-label {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 8px;
+        font-size: 0.9rem;
+    }
+    
+    .input-group-text {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        font-weight: 600;
+    }
+    
+    .btn {
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+    }
+    
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .btn-success {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        border: none;
+    }
+    
+    .btn-warning {
+        background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+        border: none;
+    }
+    
+    .btn-info {
+        background: linear-gradient(135deg, #17a2b8 0%, #007bff 100%);
+        border: none;
+    }
+    
+    .btn-secondary {
+        background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+        border: none;
+    }
+    
+    .alert {
+        border-radius: 10px;
+        border: none;
+        padding: 15px 20px;
+        margin: 15px 0;
+    }
+    
+    .alert-info {
+        background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+        color: #0c5460;
+    }
+    
+    .alert-success {
+        background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+        color: #155724;
+    }
+    
+    .alert-warning {
+        background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+        color: #856404;
+    }
+    
+    .alert-danger {
+        background: linear-gradient(135deg, #f8d7da 0%, #f1aeb5 100%);
+        color: #721c24;
+    }
+    
+    .card {
+        border-radius: 12px;
+        border: none;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+    }
+    
+    .form-check-input:checked {
+        background-color: #667eea;
+        border-color: #667eea;
+    }
+    
+    .breadcrumb-item + .breadcrumb-item::before {
+        color: #667eea;
+    }
+    
+    .breadcrumb-item a {
+        color: #667eea;
+        text-decoration: none;
+    }
+    
+    .breadcrumb-item a:hover {
+        color: #764ba2;
+        text-decoration: underline;
     }
 </style>
 @endsection
 
 @section('content')
 <div class="container-fluid">
-    <!-- Navigation breadcrumb -->
-    <nav aria-label="breadcrumb" class="mb-4">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('admin.tableau-de-bord-moderne') }}">Tableau de bord</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('admin.articles.index') }}">Gestion des produits</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('admin.articles.show', $article->ART_REF) }}">{{ $article->ART_DESIGNATION }}</a></li>
-            <li class="breadcrumb-item active">Modifier</li>
-        </ol>
-    </nav>
 
-    <!-- العنوان الرئيسي -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h1 class="h3 mb-0">Modifier le produit</h1>
-            <p class="text-muted">Modification des informations du produit : <strong>{{ $article->ART_DESIGNATION }}</strong></p>
-        </div>
-        <div>
-            <a href="{{ route('admin.articles.show', $article->ART_REF) }}" class="btn btn-info">
-                <i class="fas fa-eye"></i> Voir les détails
-            </a>
-            <a href="{{ route('admin.articles.index') }}" class="btn btn-secondary">
-                <i class="fas fa-arrow-left"></i> Retour à la liste
-            </a>
-        </div>
+    {{-- رسائل التحقق --}}
+    @if($errors->any())
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <h6><i class="fas fa-exclamation-triangle"></i> أخطاء في التحقق:</h6>
+        <ul class="mb-0">
+            @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
+    @endif
+
+    {{-- رسالة النجاح --}}
+    @if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle"></i>
+        {{ session('success') }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    @endif
 
     <form method="POST" action="{{ route('admin.articles.update', $article->ART_REF) }}" id="productForm">
         @csrf
@@ -79,10 +297,14 @@
             <div class="col-md-8">
                 <!-- المعلومات الأساسية -->
                 <div class="form-section">
-                    <h4 class="section-title">
-                        <i class="fas fa-info-circle"></i>
-                        Informations de base
-                    </h4>
+                    <div class="section-header">
+                        <h4 class="section-title">
+                            <i class="fas fa-info-circle"></i>
+                            Informations de base
+                        </h4>
+                        <p class="section-subtitle">Informations principales du produit</p>
+                    </div>
+                    <div class="section-body">
                     
                     <div class="row">
                         <div class="col-md-6">
@@ -93,7 +315,10 @@
                                 <input type="text" class="form-control @error('ART_REF') is-invalid @enderror" 
                                        id="ART_REF" name="ART_REF" value="{{ old('ART_REF', $article->ART_REF) }}" 
                                        required readonly>
-                                <div class="help-text">Le code produit ne peut pas être modifié</div>
+                                <div class="help-text">
+                                    <i class="fas fa-lock"></i>
+                                    Le code produit ne peut pas être modifié
+                                </div>
                                 @error('ART_REF')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -166,10 +391,14 @@
 
                 <!-- معلومات الأسعار -->
                 <div class="form-section">
-                    <h4 class="section-title">
-                        <i class="fas fa-dollar-sign"></i>
-                        Informations de prix
-                    </h4>
+                    <div class="section-header">
+                        <h4 class="section-title">
+                            <i class="fas fa-dollar-sign"></i>
+                            Informations de prix
+                        </h4>
+                        <p class="section-subtitle">Configuration des prix d'achat et de vente</p>
+                    </div>
+                    <div class="section-body">
                     
                     <div class="row">
                         <div class="col-md-6">
@@ -211,35 +440,38 @@
                             </div>
                         </div>
                     </div>
-                                    <span class="input-group-text">دج</span>
+                                    <span class="input-group-text">DA</span>
                                 </div>
                                 <div class="original-value">
-                                    القيمة الأصلية: {{ number_format($article->ART_PRIX_VENTE, 2) }} دج
+                                    Valeur originale : {{ number_format($article->ART_PRIX_VENTE, 2) }} DA
                                 </div>
                                 @error('ART_PRIX_VENTE')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
                         </div>
-                    </div>
-
                     <!-- حساب هامش الربح التلقائي -->
                     <div class="row">
                         <div class="col-md-12">
                             <div class="alert alert-info" id="profit-margin">
                                 <i class="fas fa-calculator me-2"></i>
-                                <span id="margin-text"></span>
+                                <span id="margin-text">Entrez des prix valides pour calculer la marge bénéficiaire</span>
                             </div>
                         </div>
+                    </div>
                     </div>
                 </div>
 
                 <!-- معلومات المخزون -->
                 <div class="form-section">
-                    <h4 class="section-title">
-                        <i class="fas fa-warehouse"></i>
-                        Informations de stock
-                    </h4>
+                    <div class="section-header">
+                        <h4 class="section-title">
+                            <i class="fas fa-warehouse"></i>
+                            Informations de stock
+                        </h4>
+                        <p class="section-subtitle">Gestion des stocks et seuils d'alerte</p>
+                    </div>
+                    <div class="section-body">
                     
                     <div class="row">
                         <div class="col-md-12">
@@ -299,16 +531,19 @@
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- الإعدادات الجانبية -->
-            <div class="col-md-4">
-                <!-- حالة المنتج -->
-                <div class="form-section">
-                    <h4 class="section-title">
-                        <i class="fas fa-cog"></i>
-                        Paramètres du produit
-                    </h4>
+                <!-- الإعدادات الجانبية -->
+                <div class="col-md-4">
+                    <!-- حالة المنتج -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <h4 class="section-title">
+                                <i class="fas fa-cog"></i>
+                                Paramètres du produit
+                            </h4>
+                            <p class="section-subtitle">Configuration et état du produit</p>
+                        </div>
+                        <div class="section-body">
                     
                     <div class="mb-3">
                         <div class="form-check form-switch">
@@ -333,19 +568,25 @@
                                 Produit menu (plat ou repas)
                             </label>
                         </div>
-                        <div class="help-text">Produits dédiés aux restaurants ou menus</div>
+                                <div class="help-text">
+                                    <i class="fas fa-info-circle"></i>
+                                    Produits dédiés aux restaurants ou menus
+                                </div>
                         <div class="original-value">
                             État original : {{ $article->IsMenu ? 'Produit menu' : 'Produit normal' }}
-                        </div>
+                        </div>                        </div>
                     </div>
-                </div>
 
-                <!-- ملاحظات -->
-                <div class="form-section">
-                    <h4 class="section-title">
-                        <i class="fas fa-sticky-note"></i>
-                        Notes supplémentaires
-                    </h4>
+                    <!-- ملاحظات -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <h4 class="section-title">
+                                <i class="fas fa-sticky-note"></i>
+                                Notes supplémentaires
+                            </h4>
+                            <p class="section-subtitle">Description et informations additionnelles</p>
+                        </div>
+                        <div class="section-body">
                     
                     <div class="mb-3 change-indicator" data-original="{{ $article->ART_DESCRIPTION }}">
                         <label for="art_description" class="form-label">Description du produit</label>
@@ -371,16 +612,19 @@
                         </div>
                         @error('art_libelle_ticket')
                             <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        @enderror                        </div>
                     </div>
-                </div>
 
-                <!-- معلومات التعديل -->
-                <div class="form-section">
-                    <h4 class="section-title">
-                        <i class="fas fa-clock"></i>
-                        Informations de modification
-                    </h4>
+                    <!-- معلومات التعديل -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <h4 class="section-title">
+                                <i class="fas fa-clock"></i>
+                                Informations de modification
+                            </h4>
+                            <p class="section-subtitle">Historique des modifications</p>
+                        </div>
+                        <div class="section-body">
                     
                     <div class="card">
                         <div class="card-body">
@@ -404,16 +648,19 @@
                                     {{ auth()->user()->name }}
                                 </small>
                             </p>
-                        </div>
+                        </div>                        </div>
                     </div>
-                </div>
 
-                <!-- معاينة التغييرات -->
-                <div class="form-section">
-                    <h4 class="section-title">
-                        <i class="fas fa-eye"></i>
-                        Aperçu des modifications
-                    </h4>
+                    <!-- معاينة التغييرات -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <h4 class="section-title">
+                                <i class="fas fa-eye"></i>
+                                Aperçu des modifications
+                            </h4>
+                            <p class="section-subtitle">Suivi des changements effectués</p>
+                        </div>
+                        <div class="section-body">
                     
                     <div class="card">
                         <div class="card-body">
@@ -430,6 +677,14 @@
         <div class="row">
             <div class="col-12">
                 <div class="form-section">
+                    <div class="section-header">
+                        <h4 class="section-title">
+                            <i class="fas fa-save"></i>
+                            Actions de sauvegarde
+                        </h4>
+                        <p class="section-subtitle">Enregistrer ou annuler les modifications</p>
+                    </div>
+                    <div class="section-body">
                     <div class="d-flex justify-content-between">
                         <div>
                             <button type="submit" class="btn btn-success btn-lg" id="saveBtn">
@@ -561,16 +816,18 @@
             
             if (hasChanges) {
                 changesSummary.innerHTML = `
-                    <p class="text-warning"><strong>Modifications effectuées sur :</strong></p>
-                    <ul class="list-unstyled">
-                        ${changes.map(change => `<li><i class="fas fa-edit text-warning me-2"></i>${change}</li>`).join('')}
-                    </ul>
+                    <div class="alert alert-warning">
+                        <h6><i class="fas fa-edit"></i> Modifications effectuées sur :</h6>
+                        <ul class="list-unstyled mb-0">
+                            ${changes.map(change => `<li><i class="fas fa-arrow-right text-warning me-2"></i>${change}</li>`).join('')}
+                        </ul>
+                    </div>
                 `;
                 saveBtn.classList.remove('btn-success');
                 saveBtn.classList.add('btn-warning');
                 saveBtn.innerHTML = '<i class="fas fa-save me-2"></i>Enregistrer les modifications (' + changes.length + ')';
             } else {
-                changesSummary.innerHTML = '<p class="text-muted">Aucune modification effectuée</p>';
+                changesSummary.innerHTML = '<div class="alert alert-info"><i class="fas fa-info-circle"></i> Aucune modification effectuée</div>';
                 saveBtn.classList.remove('btn-warning');
                 saveBtn.classList.add('btn-success');
                 saveBtn.innerHTML = '<i class="fas fa-save me-2"></i>Enregistrer les modifications';
@@ -599,11 +856,16 @@
             
             if (stockableCheckbox.checked && stockMax > 0 && stockMin >= stockMax) {
                 e.preventDefault();
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Attention !',
-                    text: 'Le stock minimum doit être inférieur au stock maximum',
-                });
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Attention !',
+                        text: 'Le stock minimum doit être inférieur au stock maximum',
+                        confirmButtonClass: 'btn btn-warning'
+                    });
+                } else {
+                    alert('Le stock minimum doit être inférieur au stock maximum');
+                }
                 return false;
             }
             

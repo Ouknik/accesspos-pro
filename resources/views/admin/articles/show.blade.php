@@ -142,7 +142,7 @@
                                     <td class="fw-bold text-muted">Famille :</td>
                                     <td>
                                         @if($article->famille)
-                                            <span class="badge bg-secondary">{{ $article->famille }}</span>
+                                            <span class="badge ">{{ $article->famille }}</span>
                                         @else
                                             <span class="text-muted">Non spécifié</span>
                                         @endif
@@ -178,27 +178,27 @@
                                         @if($article->ART_DATE_MODIFICATION)
                                             {{ \Carbon\Carbon::parse($article->ART_DATE_MODIFICATION)->format('d/m/Y H:i') }}
                                         @else
-                                            <span class="text-muted">لم يتم تحديثه</span>
+                                            <span class="text-muted">Pas encore modifié</span>
                                         @endif
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="fw-bold text-muted">نوع المنتج:</td>
+                                    <td class="fw-bold text-muted">Type de produit :</td>
                                     <td>
                                         @if($article->IsMenu)
-                                            <span class="badge bg-warning">منتج قائمة</span>
+                                            <span class="badge bg-warning">Produit menu</span>
                                         @else
-                                            <span class="badge bg-info">منتج عادي</span>
+                                            <span class="badge bg-info">Produit normal</span>
                                         @endif
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="fw-bold text-muted">مخزني:</td>
+                                    <td class="fw-bold text-muted">Stockable :</td>
                                     <td>
                                         @if($article->ART_STOCKABLE)
-                                            <span class="badge bg-success">نعم</span>
+                                            <span class="badge bg-success">Oui</span>
                                         @else
-                                            <span class="badge bg-secondary">لا</span>
+                                            <span class="badge bg-secondary">Non</span>
                                         @endif
                                     </td>
                                 </tr>
@@ -377,19 +377,19 @@
                             <i class="fas fa-edit me-2"></i>Modifier le produit
                         </a>
                         
-                        @if($article->ART_STOCKABLE)
+                        {{-- @if($article->ART_STOCKABLE)
                             <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#stockModal">
                                 <i class="fas fa-plus me-2"></i>Ajouter au stock
                             </button>
-                        @endif
+                        @endif --}}
                         
                         <a href="{{ route('admin.articles.index') }}" class="btn btn-outline-secondary">
                             <i class="fas fa-arrow-left me-2"></i>Retour à la liste
                         </a>
                         
-                        <button type="button" class="btn btn-outline-success" onclick="printProductDetails()">
+                        {{-- <button type="button" class="btn btn-outline-success" onclick="printProductDetails()">
                             <i class="fas fa-print me-2"></i>Imprimer les détails
-                        </button>
+                        </button> --}}
                     </div>
                 </div>
             </div>

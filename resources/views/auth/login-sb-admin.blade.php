@@ -238,12 +238,12 @@
                                         @csrf
                                         
                                         <div class="form-group">
-                                            <input type="email" 
+                                            <input type="text" 
                                                    class="form-control form-control-user @error('email') is-invalid @enderror" 
                                                    id="exampleInputEmail" 
                                                    name="email" 
                                                    value="{{ old('email') }}" 
-                                                   placeholder="Adresse email..."
+                                                   placeholder="Nom d'utilisateur ou email..."
                                                    required 
                                                    autofocus>
                                             @error('email')
@@ -334,13 +334,7 @@
                     return false;
                 }
                 
-                // Email validation
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailRegex.test(email)) {
-                    e.preventDefault();
-                    showAlert('Veuillez entrer une adresse email valide.', 'danger');
-                    return false;
-                }
+                // No email format validation - allow username or email
                 
                 // Show loading state
                 showLoading();

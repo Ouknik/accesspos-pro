@@ -1,306 +1,258 @@
-# AccessPos Pro - SB Admin 2 Edition
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-## 🏆 نظرة عامة
+<p align="center">
+<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+</p>
 
-AccessPos Pro هو نظام إدارة نقاط البيع المتطور، تم تحويله بالكامل لاستخدام قالب SB Admin 2 الاحترافي. النظام يوفر حلول شاملة لإدارة المبيعات، المخزون، العملاء والتقارير المالية.
+# AccessPOS Pro - Système de Point de Vente Avancé
 
-## ✨ المميزات الرئيسية
+## 📋 Description
 
-### 🎨 التصميم والواجهة
-- **SB Admin 2 Template**: تصميم احترافي وعصري
-- **Responsive Design**: متوافق مع جميع الأجهزة والشاشات
-- **Dark Mode**: وضع داكن للعمل الليلي
-- **Arabic RTL Support**: دعم كامل للغة العربية
-- **Accessibility**: متوافق مع معايير الوصولية
+AccessPOS Pro est une solution complète de point de vente (POS) développée avec Laravel, conçue pour les commerces de détail, restaurants et établissements de service. Le système offre une interface moderne et intuitive avec des fonctionnalités avancées de gestion et de reporting.
 
-### 📊 لوحة التحكم
-- **Real-time Analytics**: تحليلات لحظية للمبيعات
-- **Interactive Charts**: رسوم بيانية تفاعلية
-- **KPI Cards**: بطاقات مؤشرات الأداء الرئيسية
-- **Live Notifications**: إشعارات فورية
-- **Quick Actions**: إجراءات سريعة
+## ✨ Fonctionnalités Principales
 
-### 📦 إدارة المنتجات
-- **Product Catalog**: كتالوج منتجات شامل
-- **Inventory Management**: إدارة المخزون
-- **Stock Alerts**: تنبيهات المخزون المنخفض
-- **Barcode Support**: دعم الباركود
-- **Image Gallery**: معرض صور المنتجات
+### 🎯 Tableau de Bord Moderne
+- Interface responsive et interactive
+- Statistiques en temps réel
+- Indicateurs de performance clés (KPI)
+- Alertes automatiques pour la gestion proactive
 
-### 💰 إدارة المبيعات
-- **POS System**: نظام نقطة بيع متطور
-- **Multi-payment Methods**: طرق دفع متعددة
-- **Invoice Generation**: توليد الفواتير
-- **Sales Reports**: تقارير المبيعات
-- **Customer Management**: إدارة العملاء
+### 📊 Système de Rapports Avancé
+- **Rapports des Ventes** : Analyse du chiffre d'affaires, tickets moyens, tendances
+- **Rapports de Stock** : État des inventaires, articles en rupture, valorisation
+- **Rapports Clients** : Analyse de la clientèle, programme de fidélité
+- **Rapports Financiers** : Analyse financière complète et rentabilité
+- **Rapports Restaurant** : Gestion des tables, réservations et services
 
-### 📈 التقارير والتحليلات
-- **Financial Reports**: تقارير مالية شاملة
-- **Sales Analytics**: تحليلات المبيعات
-- **Customer Insights**: رؤى العملاء
-- **Export Options**: خيارات التصدير (PDF, Excel, CSV)
-- **Scheduled Reports**: تقارير مجدولة
+### 📈 Formats d'Export Multiples
+- Affichage web interactif
+- Export PDF formaté et imprimable
+- Export Excel pour analyses approfondies
+- Export CSV pour intégration de données
 
-## 🛠️ التقنيات المستخدمة
+### 🔧 Gestion Adaptative des Données
+- Détection automatique des structures de base de données
+- Adaptation dynamique aux noms de colonnes existants
+- Support de différents schémas de données
+- Gestion intelligente des erreurs
 
-### Backend
-- **Laravel 10**: إطار عمل PHP حديث
-- **MySQL 8**: قاعدة بيانات متقدمة
-- **Redis**: نظام تخزين مؤقت
-- **PHP 8.1+**: أحدث إصدار PHP
+### 🎨 Interface Utilisateur
+- Design moderne et professionnel
+- Interface responsive (mobile, tablette, desktop)
+- Thème sombre/clair
+- Navigation intuitive
 
-### Frontend
-- **SB Admin 2**: قالب Bootstrap احترافي
-- **Bootstrap 4**: إطار عمل CSS
-- **jQuery 3.6**: مكتبة JavaScript
-- **Chart.js**: رسوم بيانية تفاعلية
-- **DataTables**: جداول بيانات متقدمة
-- **SweetAlert2**: إشعارات جميلة
+## 🛠️ Technologies Utilisées
 
-### Build Tools
-- **Vite**: أداة بناء حديثة
-- **npm**: مدير الحزم
-- **Composer**: مدير تبعيات PHP
+- **Backend** : Laravel 10.x
+- **Frontend** : Bootstrap 5.3, JavaScript ES6+
+- **Base de Données** : MySQL/MariaDB
+- **Exports** : Laravel Excel, DomPDF
+- **Styles** : CSS3 avec variables personnalisées
+- **Icons** : Font Awesome 6.4
 
-## 📋 متطلبات النظام
+## 📦 Installation
 
-### الحد الأدنى
-- **PHP**: 8.1 أو أحدث
-- **MySQL**: 8.0 أو أحدث
-- **Node.js**: 18 أو أحدث
-- **Memory**: 2GB RAM
-- **Storage**: 10GB متاح
+### Prérequis
+- PHP 8.1 ou supérieur
+- Composer
+- MySQL 5.7+ ou MariaDB 10.3+
+- Node.js et NPM (optionnel)
 
-### الموصى به
-- **PHP**: 8.2+
-- **MySQL**: 8.0+
-- **Redis**: 6.0+
-- **Nginx**: 1.18+
-- **Memory**: 4GB+ RAM
-- **Storage**: 50GB+ SSD
+### Étapes d'Installation
 
-## ⚙️ التثبيت
-
-### 1. تحضير البيئة
+1. **Cloner le projet**
 ```bash
-# تحديث النظام
-sudo apt update && sudo apt upgrade -y
-
-# تثبيت المتطلبات
-sudo apt install php8.1 mysql-server nginx redis-server nodejs npm
-```
-
-### 2. استنساخ المشروع
-```bash
-git clone https://github.com/your-repo/accesspos-pro.git
+git clone https://github.com/ouknik/accesspos-pro.git
 cd accesspos-pro
 ```
 
-### 3. تثبيت التبعيات
+2. **Installer les dépendances**
 ```bash
-# PHP dependencies
 composer install
-
-# Node.js dependencies
-npm install
 ```
 
-### 4. إعداد البيئة
+3. **Configuration de l'environnement**
 ```bash
-# نسخ ملف البيئة
 cp .env.example .env
-
-# توليد مفتاح التطبيق
 php artisan key:generate
-
-# إعداد قاعدة البيانات
-php artisan migrate --seed
 ```
 
-### 5. بناء الأصول
+4. **Configuration de la base de données**
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=accesspos_pro
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
+```
+
+5. **Migration et données de test**
 ```bash
-# للتطوير
-npm run dev
-
-# للإنتاج
-npm run build
+php artisan migrate
+php artisan db:seed
 ```
 
-### 6. إعداد الصلاحيات
+6. **Installation des packages de reporting**
 ```bash
-sudo chown -R www-data:www-data .
-sudo chmod -R 755 .
-sudo chmod -R 775 storage bootstrap/cache
+composer require maatwebsite/excel
+composer require barryvdh/laravel-dompdf
 ```
 
-## 🚀 النشر للإنتاج
-
-### استخدام سكريبت النشر التلقائي
+7. **Publier les configurations**
 ```bash
-# Linux/macOS
-chmod +x deploy.sh
-./deploy.sh
-
-# Windows PowerShell
-.\deploy.ps1
+php artisan vendor:publish --provider="Maatwebsite\Excel\ExcelServiceProvider"
+php artisan vendor:publish --provider="Barryvdh\DomPDF\ServiceProvider"
 ```
 
-### النشر اليدوي
+8. **Démarrer le serveur**
 ```bash
-# نسخ ملف الإنتاج
-cp .env.production .env
-
-# تحسين Laravel
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
-
-# بناء الأصول
-npm run build
-
-# تشغيل الترحيلات
-php artisan migrate --force
+php artisan serve
 ```
 
-## 📚 الاستخدام
+## 🗂️ Structure du Projet
 
-### تسجيل الدخول الافتراضي
 ```
-البريد الإلكتروني: admin@accesspos.com
-كلمة المرور: password123
+accesspos-pro/
+├── app/
+│   ├── Http/Controllers/Admin/
+│   │   ├── ReportController.php      # Contrôleur des rapports
+│   │   └── TableauDeBordController.php
+│   └── Exports/
+│       └── ReportExport.php          # Classes d'export
+├── resources/views/admin/
+│   ├── reports/
+│   │   ├── index.blade.php           # Interface de génération
+│   │   ├── rapport-ventes.blade.php  # Vue des ventes
+│   │   ├── rapport-stock.blade.php   # Vue du stock
+│   │   ├── rapport-clients.blade.php # Vue des clients
+│   │   └── pdf/                      # Templates PDF
+│   └── tableau-de-bord-moderne.blade.php
+├── routes/
+│   └── web.php                       # Routes système
+└── public/
+    ├── css/
+    └── js/
 ```
 
-### الصفحات الأساسية
-- **لوحة التحكم**: `/admin/dashboard`
-- **إدارة المنتجات**: `/admin/articles`
-- **التقارير**: `/admin/rapports`
-- **الإعدادات**: `/admin/settings`
+## 🔧 Configuration
 
-## 🧪 الاختبار
+### Configuration des Rapports
 
-### تشغيل الاختبارات
+Le système s'adapte automatiquement à votre structure de base de données existante. Les tables principales supportées :
+
+- `FACTURE_VNT` : Factures de vente
+- `ARTICLE` : Articles/Produits
+- `CLIENT` : Base clients
+- `TABLE_RESTAURANT` : Tables restaurant (optionnel)
+
+### Personnalisation des Colonnes
+
+Le système recherche automatiquement les colonnes dans cet ordre de priorité :
+
+**Pour les ventes :**
+- Date : `fctv_date`, `FCTV_DATE`, `DATE_FACTURE`, `created_at`
+- Montant TTC : `fctv_mnt_ttc`, `FCTV_MNT_TTC`, `montant_ttc`, `total_ttc`
+- Référence : `FCTV_REF`, `fctv_ref`, `REF_FACTURE`, `numero_facture`
+
+**Pour le stock :**
+- Code article : `ART_CODE`, `art_code`, `code_article`, `code`
+- Désignation : `ART_DESIGNATION`, `art_designation`, `designation`, `nom`
+- Stock : `ART_QTE_STOCK`, `art_qte_stock`, `quantite_stock`, `stock`
+
+## 🚀 Utilisation
+
+### Génération de Rapports
+
+1. Accédez au tableau de bord administrateur
+2. Cliquez sur "Rapports Détaillés"
+3. Sélectionnez le type de rapport souhaité
+4. Configurez la période d'analyse
+5. Appliquez les filtres optionnels
+6. Choisissez le format d'export
+7. Générez le rapport
+
+### Raccourcis Rapides
+
+Depuis le tableau de bord, utilisez les raccourcis pour :
+- Rapport des ventes du jour
+- État du stock actuel
+- Analyse de la clientèle
+- Synthèse financière
+
+## 📈 Fonctionnalités Avancées
+
+### Alertes Automatiques
+- Détection des ruptures de stock
+- Alertes de performance des ventes
+- Notifications en temps réel
+
+### Suggestions Intelligentes
+- Recommandations de rapports basées sur les données
+- Détection des anomalies
+- Conseils d'optimisation
+
+### Historique des Rapports
+- Accès aux rapports récemment générés
+- Sauvegarde des configurations
+- Réutilisation rapide des paramètres
+
+## 🔒 Sécurité
+
+- Authentification requise pour tous les rapports
+- Contrôle d'accès par rôles
+- Validation des données d'entrée
+- Protection CSRF
+- Logs d'audit des actions
+
+## 🐛 Dépannage
+
+### Problèmes Courants
+
+**Erreur "Column not found"**
+- Vérifiez que vos tables contiennent les données nécessaires
+- Le système s'adapte automatiquement aux noms de colonnes
+
+**Rapport vide**
+- Assurez-vous que des données existent pour la période sélectionnée
+- Vérifiez la configuration de la base de données
+
+**Erreur d'export PDF/Excel**
+- Vérifiez que les packages sont correctement installés
+- Contrôlez les permissions d'écriture
+
+### Logs
 ```bash
-# جميع الاختبارات
-php artisan test
-
-# اختبارات محددة
-php artisan test --filter=ArticleTest
+tail -f storage/logs/laravel.log
 ```
 
-### صفحات الاختبار
-- **اختبار المتصفحات**: `/admin/test-pages`
-- **اختبار الاستجابة**: `/admin/responsive-test`
-- **اختبار النماذج**: `/admin/forms-test`
-- **اختبار JavaScript**: `/admin/javascript-test`
+## 🤝 Contribution
 
-## 📖 التوثيق
+Les contributions sont les bienvenues ! Pour contribuer :
 
-### ملفات التوثيق
-- **دليل المستخدم**: `docs/user-manual.md`
-- **توثيق API**: `docs/api-documentation.md`
-- **دليل الأنماط**: `docs/style-guide.md`
-- **توثيق المكونات**: `docs/components-documentation.md`
-- **خطة الترحيل**: `docs/migration-plan.md`
+1. Forkez le projet
+2. Créez une branche feature (`git checkout -b feature/nouvelle-fonctionnalite`)
+3. Committez vos changements (`git commit -am 'Ajout de nouvelle fonctionnalité'`)
+4. Pushez vers la branche (`git push origin feature/nouvelle-fonctionnalite`)
+5. Ouvrez une Pull Request
 
-## 🔧 التخصيص
 
-### تخصيص الألوان
-```css
-/* في resources/css/custom-sb-admin.css */
-:root {
-    --primary-color: #4e73df;
-    --secondary-color: #858796;
-    --success-color: #1cc88a;
-    --warning-color: #f6c23e;
-    --danger-color: #e74a3b;
-}
-```
+## 📞 Support
 
-### إضافة صفحة جديدة
-```php
-// في routes/web.php
-Route::get('/admin/new-page', function() {
-    return view('admin.new-page-sb-admin');
-})->name('admin.new-page');
-```
+Pour toute question ou support :
 
-## 🔒 الأمان
+- **Email** : oopokni@gmail.com
+- **Documentation** : [Wiki du projet](https://github.com/ouknik/accesspos-pro/wiki)
+- **Issues** : [GitHub Issues](https://github.com/ouknik/accesspos-pro/issues)
 
-### الميزات الأمنية
-- **CSRF Protection**: حماية من هجمات CSRF
-- **SQL Injection Prevention**: منع حقن SQL
-- **XSS Protection**: حماية من XSS
-- **Rate Limiting**: تحديد معدل الطلبات
-- **Secure Headers**: رؤوس أمان إضافية
-
-### أفضل الممارسات
-- استخدم كلمات مرور قوية
-- فعّل المصادقة الثنائية
-- حدّث النظام بانتظام
-- راجع سجلات الأمان دورياً
-
-## 📊 مراقبة الأداء
-
-### المؤشرات الأساسية
-- **وقت الاستجابة**: < 2 ثانية
-- **استخدام الذاكرة**: < 80%
-- **استخدام المعالج**: < 70%
-- **وقت التشغيل**: > 99.9%
-
-### أدوات المراقبة
-- **Laravel Telescope**: للتطوير
-- **New Relic**: للإنتاج
-- **Sentry**: لتتبع الأخطاء
-
-## 🆘 الدعم
-
-### الحصول على المساعدة
-- **التوثيق**: راجع ملفات `docs/`
-- **المشاكل الشائعة**: في `docs/troubleshooting.md`
-- **الدعم التقني**: support@accesspos.com
-
-### المساهمة
-1. Fork المشروع
-2. إنشاء branch للميزة الجديدة
-3. Commit التغييرات
-4. Push للـ branch
-5. إنشاء Pull Request
-
-## 📝 الترخيص
-
-هذا المشروع مرخص تحت [MIT License](LICENSE).
-
-## 🏆 الفريق
-
-### فريق التطوير
-- **مطور رئيسي**: فريق AccessPos
-- **مصمم UI/UX**: فريق التصميم
-- **مطور Frontend**: فريق الواجهة الأمامية
-- **مطور Backend**: فريق الخادم
-
-## 🔄 سجل التغييرات
-
-### الإصدار 2.0.0 (ديسمبر 2024)
-- ✅ تحويل كامل لـ SB Admin 2
-- ✅ إضافة Dark Mode
-- ✅ تحسين الأداء والسرعة
-- ✅ إضافة ميزات الوصولية
-- ✅ تحديث شامل للتوثيق
-- ✅ إضافة أدوات النشر التلقائي
-
-### الإصدار 1.0.0 (سابقاً)
-- نظام إدارة نقاط البيع الأساسي
-- لوحة تحكم بسيطة
-- إدارة المنتجات والمبيعات
-
-## 📞 معلومات الاتصال
-
-**AccessPos Pro**
-- **الموقع**: https://accesspos.com
-- **البريد**: info@accesspos.com
-- **الدعم**: support@accesspos.com
-- **الهاتف**: +123 456 789
 
 ---
 
-**© 2024 AccessPos Pro. جميع الحقوق محفوظة.**
+**AccessPOS Pro** - Solution POS moderne pour entreprises ambitieuses.
+
+Développé avec ❤️ par l'équipe AccessPOS.

@@ -349,7 +349,7 @@ function startResponsiveTest() {
     document.getElementById('testProgressCard').style.display = 'block';
     
     const pages = [
-        { name: 'dashboard', url: '{{ route("admin.dashboard") }}' },
+        { name: 'dashboard', url: '{{ route("route('admin.tableau-de-bord-moderne')") }}' },
         { name: 'articles', url: '{{ route("admin.articles.index") }}' },
         { name: 'create-article', url: '{{ route("admin.articles.create") }}' },
         { name: 'login', url: '{{ route("login") }}' }

@@ -101,7 +101,7 @@ class ArticleController extends Controller
             // Liste des familles pour le filtre
             $familles = DB::table('FAMILLE')->orderBy('FAM_LIB')->get();
 
-            return view('admin.articles.index', compact('articles', 'stats', 'familles', 'search', 'famille', 'statut'));
+            return view('admin.articles.index-sb-admin', compact('articles', 'stats', 'familles', 'search', 'famille', 'statut'));
 
         } catch (\Exception $e) {
             // Log pour debugging
@@ -771,8 +771,9 @@ class ArticleController extends Controller
                     $lowStockCount++;
                 }
                 
-                if ($article->ART_PRIX_ACHAT) {
-                    $stockValue += $stock * $article->ART_PRIX_ACHAT;
+                // Use prix_vente instead of prix_achat for stock value, and ensure positive values
+                if ($article->ART_PRIX_VENTE && $stock > 0) {
+                    $stockValue += $stock * $article->ART_PRIX_VENTE;
                 }
             }
             
@@ -780,7 +781,7 @@ class ArticleController extends Controller
                 'total' => $total,
                 'active' => $active,
                 'low_stock' => $lowStockCount,
-                'stock_value' => $stockValue,
+                'stock_value' => max(0, $stockValue), // Ensure positive value
             ];
         } catch (\Exception $e) {
             Log::error('Erreur dans getArticlesStats: ' . $e->getMessage());
