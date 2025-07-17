@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Admin\TableauDeBordController;
 use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Admin\ExcelReportsController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
@@ -100,6 +101,16 @@ Route::middleware('auth')->prefix('admin')->group(function () {
         Route::get('/complet', [ReportController::class, 'rapportComplet'])->name('complet');
         Route::get('/complet/pdf', [ReportController::class, 'rapportCompletPDF'])->name('complet.pdf');
         Route::get('/rapide', [ReportController::class, 'rapportRapide'])->name('rapide');
+    });
+
+    // Routes des rapports Excel - Papier de Travail
+    Route::prefix('excel-reports')->name('admin.excel-reports.')->group(function () {
+        Route::get('/papier-de-travail', [ExcelReportsController::class, 'generatePapierDeTravail'])
+            ->name('papier-de-travail');
+        Route::get('/custom-form', [ExcelReportsController::class, 'showCustomReportForm'])
+            ->name('custom-form');
+        Route::post('/generate', [ExcelReportsController::class, 'generateCustomReport'])
+            ->name('generate');
     });
 
     // Routes pour la gestion des articles/produits

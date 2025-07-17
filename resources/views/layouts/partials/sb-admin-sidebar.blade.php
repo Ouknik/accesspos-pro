@@ -145,6 +145,40 @@
         </div>
     </li>
 
+    <!-- Nav Item - Rapports Excel -->
+    <li class="nav-item {{ request()->routeIs('admin.excel-reports.*') ? 'active' : '' }}">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseExcelReports"
+            aria-expanded="{{ request()->routeIs('admin.excel-reports.*') ? 'true' : 'false' }}" aria-controls="collapseExcelReports">
+            <i class="fas fa-fw fa-file-excel text-success"></i>
+            <span>Rapports Excel</span>
+        </a>
+        <div id="collapseExcelReports" class="collapse {{ request()->routeIs('admin.excel-reports.*') ? 'show' : '' }}" aria-labelledby="headingExcelReports" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Papier de Travail:</h6>
+                <a class="collapse-item" href="{{ route('admin.excel-reports.papier-de-travail') }}">
+                    <i class="fas fa-clipboard-list"></i> Téléchargement direct
+                </a>
+                <a class="collapse-item" href="{{ route('admin.excel-reports.custom-form') }}">
+                    <i class="fas fa-cogs"></i> Rapport personnalisé
+                </a>
+                <div class="collapse-divider"></div>
+                <h6 class="collapse-header">Rapports spécifiques:</h6>
+                <a class="collapse-item" onclick="generateQuickReport('inventory_value')" style="cursor: pointer;">
+                    <i class="fas fa-warehouse"></i> Inventaire en valeur
+                </a>
+                <a class="collapse-item" onclick="generateQuickReport('physical_inventory')" style="cursor: pointer;">
+                    <i class="fas fa-boxes"></i> Inventaire physique
+                </a>
+                <a class="collapse-item" onclick="generateQuickReport('sales_output')" style="cursor: pointer;">
+                    <i class="fas fa-shopping-cart"></i> État de sortie
+                </a>
+                <a class="collapse-item" onclick="generateQuickReport('reception_status')" style="cursor: pointer;">
+                    <i class="fas fa-truck"></i> État de réception
+                </a>
+            </div>
+        </div>
+    </li>
+
     <!-- Divider -->
     <hr class="sidebar-divider">
 

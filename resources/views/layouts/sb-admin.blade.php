@@ -449,6 +449,49 @@
                 });
             });
         });
+
+        // وظائف التقارير السريعة
+        function generateQuickReport(reportType) {
+            // إنشاء نموذج مؤقت
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '{{ route("admin.excel-reports.generate") }}';
+            form.style.display = 'none';
+            
+            // إضافة CSRF token
+            const csrfInput = document.createElement('input');
+            csrfInput.type = 'hidden';
+            csrfInput.name = '_token';
+            csrfInput.value = '{{ csrf_token() }}';
+            form.appendChild(csrfInput);
+            
+            // إضافة نوع التقرير
+            const reportInput = document.createElement('input');
+            reportInput.type = 'hidden';
+            reportInput.name = 'report_type';
+            reportInput.value = reportType;
+            form.appendChild(reportInput);
+            
+            // إضافة الفترة الافتراضية
+            const periodInput = document.createElement('input');
+            periodInput.type = 'hidden';
+            periodInput.name = 'period';
+            periodInput.value = 'this_month';
+            form.appendChild(periodInput);
+            
+            // إرسال النموذج
+            document.body.appendChild(form);
+            
+            // إظهار رسالة التحميل
+            AccessPosAlert.info('جاري إنشاء التقرير... يرجى الانتظار');
+            
+            form.submit();
+            
+            // إزالة النموذج بعد الإرسال
+            setTimeout(() => {
+                document.body.removeChild(form);
+            }, 1000);
+        }
     </script>
 
     @stack('scripts')

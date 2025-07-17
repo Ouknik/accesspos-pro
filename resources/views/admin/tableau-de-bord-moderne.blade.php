@@ -948,6 +948,43 @@
                     <div class="stat-icon financiere">
                         <i class="fas fa-shopping-cart"></i>
                     </div>
+
+            <!-- Nouvelle بطاقة تقارير Excel -->
+            <div class="stat-card excel-reports" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white;">
+                <div class="stat-header">
+                    <div class="stat-icon" style="background: rgba(255,255,255,0.2); color: white;">
+                        <i class="fas fa-file-excel"></i>
+                    </div>
+                    <h3 class="stat-title" style="color: white;">Papier de Travail Excel</h3>
+                </div>
+                <div class="stat-value" style="color: white; font-size: 1.2rem;">
+                    <i class="fas fa-clipboard-list me-2"></i>
+                    Rapports personnalisés
+                </div>
+                <div class="stat-label" style="color: rgba(255,255,255,0.8);">
+                    Inventaire, ventes et analyses
+                </div>
+                <div class="stat-trend" style="color: rgba(255,255,255,0.9);">
+                    <span><i class="fas fa-chart-bar me-1"></i> 4 types de rapports disponibles</span>
+                </div>
+                <div class="stat-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                    <a href="{{ route('admin.excel-reports.papier-de-travail') }}" 
+                       class="btn-details" 
+                       style="flex: 1; padding: 0.5rem; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white; border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: flex; align-items: center; justify-content: center;"
+                       onmouseover="this.style.background='rgba(255,255,255,0.2)'"
+                       onmouseout="this.style.background='rgba(255,255,255,0.1)'">
+                        <i class="fas fa-download me-1"></i>
+                        Télécharger
+                    </a>
+                    <a href="{{ route('admin.excel-reports.custom-form') }}" 
+                       class="btn-export" 
+                       style="padding: 0.5rem 0.75rem; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white; border-radius: 0.4rem; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: flex; align-items: center;"
+                       onmouseover="this.style.background='rgba(255,255,255,0.2)'"
+                       onmouseout="this.style.background='rgba(255,255,255,0.1)'">
+                        <i class="fas fa-cogs"></i>
+                    </a>
+                </div>
+            </div>
                     <h3 class="stat-title">Ticket Moyen</h3>
                 </div>
                 <div class="stat-value">{{ number_format($statistiquesFinancieres['ticket_moyen'] ?? 0, 2) }} DH</div>
