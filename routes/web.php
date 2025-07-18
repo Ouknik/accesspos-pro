@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Admin\TableauDeBordController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\ExcelReportsController;
+use App\Http\Controllers\Admin\ReportsManagerController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
@@ -93,7 +94,16 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::get('/api/live-data', [TableauDeBordController::class, 'getLiveData'])
         ->name('admin.live-data');
     
-    // Routes pour le système de rapports
+    // Routes للتقارير الرئيسية
+    Route::prefix('reports')->name('admin.reports.')->group(function () {
+        // واجهة إدارة التقارير الرئيسية
+        Route::get('/manager', [ReportsManagerController::class, 'index'])
+            ->name('manager');
+        Route::get('/dashboard', [ReportsManagerController::class, 'dashboard'])
+            ->name('dashboard');
+    });
+
+    // Routes pour le système de rapports القديم
     Route::prefix('rapports')->name('admin.reports.')->group(function () {
         Route::get('/', [ReportController::class, 'index'])->name('index');
         Route::post('/generate', [ReportController::class, 'generate'])->name('generate');
@@ -105,8 +115,12 @@ Route::middleware('auth')->prefix('admin')->group(function () {
 
     // Routes des rapports Excel - Papier de Travail
     Route::prefix('excel-reports')->name('admin.excel-reports.')->group(function () {
+        // التقرير الشامل الجديد
         Route::get('/papier-de-travail', [ExcelReportsController::class, 'generatePapierDeTravail'])
             ->name('papier-de-travail');
+        
+        
+        // المسارات القديمة للمتوافقية
         Route::get('/custom-form', [ExcelReportsController::class, 'showCustomReportForm'])
             ->name('custom-form');
         Route::post('/generate', [ExcelReportsController::class, 'generateCustomReport'])
