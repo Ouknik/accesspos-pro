@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Contrôleur pour le Tableau de Bord Administrateur
@@ -18,7 +19,8 @@ class TableauDeBordController extends Controller
      */
     public function index()
     {
-        
+        Log::info('Accès au tableau de bord moderne');
+
         try {
 
             // استخدام التاريخ الحالي (ديناميكي)
@@ -35,6 +37,16 @@ class TableauDeBordController extends Controller
             $graphiquesAnalyses = $this->obtenirGraphiquesAnalyses($aujourd_hui);
             $gestionFinanciere = $this->obtenirGestionFinanciere($aujourd_hui, $debut_mois);
 
+            Log::info('Affichage du tableau de bord avec les données récupérées');
+            Log::debug('Données du tableau de bord', [
+                'statistiquesFinancieres' => $statistiquesFinancieres,
+                'gestionStocks' => $gestionStocks,
+                'gestionClientele' => $gestionClientele,
+                'achatsFournisseurs' => $achatsFournisseurs,
+                'gestionRestaurant' => $gestionRestaurant,
+                'graphiquesAnalyses' => $graphiquesAnalyses,
+                'gestionFinanciere' => $gestionFinanciere
+            ]);
             return view('admin.dashboard-sb-admin', compact(
                 'statistiquesFinancieres',
                 'gestionStocks',

@@ -45,21 +45,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
         ->name('admin.tableau-de-bord-moderne');
     
     // Testing Routes - TASK 13
-    Route::get('/test-pages', function() {
-        return view('admin.test-pages-sb-admin');
-    })->name('admin.test-pages');
     
-    Route::get('/responsive-test', function() {
-        return view('admin.responsive-test-sb-admin');
-    })->name('admin.responsive-test');
-    
-    Route::get('/forms-test', function() {
-        return view('admin.forms-test-sb-admin');
-    })->name('admin.forms-test');
-    
-    Route::get('/javascript-test', function() {
-        return view('admin.javascript-test-sb-admin');
-    })->name('admin.javascript-test');
     
     Route::get('/console-errors-test', function() {
         return view('admin.console-errors-test-sb-admin');
