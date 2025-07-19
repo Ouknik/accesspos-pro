@@ -23,14 +23,18 @@ class ExcelReportsController extends Controller
             set_time_limit(300);
             ini_set('memory_limit', '512M');
             
+            // استخراج التواريخ من الطلب
+            $dateFrom = $request->input('date_from', Carbon::now()->startOfMonth()->format('Y-m-d'));
+            $dateTo = $request->input('date_to', Carbon::now()->format('Y-m-d'));
+            
             $spreadsheet = new Spreadsheet();
             
-            // إنشاء التقارير الأربعة بناءً على الصور المرسلة
+            // إنشاء التقارير الأربعة بناءً على الصور المرسلة مع فلترة التواريخ
             // التقرير الأول: الجرد حسب المواقع (النسخة الجديدة المطابقة للصورة)
-            $this->createInventaireValeurSheet($spreadsheet);
-            $this->createEtatReceptionSheet($spreadsheet);
-            $this->createEtatSortieSheet($spreadsheet);
-            $this->createInventairePhysiqueSheet($spreadsheet);
+            $this->createInventaireValeurSheet($spreadsheet, $dateFrom, $dateTo);
+            $this->createEtatReceptionSheet($spreadsheet, $dateFrom, $dateTo);
+            $this->createEtatSortieSheet($spreadsheet, $dateFrom, $dateTo);
+            $this->createInventairePhysiqueSheet($spreadsheet, $dateFrom, $dateTo);
             
             $spreadsheet->setActiveSheetIndex(0);
             
@@ -47,7 +51,7 @@ class ExcelReportsController extends Controller
      * التقرير الأول: Inventaire En Valeur (مثل الصورة الجديدة)
      * بناءً على الصورة المرسلة - عرض المواقع مع المبالغ
      */
-    private function createInventaireValeurSheet($spreadsheet)
+    private function createInventaireValeurSheet($spreadsheet, $dateFrom = null, $dateTo = null)
     {
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setTitle('Inventaire En Valeur');
@@ -62,9 +66,15 @@ class ExcelReportsController extends Controller
         $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(16);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
         
-        // تاريخ التقرير
-        $today = Carbon::now('Africa/Algiers')->format('d/m/Y');
-        $sheet->setCellValue('A2', "Du $today Au $today");
+        // تاريخ التقرير - استخدام التواريخ المطلوبة أو التاريخ الحالي
+        if ($dateFrom && $dateTo) {
+            $dateFromFormatted = Carbon::parse($dateFrom)->format('d/m/Y');
+            $dateToFormatted = Carbon::parse($dateTo)->format('d/m/Y');
+            $sheet->setCellValue('A2', "Du $dateFromFormatted Au $dateToFormatted");
+        } else {
+            $today = Carbon::now('Africa/Algiers')->format('d/m/Y');
+            $sheet->setCellValue('A2', "Du $today Au $today");
+        }
         $sheet->mergeCells('A2:B2');
         $sheet->getStyle('A2')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
         
@@ -283,7 +293,7 @@ class ExcelReportsController extends Controller
      * التقرير الثاني: État de réception
      * بناءً على الصورة الثانية المرسلة
      */
-    private function createEtatReceptionSheet($spreadsheet)
+    private function createEtatReceptionSheet($spreadsheet, $dateFrom = null, $dateTo = null)
     {
         $sheet = $spreadsheet->createSheet();
         $sheet->setTitle('État de Réception');
@@ -295,9 +305,15 @@ class ExcelReportsController extends Controller
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
 
         // إضافة فترة التاريخ
-        $dateFrom = Carbon::now()->startOfMonth()->format('d/m/Y');
-        $dateTo = Carbon::now()->format('d/m/Y');
-        $sheet->setCellValue('A2', "Du {$dateFrom} Au {$dateTo}");
+        if ($dateFrom && $dateTo) {
+            $dateFromFormatted = Carbon::parse($dateFrom)->format('d/m/Y');
+            $dateToFormatted = Carbon::parse($dateTo)->format('d/m/Y');
+            $sheet->setCellValue('A2', "Du {$dateFromFormatted} Au {$dateToFormatted}");
+        } else {
+            $dateFromDefault = Carbon::now()->startOfMonth()->format('d/m/Y');
+            $dateToDefault = Carbon::now()->format('d/m/Y');
+            $sheet->setCellValue('A2', "Du {$dateFromDefault} Au {$dateToDefault}");
+        }
         $sheet->mergeCells('A2:I2');
         $sheet->getStyle('A2')->getFont()->setSize(12);
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
@@ -327,8 +343,7 @@ class ExcelReportsController extends Controller
         $sheet->getStyle('A4:I4')->getBorders()->getAllBorders()
             ->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-        // استخراج بيانات الاستلام من FACTURE_FOURNISSEUR
-        $receptions = DB::table('FACTURE_FOURNISSEUR as ff')
+        $query = DB::table('FACTURE_FOURNISSEUR as ff')
             ->join('FACTURE_FRS_DETAIL as ffd', 'ff.FCF_REF', '=', 'ffd.FCF_REF')
             ->join('ARTICLE as a', 'ffd.ART_REF', '=', 'a.ART_REF')
             ->leftJoin('SOUS_FAMILLE as sf', 'a.SFM_REF', '=', 'sf.SFM_REF')
@@ -345,8 +360,14 @@ class ExcelReportsController extends Controller
                 DB::raw('ffd.FCF_QTE * ffd.FCF_PRIX_HT as montant'),
                 'ff.FCF_REMARQUE as observation'
             ])
-            ->where('ff.FCF_VALIDE', 1)
-            ->orderBy('ff.FCF_DATE', 'desc')
+            ->where('ff.FCF_VALIDE', 1);
+
+        // تطبيق فلترة التواريخ إذا تم تمريرها
+        if ($dateFrom && $dateTo) {
+            $query->whereBetween('ff.FCF_DATE', [$dateFrom, $dateTo]);
+        }
+
+        $receptions = $query->orderBy('ff.FCF_DATE', 'desc')
             ->limit(200)
             ->get();
 
@@ -402,7 +423,7 @@ class ExcelReportsController extends Controller
      * التقرير الثالث: État de Sorties
      * بناءً على الصورة الثالثة المرسلة
      */
-    private function createEtatSortieSheet($spreadsheet)
+    private function createEtatSortieSheet($spreadsheet, $dateFrom = null, $dateTo = null)
     {
         $sheet = $spreadsheet->createSheet();
         $sheet->setTitle('État de Sorties');
@@ -413,10 +434,10 @@ class ExcelReportsController extends Controller
         $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(16);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
 
-        // إضافة فترة التاريخ
-        $dateFrom = Carbon::now()->startOfMonth()->format('d/m/Y');
-        $dateTo = Carbon::now()->format('d/m/Y');
-        $sheet->setCellValue('A2', "Du {$dateFrom} Au {$dateTo}");
+        // إضافة فترة التاريخ - استخدام التواريخ الممررة أو التواريخ الافتراضية
+        $displayDateFrom = $dateFrom ? Carbon::parse($dateFrom)->format('d/m/Y') : Carbon::now()->startOfMonth()->format('d/m/Y');
+        $displayDateTo = $dateTo ? Carbon::parse($dateTo)->format('d/m/Y') : Carbon::now()->format('d/m/Y');
+        $sheet->setCellValue('A2', "Du {$displayDateFrom} Au {$displayDateTo}");
         $sheet->mergeCells('A2:I2');
         $sheet->getStyle('A2')->getFont()->setSize(12);
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
@@ -446,8 +467,8 @@ class ExcelReportsController extends Controller
         $sheet->getStyle('A4:I4')->getBorders()->getAllBorders()
             ->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-        // استخراج بيانات المبيعات/الخروج من FACTURE_VNT
-        $sorties = DB::table('FACTURE_VNT as fv')
+        // استخراج بيانات المبيعات/الخروج من FACTURE_VNT مع فلترة التواريخ
+        $query = DB::table('FACTURE_VNT as fv')
             ->join('FACTURE_VNT_DETAIL as fvd', 'fv.FCTV_REF', '=', 'fvd.FCTV_REF')
             ->join('ARTICLE as a', 'fvd.ART_REF', '=', 'a.ART_REF')
             ->leftJoin('SOUS_FAMILLE as sf', 'a.SFM_REF', '=', 'sf.SFM_REF')
@@ -464,8 +485,14 @@ class ExcelReportsController extends Controller
                 DB::raw('fvd.FVD_QTE * fvd.FVD_PRIX_VNT_HT as montant'),
                 'fv.FCTV_REMARQUE as observation'
             ])
-            ->where('fv.FCTV_VALIDE', 1)
-            ->orderBy('fv.FCTV_DATE', 'desc')
+            ->where('fv.FCTV_VALIDE', 1);
+
+        // تطبيق فلترة التواريخ إذا تم تمريرها
+        if ($dateFrom && $dateTo) {
+            $query->whereBetween('fv.FCTV_DATE', [$dateFrom, $dateTo]);
+        }
+
+        $sorties = $query->orderBy('fv.FCTV_DATE', 'desc')
             ->limit(200)
             ->get();
 
@@ -521,7 +548,7 @@ class ExcelReportsController extends Controller
      * التقرير الرابع: Inventaire Physique Par Article
      * بناءً على الصورة الرابعة المرسلة
      */
-    private function createInventairePhysiqueSheet($spreadsheet)
+    private function createInventairePhysiqueSheet($spreadsheet, $dateFrom = null, $dateTo = null)
     {
         $sheet = $spreadsheet->createSheet();
         $sheet->setTitle('Inventaire Physique');
@@ -532,10 +559,10 @@ class ExcelReportsController extends Controller
         $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(16);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
 
-        // إضافة فترة التاريخ
-        $dateFrom = Carbon::now()->startOfMonth()->format('d/m/Y');
-        $dateTo = Carbon::now()->format('d/m/Y');
-        $sheet->setCellValue('A2', "Du {$dateFrom} Au {$dateTo}");
+        // إضافة فترة التاريخ - استخدام التواريخ الممررة أو التواريخ الافتراضية
+        $displayDateFrom = $dateFrom ? Carbon::parse($dateFrom)->format('d/m/Y') : Carbon::now()->startOfMonth()->format('d/m/Y');
+        $displayDateTo = $dateTo ? Carbon::parse($dateTo)->format('d/m/Y') : Carbon::now()->format('d/m/Y');
+        $sheet->setCellValue('A2', "Du {$displayDateFrom} Au {$displayDateTo}");
         $sheet->mergeCells('A2:F2');
         $sheet->getStyle('A2')->getFont()->setSize(12);
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
@@ -585,18 +612,29 @@ class ExcelReportsController extends Controller
         foreach ($inventaire as $item) {
             $sheet->setCellValue('A' . $row, $item->designation ?? '');
             
-            // يمكن حساب الكميات الداخلة والخارجة من خلال استعلامات إضافية
-            $quantiteEntree = DB::table('FACTURE_FRS_DETAIL as ffd')
+            // حساب الكميات الداخلة مع فلترة التواريخ
+            $queryEntree = DB::table('FACTURE_FRS_DETAIL as ffd')
                 ->join('FACTURE_FOURNISSEUR as ff', 'ffd.FCF_REF', '=', 'ff.FCF_REF')
                 ->where('ffd.ART_REF', $item->designation) // استخدام ART_REF الصحيح
-                ->where('ff.FCF_VALIDE', 1)
-                ->sum('ffd.FCF_QTE') ?? 0;
+                ->where('ff.FCF_VALIDE', 1);
+            
+            if ($dateFrom && $dateTo) {
+                $queryEntree->whereBetween('ff.FCF_DATE', [$dateFrom, $dateTo]);
+            }
+            
+            $quantiteEntree = $queryEntree->sum('ffd.FCF_QTE') ?? 0;
                 
-            $quantiteSortie = DB::table('FACTURE_VNT_DETAIL as fvd')
+            // حساب الكميات الخارجة مع فلترة التواريخ
+            $querySortie = DB::table('FACTURE_VNT_DETAIL as fvd')
                 ->join('FACTURE_VNT as fv', 'fvd.FCTV_REF', '=', 'fv.FCTV_REF')
                 ->where('fvd.ART_REF', $item->designation) // استخدام ART_REF الصحيح
-                ->where('fv.FCTV_VALIDE', 1)
-                ->sum('fvd.FVD_QTE') ?? 0;
+                ->where('fv.FCTV_VALIDE', 1);
+            
+            if ($dateFrom && $dateTo) {
+                $querySortie->whereBetween('fv.FCTV_DATE', [$dateFrom, $dateTo]);
+            }
+            
+            $quantiteSortie = $querySortie->sum('fvd.FVD_QTE') ?? 0;
 
             $sheet->setCellValue('B' . $row, $quantiteEntree);
             $sheet->setCellValue('C' . $row, $quantiteSortie);

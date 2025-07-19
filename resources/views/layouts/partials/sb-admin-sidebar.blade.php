@@ -109,6 +109,39 @@
     </li>
     @endif
 
+    <!-- Nav Item - Tables Restaurant -->
+    <li class="nav-item {{ request()->routeIs('admin.tables.*') ? 'active' : '' }}">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTables"
+            aria-expanded="{{ request()->routeIs('admin.tables.*') ? 'true' : 'false' }}" aria-controls="collapseTables">
+            <i class="fas fa-fw fa-utensils"></i>
+            <span>Gestion des Tables</span>
+        </a>
+        <div id="collapseTables" class="collapse {{ request()->routeIs('admin.tables.*') ? 'show' : '' }}" aria-labelledby="headingTables" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Gestion des tables:</h6>
+                <a class="collapse-item {{ request()->routeIs('admin.tables.index') ? 'active' : '' }}" href="{{ route('admin.tables.index') }}">
+                    <i class="fas fa-list"></i> Liste des tables
+                </a>
+                <a class="collapse-item {{ request()->routeIs('admin.tables.create') ? 'active' : '' }}" href="{{ route('admin.tables.create') }}">
+                    <i class="fas fa-plus"></i> Ajouter une table
+                </a>
+                {{-- <div class="collapse-divider"></div>
+                <h6 class="collapse-header">Vue d'ensemble:</h6>
+                <a class="collapse-item {{ request()->routeIs('admin.dashboard.etat-tables') ? 'active' : '' }}" href="{{ route('admin.dashboard.etat-tables') }}">
+                    <i class="fas fa-eye"></i> État en temps réel
+                </a>
+                <a class="collapse-item {{ request()->routeIs('admin.zones.index') ? 'active' : '' }}" href="{{ route('admin.zones.index') }}">
+                    <i class="fas fa-map-marker-alt"></i> Gestion des zones
+                </a>
+                @if(Route::has('admin.tables.layout'))
+                <a class="collapse-item" href="{{ route('admin.tables.layout') }}">
+                    <i class="fas fa-map"></i> Plan du restaurant
+                </a>
+                @endif --}}
+            </div>
+        </div>
+    </li>
+
     <!-- Nav Item - Rapports Détaillés -->
     <li class="nav-item {{ request()->routeIs('admin.dashboard.*') ? 'active' : '' }}">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDetails"
@@ -133,9 +166,7 @@
                 <a class="collapse-item {{ request()->routeIs('admin.dashboard.performance-horaire') ? 'active' : '' }}" href="{{ route('admin.dashboard.performance-horaire') }}">
                     <i class="fas fa-clock"></i> Performance horaire
                 </a>
-                <a class="collapse-item {{ request()->routeIs('admin.dashboard.etat-tables') ? 'active' : '' }}" href="{{ route('admin.dashboard.etat-tables') }}">
-                    <i class="fas fa-table"></i> État des tables
-                </a>
+               
                 <div class="collapse-divider"></div>
                 <h6 class="collapse-header">Analyses client:</h6>
                 <a class="collapse-item {{ request()->routeIs('admin.dashboard.top-clients') ? 'active' : '' }}" href="{{ route('admin.dashboard.top-clients') }}">

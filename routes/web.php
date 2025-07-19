@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\ArticleController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Admin\TableauDeBordController;
+use App\Http\Controllers\Admin\TableController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\ExcelReportsController;
 use App\Http\Controllers\Admin\ReportsManagerController;
@@ -156,6 +157,32 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     // Route pour export des données
     Route::get('/api/dashboard-export', [TableauDeBordController::class, 'exportModalData'])
         ->name('admin.dashboard.export');
+
+    // Routes pour la gestion des tables/طاولات
+    Route::prefix('tables')->name('admin.tables.')->group(function () {
+        Route::get('/', [TableController::class, 'index'])->name('index');
+        Route::get('/create', [TableController::class, 'create'])->name('create');
+        Route::post('/', [TableController::class, 'store'])->name('store');
+        Route::get('/{table}', [TableController::class, 'show'])->name('show');
+        Route::get('/{table}/edit', [TableController::class, 'edit'])->name('edit');
+        Route::put('/{table}', [TableController::class, 'update'])->name('update');
+        Route::delete('/{table}', [TableController::class, 'destroy'])->name('destroy');
+        
+        // Routes AJAX pour إدارة الطاولات
+        Route::post('/{table}/status', [TableController::class, 'changeStatus'])->name('change-status');
+        Route::get('/api/data', [TableController::class, 'getTablesData'])->name('data');
+    });
+
+    // Routes pour la gestion des zones/مناطق
+    Route::prefix('zones')->name('admin.zones.')->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\ZoneController::class, 'index'])->name('index');
+        Route::get('/create', [App\Http\Controllers\Admin\ZoneController::class, 'create'])->name('create');
+        Route::post('/', [App\Http\Controllers\Admin\ZoneController::class, 'store'])->name('store');
+        Route::get('/{zone}', [App\Http\Controllers\Admin\ZoneController::class, 'show'])->name('show');
+        Route::get('/{zone}/edit', [App\Http\Controllers\Admin\ZoneController::class, 'edit'])->name('edit');
+        Route::put('/{zone}', [App\Http\Controllers\Admin\ZoneController::class, 'update'])->name('update');
+        Route::delete('/{zone}', [App\Http\Controllers\Admin\ZoneController::class, 'destroy'])->name('destroy');
+    });
 });
 
 // Redirection pour compatibilité avec les anciens liens
