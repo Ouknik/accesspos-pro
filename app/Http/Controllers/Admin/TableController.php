@@ -38,6 +38,8 @@ class TableController extends Controller
                 ->orderBy('ZON_LIB')
                 ->get();
 
+             
+
             // حساب الإحصائيات
             $statistiques = [
                 'total' => $tables->count(),
