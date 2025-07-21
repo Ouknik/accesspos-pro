@@ -286,18 +286,24 @@ $(document).ready(function() {
 // Changer l'état de la table
 function changeTableStatus(tabRef, newStatus) {
     if (confirm('Êtes-vous sûr de vouloir changer l\'état de la table ?')) {
-        $.post('/admin/tables/' + tabRef + '/status', {
-            _token: '{{ csrf_token() }}',
-            status: newStatus
-        }).done(function(response) {
-            if (response.success) {
-                alert('✅ ' + response.message);
-                location.reload();
-            } else {
-                alert('❌ ' + (response.error || 'Erreur lors du changement d\'état'));
+        $.ajax({
+            url: '/admin/tables/' + tabRef + '/status',
+            method: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                status: newStatus
+            },
+            success: function(response) {
+                if (response.success) {
+                    alert('✅ ' + response.message);
+                    location.reload();
+                } else {
+                    alert('❌ ' + (response.error || 'Erreur lors du changement d\'état'));
+                }
+            },
+            error: function(xhr) {
+                alert('❌ Erreur de connexion au serveur');
             }
-        }).fail(function() {
-            alert('❌ Erreur de connexion au serveur');
         });
     }
 }

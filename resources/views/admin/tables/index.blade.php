@@ -405,26 +405,6 @@
     </div>
 </div>
 
-{{-- Modal détails de la table --}}
-<div class="modal fade" id="tableDetailsModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Détails de la table</h5>
-                <button type="button" class="close" data-dismiss="modal">
-                    <span>&times;</span>
-                </button>
-            </div>
-            <div class="modal-body" id="tableDetailsContent">
-                <div class="text-center">
-                    <i class="fas fa-spinner fa-spin fa-2x text-primary"></i>
-                    <p class="mt-2">Chargement en cours...</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 {{-- Modal plan --}}
 <div class="modal fade" id="layoutModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-xl" role="document">
@@ -746,28 +726,8 @@ function refreshTables() {
 
 // تفاصيل الطاولة
 function showTableDetails(tableRef) {
-    $('#tableDetailsModal').modal('show');
-    $('#tableDetailsContent').html(`
-        <div class="text-center">
-            <div class="spinner-border text-primary" role="status">
-                <span class="sr-only">Chargement...</span>
-            </div>
-            <p class="mt-2">Chargement des détails...</p>
-        </div>
-    `);
-
-    $.get('{{ url("admin/tables") }}/' + tableRef)
-        .done(function(response) {
-            $('#tableDetailsContent').html(response);
-        })
-        .fail(function() {
-            $('#tableDetailsContent').html(`
-                <div class="alert alert-danger">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    Erreur lors du chargement des détails
-                </div>
-            `);
-        });
+    // التوجه مباشرة إلى صفحة التفاصيل
+    window.location.href = '/admin/tables/' + tableRef;
 }
 
 // تغيير حالة الطاولة
@@ -803,20 +763,28 @@ function changeTableStatus(tableRef, newStatus) {
 
 function updateTableStatus(tableRef, newStatus) {
     $.ajax({
-        url: `/admin/tables/${tableRef}/status`,
-        method: 'PATCH',
+        url: '/admin/tables/' + tableRef + '/status',
+        method: 'POST',
         data: {
             status: newStatus,
             _token: '{{ csrf_token() }}'
         },
         success: function(response) {
-            showToast('success', 'État de la table mis à jour.');
-            setTimeout(() => {
-                location.reload();
-            }, 1500);
+            if (response.success) {
+                showToast('success', response.message || 'État de la table mis à jour.');
+                setTimeout(() => {
+                    location.reload();
+                }, 1500);
+            } else {
+                showToast('error', response.error || 'Erreur lors de la mise à jour.');
+            }
         },
         error: function(xhr) {
-            showToast('error', 'Erreur lors de la mise à jour de l\'état.');
+            let errorMsg = 'Erreur lors de la mise à jour de l\'état.';
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+                errorMsg = xhr.responseJSON.message;
+            }
+            showToast('error', errorMsg);
         }
     });
 }
@@ -847,19 +815,27 @@ function deleteTable(tableRef, tableName) {
 
 function performDeleteTable(tableRef) {
     $.ajax({
-        url: `/admin/tables/${tableRef}`,
+        url: '/admin/tables/' + tableRef,
         method: 'DELETE',
         data: {
             _token: '{{ csrf_token() }}'
         },
         success: function(response) {
-            showToast('success', 'Table supprimée avec succès.');
-            setTimeout(() => {
-                location.reload();
-            }, 1500);
+            if (response.success) {
+                showToast('success', response.success || 'Table supprimée avec succès.');
+                setTimeout(() => {
+                    location.reload();
+                }, 1500);
+            } else {
+                showToast('error', response.error || 'Erreur lors de la suppression.');
+            }
         },
         error: function(xhr) {
-            showToast('error', 'Erreur lors de la suppression.');
+            let errorMsg = 'Erreur lors de la suppression.';
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+                errorMsg = xhr.responseJSON.message;
+            }
+            showToast('error', errorMsg);
         }
     });
 }

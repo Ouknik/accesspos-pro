@@ -595,6 +595,7 @@ class ExcelReportsController extends Controller
             ->leftJoin('SOUS_FAMILLE as sf', 'a.SFM_REF', '=', 'sf.SFM_REF')
             ->leftJoin('FAMILLE as f', 'sf.FAM_REF', '=', 'f.FAM_REF')
             ->select([
+                'a.ART_REF as art_ref',          // إضافة ART_REF
                 'a.ART_DESIGNATION as designation',
                 'a.UNM_ABR as unite',
                 's.STK_QTE as stock_final',
@@ -615,26 +616,34 @@ class ExcelReportsController extends Controller
             // حساب الكميات الداخلة مع فلترة التواريخ
             $queryEntree = DB::table('FACTURE_FRS_DETAIL as ffd')
                 ->join('FACTURE_FOURNISSEUR as ff', 'ffd.FCF_REF', '=', 'ff.FCF_REF')
-                ->where('ffd.ART_REF', $item->designation) // استخدام ART_REF الصحيح
+                ->where('ffd.ART_REF', $item->art_ref) // استخدام ART_REF الصحيح
                 ->where('ff.FCF_VALIDE', 1);
             
             if ($dateFrom && $dateTo) {
                 $queryEntree->whereBetween('ff.FCF_DATE', [$dateFrom, $dateTo]);
             }
             
-            $quantiteEntree = $queryEntree->sum('ffd.FCF_QTE') ?? 0;
+            try {
+                $quantiteEntree = $queryEntree->sum('ffd.FCF_QTE') ?? 0;
+            } catch (\Exception $e) {
+                $quantiteEntree = 0;
+            }
                 
             // حساب الكميات الخارجة مع فلترة التواريخ
             $querySortie = DB::table('FACTURE_VNT_DETAIL as fvd')
                 ->join('FACTURE_VNT as fv', 'fvd.FCTV_REF', '=', 'fv.FCTV_REF')
-                ->where('fvd.ART_REF', $item->designation) // استخدام ART_REF الصحيح
+                ->where('fvd.ART_REF', $item->art_ref) // استخدام ART_REF الصحيح
                 ->where('fv.FCTV_VALIDE', 1);
             
             if ($dateFrom && $dateTo) {
                 $querySortie->whereBetween('fv.FCTV_DATE', [$dateFrom, $dateTo]);
             }
             
-            $quantiteSortie = $querySortie->sum('fvd.FVD_QTE') ?? 0;
+            try {
+                $quantiteSortie = $querySortie->sum('fvd.FVD_QTE') ?? 0;
+            } catch (\Exception $e) {
+                $quantiteSortie = 0;
+            }
 
             $sheet->setCellValue('B' . $row, $quantiteEntree);
             $sheet->setCellValue('C' . $row, $quantiteSortie);
@@ -738,17 +747,115 @@ class ExcelReportsController extends Controller
     // }
 
 
-     public function showCustomReportForm()
+    /**
+     * حساب نطاق التواريخ بناءً على الفترة المختارة
+     */
+    private function calculateDateRange($period, $dateFrom = null, $dateTo = null)
+    {
+        $now = Carbon::now();
+        
+        switch ($period) {
+            case 'today':
+                return [$now->format('Y-m-d'), $now->format('Y-m-d')];
+            case 'this_week':
+                return [$now->startOfWeek()->format('Y-m-d'), $now->copy()->endOfWeek()->format('Y-m-d')];
+            case 'this_month':
+                return [$now->startOfMonth()->format('Y-m-d'), $now->copy()->endOfMonth()->format('Y-m-d')];
+            case 'last_month':
+                $lastMonth = $now->copy()->subMonth();
+                return [$lastMonth->startOfMonth()->format('Y-m-d'), $lastMonth->endOfMonth()->format('Y-m-d')];
+            case 'custom':
+                return [
+                    $dateFrom ?: $now->startOfMonth()->format('Y-m-d'),
+                    $dateTo ?: $now->format('Y-m-d')
+                ];
+            default:
+                return [$now->startOfMonth()->format('Y-m-d'), $now->format('Y-m-d')];
+        }
+    }
+
+    public function showCustomReportForm()
     {
         return view('admin.reports.excel-custom');
     }
 
     /**
-     * توليد تقرير مخصص (للمتوافقية مع المسارات القديمة)
+     * توليد تقرير مخصص بناءً على المعاملات المدخلة
      */
     public function generateCustomReport(Request $request)
     {
-        // توجيه إلى التقرير الشامل الجديد
-        return $this->generatePapierDeTravail($request);
+        try {
+            // إعداد الوقت والذاكرة
+            set_time_limit(600);
+            ini_set('memory_limit', '1024M');
+            
+            // التحقق من صحة البيانات
+            $request->validate([
+                'report_type' => 'required|string|in:papier_travail,inventory_value,physical_inventory,sales_output,reception_status',
+                'period' => 'required|string|in:today,this_week,this_month,last_month,custom',
+                'date_from' => 'nullable|date|before_or_equal:date_to',
+                'date_to' => 'nullable|date|after_or_equal:date_from',
+            ], [
+                'report_type.required' => 'يجب اختيار نوع التقرير',
+                'report_type.in' => 'نوع التقرير المختار غير صحيح',
+                'period.required' => 'يجب اختيار الفترة الزمنية',
+                'date_from.before_or_equal' => 'تاريخ البداية يجب أن يكون قبل أو يساوي تاريخ النهاية',
+                'date_to.after_or_equal' => 'تاريخ النهاية يجب أن يكون بعد أو يساوي تاريخ البداية',
+            ]);
+            
+            // حساب نطاق التواريخ
+            [$dateFrom, $dateTo] = $this->calculateDateRange(
+                $request->period,
+                $request->date_from,
+                $request->date_to
+            );
+            
+            $spreadsheet = new Spreadsheet();
+            $reportType = $request->report_type;
+            
+            // إنشاء التقرير المطلوب
+            switch ($reportType) {
+                case 'papier_travail':
+                    // إنشاء التقرير الشامل الأربعة
+                    $this->createInventaireValeurSheet($spreadsheet, $dateFrom, $dateTo);
+                    $this->createEtatReceptionSheet($spreadsheet, $dateFrom, $dateTo);
+                    $this->createEtatSortieSheet($spreadsheet, $dateFrom, $dateTo);
+                    $this->createInventairePhysiqueSheet($spreadsheet, $dateFrom, $dateTo);
+                    $fileName = 'Papier_de_Travail_' . $dateFrom . '_' . $dateTo;
+                    break;
+                    
+                case 'inventory_value':
+                    $this->createInventaireValeurSheet($spreadsheet, $dateFrom, $dateTo);
+                    $fileName = 'Inventaire_Valeur_' . $dateFrom . '_' . $dateTo;
+                    break;
+                    
+                case 'physical_inventory':
+                    $this->createInventairePhysiqueSheet($spreadsheet, $dateFrom, $dateTo);
+                    $fileName = 'Inventaire_Physique_' . $dateFrom . '_' . $dateTo;
+                    break;
+                    
+                case 'sales_output':
+                    $this->createEtatSortieSheet($spreadsheet, $dateFrom, $dateTo);
+                    $fileName = 'Etat_Sortie_' . $dateFrom . '_' . $dateTo;
+                    break;
+                    
+                case 'reception_status':
+                    $this->createEtatReceptionSheet($spreadsheet, $dateFrom, $dateTo);
+                    $fileName = 'Etat_Reception_' . $dateFrom . '_' . $dateTo;
+                    break;
+                    
+                default:
+                    throw new \Exception('نوع التقرير غير مدعوم');
+            }
+            
+            $spreadsheet->setActiveSheetIndex(0);
+            
+            return $this->exportExcelFile($spreadsheet, $fileName);
+            
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return back()->withErrors($e->errors())->withInput();
+        } catch (\Exception $e) {
+            return back()->with('error', 'حدث خطأ في إنشاء التقرير: ' . $e->getMessage())->withInput();
+        }
     }
 }
