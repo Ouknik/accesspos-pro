@@ -15,7 +15,7 @@ use Carbon\Carbon;
 class ExcelReportsController extends Controller
 {
     /**
-     * إنشاء تقرير "Papier de Travail" الكامل - التقارير الأربعة مجتمعة
+     * Création du rapport "Papier de Travail" complet - Les quatre rapports réunis
      */
     public function generatePapierDeTravail(Request $request)
     {
@@ -23,14 +23,14 @@ class ExcelReportsController extends Controller
             set_time_limit(300);
             ini_set('memory_limit', '512M');
             
-            // استخراج التواريخ من الطلب
+            // Extraction des dates de la requête
             $dateFrom = $request->input('date_from', Carbon::now()->startOfMonth()->format('Y-m-d'));
             $dateTo = $request->input('date_to', Carbon::now()->format('Y-m-d'));
             
             $spreadsheet = new Spreadsheet();
             
-            // إنشاء التقارير الأربعة بناءً على الصور المرسلة مع فلترة التواريخ
-            // التقرير الأول: الجرد حسب المواقع (النسخة الجديدة المطابقة للصورة)
+            // Création des quatre rapports basés sur les images envoyées avec filtrage par dates
+            // Premier rapport: Inventaire par sites (nouvelle version conforme à l'image)
             $this->createInventaireValeurSheet($spreadsheet, $dateFrom, $dateTo);
             $this->createEtatReceptionSheet($spreadsheet, $dateFrom, $dateTo);
             $this->createEtatSortieSheet($spreadsheet, $dateFrom, $dateTo);
@@ -42,31 +42,31 @@ class ExcelReportsController extends Controller
             
         } catch (\Exception $e) {
             return response()->json([
-                'error' => 'حدث خطأ في إنشاء التقرير: ' . $e->getMessage()
+                'error' => 'Une erreur s\'est produite lors de la création du rapport: ' . $e->getMessage()
             ], 500);
         }
     }
 
     /**
-     * التقرير الأول: Inventaire En Valeur (مثل الصورة الجديدة)
-     * بناءً على الصورة المرسلة - عرض المواقع مع المبالغ
+     * Premier rapport: Inventaire En Valeur (comme la nouvelle image)
+     * Basé sur l'image envoyée - affichage des sites avec les montants
      */
     private function createInventaireValeurSheet($spreadsheet, $dateFrom = null, $dateTo = null)
     {
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setTitle('Inventaire En Valeur');
         
-        // إعداد الأعمدة
+        // Configuration des colonnes
         $sheet->getColumnDimension('A')->setWidth(25);
         $sheet->getColumnDimension('B')->setWidth(20);
         
-        // العنوان الرئيسي
+        // Titre principal
         $sheet->setCellValue('A1', 'DJAFAAT AL JAOUDA');
         $sheet->mergeCells('A1:B1');
         $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(16);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
         
-        // تاريخ التقرير - استخدام التواريخ المطلوبة أو التاريخ الحالي
+        // Date du rapport - utilise les dates demandées ou la date actuelle
         if ($dateFrom && $dateTo) {
             $dateFromFormatted = Carbon::parse($dateFrom)->format('d/m/Y');
             $dateToFormatted = Carbon::parse($dateTo)->format('d/m/Y');
@@ -78,11 +78,11 @@ class ExcelReportsController extends Controller
         $sheet->mergeCells('A2:B2');
         $sheet->getStyle('A2')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
         
-        // عناوين الأعمدة
+        // Titres des colonnes
         $sheet->setCellValue('A4', 'Lieu');
         $sheet->setCellValue('B4', 'Valeur');
         
-        // تنسيق عناوين الأعمدة
+        // Formatage des titres de colonnes
         $headerStyle = [
             'font' => ['bold' => true],
             'borders' => [
@@ -97,14 +97,14 @@ class ExcelReportsController extends Controller
         ];
         $sheet->getStyle('A4:B4')->applyFromArray($headerStyle);
         
-        // حساب القيمة الإجمالية للمخزون
+        // Calcul de la valeur totale du stock
         $totalValue = DB::table('STOCK as s')
             ->join('ARTICLE as a', 's.ART_REF', '=', 'a.ART_REF')
             ->where('s.STK_QTE', '>', 0)
             ->selectRaw('SUM(s.STK_QTE * a.ART_PRIX_ACHAT) as total')
             ->value('total') ?? 0;
         
-        // البيانات حسب المواقع مع النسب المحددة
+        // Données par sites avec les pourcentages définis
         $locations = [
             ['name' => 'Magasins', 'percentage' => 35],
             ['name' => 'Congilateurs', 'percentage' => 15],
@@ -121,7 +121,7 @@ class ExcelReportsController extends Controller
             $sheet->setCellValue('A' . $row, $location['name']);
             $sheet->setCellValue('B' . $row, number_format($value, 2, '.', ','));
             
-            // تنسيق الصفوف
+            // Formatage des lignes
             $sheet->getStyle('A' . $row . ':B' . $row)->applyFromArray([
                 'borders' => [
                     'allBorders' => [
@@ -133,11 +133,11 @@ class ExcelReportsController extends Controller
             $row++;
         }
         
-        // المجموع
+        // Total
         $sheet->setCellValue('A' . $row, 'Total');
         $sheet->setCellValue('B' . $row, number_format($totalValue, 2, '.', ','));
         
-        // تنسيق صف المجموع
+        // Formatage de la ligne total
         $totalStyle = [
             'font' => ['bold' => true],
             'borders' => [
@@ -154,11 +154,11 @@ class ExcelReportsController extends Controller
     }
 
     /**
-     * حساب قيمة المخزون لموقع معين
+     * Calcul de la valeur du stock pour un site donné
      */
     private function calculerValeurStock($siteType)
     {
-        // في حال عدم وجود تصنيف المواقع في قاعدة البيانات، نحسب إجمالي القيمة مقسمة
+        // En cas d'absence de classification des sites dans la base de données, on calcule la valeur totale divisée
         $totalValue = DB::table('ARTICLE as a')
             ->leftJoin('STOCK as s', 'a.ART_REF', '=', 's.ART_REF')
             ->leftJoin('SOUS_FAMILLE as sf', 'a.SFM_REF', '=', 'sf.SFM_REF')
@@ -167,7 +167,7 @@ class ExcelReportsController extends Controller
             ->selectRaw('SUM(ISNULL(s.STK_QTE, 0) * ISNULL(a.ART_PRIX_ACHAT, 0)) as total_value')
             ->value('total_value') ?? 0;
 
-        // توزيع القيمة على المواقع المختلفة (يمكن تخصيصها حسب الحاجة)
+        // Répartition de la valeur sur les différents sites (peut être personnalisée selon les besoins)
         $distribution = [
             'MAGASIN' => 0.35,        // 35%
             'CONGILATEUR' => 0.15,    // 15%
@@ -181,20 +181,20 @@ class ExcelReportsController extends Controller
     }
 
     /**
-     * التقرير التفصيلي للجرد بالقيمة (النسخة الأصلية مع التفاصيل)
+     * Rapport détaillé d'inventaire par valeur (version originale avec détails)
      */
     private function createInventaireValeurDetailleSheet($spreadsheet)
     {
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setTitle('Inventaire Détaillé');
 
-        // العنوان الرئيسي مع التاريخ
+        // Titre principal avec date
         $sheet->setCellValue('A1', 'Inventaire En Valeur - Détaillé');
         $sheet->mergeCells('A1:F1');
         $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(16);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
 
-        // إضافة فترة التاريخ "Du... Au..."
+        // Ajout de la période de date "Du... Au..."
         $dateFrom = Carbon::now()->startOfMonth()->format('d/m/Y');
         $dateTo = Carbon::now()->format('d/m/Y');
         $sheet->setCellValue('A2', "Du {$dateFrom} Au {$dateTo}");
@@ -202,7 +202,7 @@ class ExcelReportsController extends Controller
         $sheet->getStyle('A2')->getFont()->setSize(12);
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
 
-        // رؤوس الأعمدة
+        // En-têtes de colonnes
         $headers = [
             'A4' => 'Désignation',
             'B4' => 'Famille',
@@ -221,11 +221,11 @@ class ExcelReportsController extends Controller
             ->setFillType(Fill::FILL_SOLID)
             ->setStartColor(new Color('D9D9D9'));
 
-        // إضافة حدود للعناوين
+        // Ajout des bordures pour les en-têtes
         $sheet->getStyle('A4:F4')->getBorders()->getAllBorders()
             ->setBorderStyle(Border::BORDER_THIN);
 
-        // استخراج البيانات
+        // Extraction des données
         $data = DB::table('ARTICLE as a')
             ->leftJoin('SOUS_FAMILLE as sf', 'a.SFM_REF', '=', 'sf.SFM_REF')
             ->leftJoin('FAMILLE as f', 'sf.FAM_REF', '=', 'f.FAM_REF')
@@ -253,7 +253,7 @@ class ExcelReportsController extends Controller
             $sheet->setCellValue('E' . $row, $item->prix_unitaire ?? 0);
             $sheet->setCellValue('F' . $row, $item->valeur_totale ?? 0);
             
-            // تنسيق الأرقام
+            // Formatage des nombres
             $sheet->getStyle('D' . $row)->getNumberFormat()
                 ->setFormatCode('#,##0.00');
             $sheet->getStyle('E' . $row)->getNumberFormat()
@@ -261,7 +261,7 @@ class ExcelReportsController extends Controller
             $sheet->getStyle('F' . $row)->getNumberFormat()
                 ->setFormatCode('#,##0.00');
             
-            // إضافة حدود للصفوف
+            // Ajout de bordures pour les lignes
             $sheet->getStyle('A' . $row . ':F' . $row)->getBorders()->getAllBorders()
                 ->setBorderStyle(Border::BORDER_THIN);
             
@@ -269,7 +269,7 @@ class ExcelReportsController extends Controller
             $row++;
         }
 
-        // صف المجموع
+        // Ligne total
         $sheet->setCellValue('A' . $row, 'TOTAL GÉNÉRAL');
         $sheet->mergeCells('A' . $row . ':E' . $row);
         $sheet->setCellValue('F' . $row, $totalValeur);
@@ -280,7 +280,7 @@ class ExcelReportsController extends Controller
         $sheet->getStyle('F' . $row)->getNumberFormat()
             ->setFormatCode('#,##0.00');
 
-        // تحديد عرض الأعمدة
+        // Définition de la largeur des colonnes
         $sheet->getColumnDimension('A')->setWidth(35);
         $sheet->getColumnDimension('B')->setWidth(20);
         $sheet->getColumnDimension('C')->setWidth(15);
@@ -290,21 +290,21 @@ class ExcelReportsController extends Controller
     }
 
     /**
-     * التقرير الثاني: État de réception
-     * بناءً على الصورة الثانية المرسلة
+     * Deuxième rapport: État de réception
+     * Basé sur la deuxième image envoyée
      */
     private function createEtatReceptionSheet($spreadsheet, $dateFrom = null, $dateTo = null)
     {
         $sheet = $spreadsheet->createSheet();
         $sheet->setTitle('État de Réception');
 
-        // العنوان الرئيسي
+        // Titre principal
         $sheet->setCellValue('A1', 'État de réception');
         $sheet->mergeCells('A1:I1');
         $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(16);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
 
-        // إضافة فترة التاريخ
+        // Ajout de la période de date
         if ($dateFrom && $dateTo) {
             $dateFromFormatted = Carbon::parse($dateFrom)->format('d/m/Y');
             $dateToFormatted = Carbon::parse($dateTo)->format('d/m/Y');
@@ -339,7 +339,7 @@ class ExcelReportsController extends Controller
             ->setFillType(Fill::FILL_SOLID)
             ->setStartColor(new Color('D9D9D9'));
 
-        // إضافة حدود للعناوين
+        // Ajout de bordures pour les en-têtes
         $sheet->getStyle('A4:I4')->getBorders()->getAllBorders()
             ->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -362,7 +362,7 @@ class ExcelReportsController extends Controller
             ])
             ->where('ff.FCF_VALIDE', 1);
 
-        // تطبيق فلترة التواريخ إذا تم تمريرها
+        // Application du filtrage par dates si elles sont transmises
         if ($dateFrom && $dateTo) {
             $query->whereBetween('ff.FCF_DATE', [$dateFrom, $dateTo]);
         }
@@ -385,12 +385,12 @@ class ExcelReportsController extends Controller
             $sheet->setCellValue('H' . $row, $reception->montant ?? 0);
             $sheet->setCellValue('I' . $row, $reception->observation ?? '');
 
-            // تنسيق الأرقام
+            // Formatage des nombres
             $sheet->getStyle('D' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
             $sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
             $sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 
-            // إضافة حدود للصفوف
+            // Ajout de bordures pour les lignes
             $sheet->getStyle('A' . $row . ':I' . $row)->getBorders()->getAllBorders()
                 ->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -398,7 +398,7 @@ class ExcelReportsController extends Controller
             $row++;
         }
 
-        // صف المجموع
+        // Ligne total
         $sheet->setCellValue('A' . $row, 'TOTAL GÉNÉRAL');
         $sheet->mergeCells('A' . $row . ':G' . $row);
         $sheet->setCellValue('H' . $row, $totalMontant);
@@ -420,21 +420,21 @@ class ExcelReportsController extends Controller
     }
 
     /**
-     * التقرير الثالث: État de Sorties
-     * بناءً على الصورة الثالثة المرسلة
+     * Troisième rapport: État de Sorties
+     * Basé sur la troisième image envoyée
      */
     private function createEtatSortieSheet($spreadsheet, $dateFrom = null, $dateTo = null)
     {
         $sheet = $spreadsheet->createSheet();
         $sheet->setTitle('État de Sorties');
 
-        // العنوان الرئيسي
+        // Titre principal
         $sheet->setCellValue('A1', 'État de Sorties');
         $sheet->mergeCells('A1:I1');
         $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(16);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
 
-        // إضافة فترة التاريخ - استخدام التواريخ الممررة أو التواريخ الافتراضية
+        // Ajout de la période de date - utilise les dates transmises ou les dates par défaut
         $displayDateFrom = $dateFrom ? Carbon::parse($dateFrom)->format('d/m/Y') : Carbon::now()->startOfMonth()->format('d/m/Y');
         $displayDateTo = $dateTo ? Carbon::parse($dateTo)->format('d/m/Y') : Carbon::now()->format('d/m/Y');
         $sheet->setCellValue('A2', "Du {$displayDateFrom} Au {$displayDateTo}");
@@ -463,11 +463,11 @@ class ExcelReportsController extends Controller
             ->setFillType(Fill::FILL_SOLID)
             ->setStartColor(new Color('D9D9D9'));
 
-        // إضافة حدود للعناوين
+        // Ajout de bordures pour les en-têtes
         $sheet->getStyle('A4:I4')->getBorders()->getAllBorders()
             ->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-        // استخراج بيانات المبيعات/الخروج من FACTURE_VNT مع فلترة التواريخ
+        // Extraction des données de ventes/sortie de FACTURE_VNT avec filtrage par dates
         $query = DB::table('FACTURE_VNT as fv')
             ->join('FACTURE_VNT_DETAIL as fvd', 'fv.FCTV_REF', '=', 'fvd.FCTV_REF')
             ->join('ARTICLE as a', 'fvd.ART_REF', '=', 'a.ART_REF')
@@ -487,7 +487,7 @@ class ExcelReportsController extends Controller
             ])
             ->where('fv.FCTV_VALIDE', 1);
 
-        // تطبيق فلترة التواريخ إذا تم تمريرها
+        // Application du filtrage par dates si elles sont transmises
         if ($dateFrom && $dateTo) {
             $query->whereBetween('fv.FCTV_DATE', [$dateFrom, $dateTo]);
         }
@@ -510,12 +510,12 @@ class ExcelReportsController extends Controller
             $sheet->setCellValue('H' . $row, $sortie->montant ?? 0);
             $sheet->setCellValue('I' . $row, $sortie->observation ?? '');
 
-            // تنسيق الأرقام
+            // Formatage des nombres
             $sheet->getStyle('D' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
             $sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
             $sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 
-            // إضافة حدود للصفوف
+            // Ajout de bordures pour les lignes
             $sheet->getStyle('A' . $row . ':I' . $row)->getBorders()->getAllBorders()
                 ->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -523,7 +523,7 @@ class ExcelReportsController extends Controller
             $row++;
         }
 
-        // صف المجموع
+        // Ligne total
         $sheet->setCellValue('A' . $row, 'TOTAL GÉNÉRAL');
         $sheet->mergeCells('A' . $row . ':G' . $row);
         $sheet->setCellValue('H' . $row, $totalMontant);
@@ -545,21 +545,21 @@ class ExcelReportsController extends Controller
     }
 
     /**
-     * التقرير الرابع: Inventaire Physique Par Article
-     * بناءً على الصورة الرابعة المرسلة
+     * Quatrième rapport: Inventaire Physique Par Article
+     * Basé sur la quatrième image envoyée
      */
     private function createInventairePhysiqueSheet($spreadsheet, $dateFrom = null, $dateTo = null)
     {
         $sheet = $spreadsheet->createSheet();
         $sheet->setTitle('Inventaire Physique');
 
-        // العنوان الرئيسي
+        // Titre principal
         $sheet->setCellValue('A1', 'Inventaire Physique Par Article');
         $sheet->mergeCells('A1:F1');
         $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(16);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
 
-        // إضافة فترة التاريخ - استخدام التواريخ الممررة أو التواريخ الافتراضية
+        // Ajout de la période de date - utilise les dates transmises ou les dates par défaut
         $displayDateFrom = $dateFrom ? Carbon::parse($dateFrom)->format('d/m/Y') : Carbon::now()->startOfMonth()->format('d/m/Y');
         $displayDateTo = $dateTo ? Carbon::parse($dateTo)->format('d/m/Y') : Carbon::now()->format('d/m/Y');
         $sheet->setCellValue('A2', "Du {$displayDateFrom} Au {$displayDateTo}");
@@ -585,17 +585,17 @@ class ExcelReportsController extends Controller
             ->setFillType(Fill::FILL_SOLID)
             ->setStartColor(new Color('D9D9D9'));
 
-        // إضافة حدود للعناوين
+        // Ajout de bordures pour les en-têtes
         $sheet->getStyle('A4:F4')->getBorders()->getAllBorders()
             ->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-        // استخراج بيانات الجرد الفيزيائي مع حساب الكميات
+        // Extraction des données d'inventaire physique avec calcul des quantités
         $inventaire = DB::table('ARTICLE as a')
             ->leftJoin('STOCK as s', 'a.ART_REF', '=', 's.ART_REF')
             ->leftJoin('SOUS_FAMILLE as sf', 'a.SFM_REF', '=', 'sf.SFM_REF')
             ->leftJoin('FAMILLE as f', 'sf.FAM_REF', '=', 'f.FAM_REF')
             ->select([
-                'a.ART_REF as art_ref',          // إضافة ART_REF
+                'a.ART_REF as art_ref',          // Ajout ART_REF
                 'a.ART_DESIGNATION as designation',
                 'a.UNM_ABR as unite',
                 's.STK_QTE as stock_final',
@@ -613,10 +613,10 @@ class ExcelReportsController extends Controller
         foreach ($inventaire as $item) {
             $sheet->setCellValue('A' . $row, $item->designation ?? '');
             
-            // حساب الكميات الداخلة مع فلترة التواريخ
+            // Calcul des quantités entrées avec filtrage par dates
             $queryEntree = DB::table('FACTURE_FRS_DETAIL as ffd')
                 ->join('FACTURE_FOURNISSEUR as ff', 'ffd.FCF_REF', '=', 'ff.FCF_REF')
-                ->where('ffd.ART_REF', $item->art_ref) // استخدام ART_REF الصحيح
+                ->where('ffd.ART_REF', $item->art_ref) // Utilisation de l'ART_REF correct
                 ->where('ff.FCF_VALIDE', 1);
             
             if ($dateFrom && $dateTo) {
@@ -629,10 +629,10 @@ class ExcelReportsController extends Controller
                 $quantiteEntree = 0;
             }
                 
-            // حساب الكميات الخارجة مع فلترة التواريخ
+            // Calcul des quantités sorties avec filtrage par dates
             $querySortie = DB::table('FACTURE_VNT_DETAIL as fvd')
                 ->join('FACTURE_VNT as fv', 'fvd.FCTV_REF', '=', 'fv.FCTV_REF')
-                ->where('fvd.ART_REF', $item->art_ref) // استخدام ART_REF الصحيح
+                ->where('fvd.ART_REF', $item->art_ref) // Utilisation de l'ART_REF correct
                 ->where('fv.FCTV_VALIDE', 1);
             
             if ($dateFrom && $dateTo) {
@@ -651,12 +651,12 @@ class ExcelReportsController extends Controller
             $sheet->setCellValue('E' . $row, $item->stock_final ?? 0);
             $sheet->setCellValue('F' . $row, $item->observation ?? '');
 
-            // تنسيق الأرقام
+            // Formatage des nombres
             $sheet->getStyle('B' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
             $sheet->getStyle('C' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
             $sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 
-            // إضافة حدود للصفوف
+            // Ajout de bordures pour les lignes
             $sheet->getStyle('A' . $row . ':F' . $row)->getBorders()->getAllBorders()
                 ->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -672,7 +672,7 @@ class ExcelReportsController extends Controller
     }
 
     /**
-     * تصدير ملف Excel
+     * Export du fichier Excel
      */
     private function exportExcelFile($spreadsheet, $fileName)
     {
@@ -690,7 +690,7 @@ class ExcelReportsController extends Controller
     }
 
     /**
-     * دوال الاختبار للتقارير المنفردة
+     * Fonctions de test pour les rapports individuels
      */
     public function testInventaireValeur()
     {
@@ -731,7 +731,7 @@ class ExcelReportsController extends Controller
     }
 
     /**
-     * عرض صفحة الاختبار
+     * Affichage de la page de test
      */
     public function showTestPage()
     {
@@ -739,7 +739,7 @@ class ExcelReportsController extends Controller
     }
 
     /**
-     * عرض نموذج التقرير المخصص (للمتوافقية مع المسارات القديمة)
+     * Affichage du formulaire de rapport personnalisé (pour compatibilité avec les anciens routes)
      */
     // public function showCustomReportForm()
     // {
@@ -748,7 +748,7 @@ class ExcelReportsController extends Controller
 
 
     /**
-     * حساب نطاق التواريخ بناءً على الفترة المختارة
+     * Calcul de la plage de dates basé sur la période choisie
      */
     private function calculateDateRange($period, $dateFrom = null, $dateTo = null)
     {
@@ -780,30 +780,30 @@ class ExcelReportsController extends Controller
     }
 
     /**
-     * توليد تقرير مخصص بناءً على المعاملات المدخلة
+     * Génération de rapport personnalisé basé sur les paramètres saisis
      */
     public function generateCustomReport(Request $request)
     {
         try {
-            // إعداد الوقت والذاكرة
+            // Configuration du temps et de la mémoire
             set_time_limit(600);
             ini_set('memory_limit', '1024M');
             
-            // التحقق من صحة البيانات
+            // Validation des données
             $request->validate([
                 'report_type' => 'required|string|in:papier_travail,inventory_value,physical_inventory,sales_output,reception_status',
                 'period' => 'required|string|in:today,this_week,this_month,last_month,custom',
                 'date_from' => 'nullable|date|before_or_equal:date_to',
                 'date_to' => 'nullable|date|after_or_equal:date_from',
             ], [
-                'report_type.required' => 'يجب اختيار نوع التقرير',
-                'report_type.in' => 'نوع التقرير المختار غير صحيح',
-                'period.required' => 'يجب اختيار الفترة الزمنية',
-                'date_from.before_or_equal' => 'تاريخ البداية يجب أن يكون قبل أو يساوي تاريخ النهاية',
-                'date_to.after_or_equal' => 'تاريخ النهاية يجب أن يكون بعد أو يساوي تاريخ البداية',
+                'report_type.required' => 'Vous devez choisir le type de rapport',
+                'report_type.in' => 'Le type de rapport sélectionné n\'est pas valide',
+                'period.required' => 'Vous devez choisir la période',
+                'date_from.before_or_equal' => 'La date de début doit être antérieure ou égale à la date de fin',
+                'date_to.after_or_equal' => 'La date de fin doit être postérieure ou égale à la date de début',
             ]);
             
-            // حساب نطاق التواريخ
+            // Calcul de la plage de dates
             [$dateFrom, $dateTo] = $this->calculateDateRange(
                 $request->period,
                 $request->date_from,
@@ -813,10 +813,10 @@ class ExcelReportsController extends Controller
             $spreadsheet = new Spreadsheet();
             $reportType = $request->report_type;
             
-            // إنشاء التقرير المطلوب
+            // Création du rapport demandé
             switch ($reportType) {
                 case 'papier_travail':
-                    // إنشاء التقرير الشامل الأربعة
+                    // Création du rapport complet des quatre
                     $this->createInventaireValeurSheet($spreadsheet, $dateFrom, $dateTo);
                     $this->createEtatReceptionSheet($spreadsheet, $dateFrom, $dateTo);
                     $this->createEtatSortieSheet($spreadsheet, $dateFrom, $dateTo);
@@ -845,7 +845,7 @@ class ExcelReportsController extends Controller
                     break;
                     
                 default:
-                    throw new \Exception('نوع التقرير غير مدعوم');
+                    throw new \Exception('Type de rapport non supporté');
             }
             
             $spreadsheet->setActiveSheetIndex(0);
@@ -855,7 +855,7 @@ class ExcelReportsController extends Controller
         } catch (\Illuminate\Validation\ValidationException $e) {
             return back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
-            return back()->with('error', 'حدث خطأ في إنشاء التقرير: ' . $e->getMessage())->withInput();
+            return back()->with('error', 'Une erreur s\'est produite lors de la création du rapport: ' . $e->getMessage())->withInput();
         }
     }
 }
