@@ -197,7 +197,7 @@
     {{-- Messages de validation --}}
     @if($errors->any())
     <div class="alert alert-danger alert-dismissible fade show border-left-danger" role="alert">
-        <h6><i class="fas fa-exclamation-triangle"></i> أخطاء في التحقق من البيانات:</h6>
+        <h6><i class="fas fa-exclamation-triangle"></i> Erreurs de validation des données :</h6>
         <ul class="mb-0">
             @foreach($errors->all() as $error)
                 <li>{{ $error }}</li>
@@ -233,11 +233,11 @@
         
         <div class="row">
             <div class="col-xl-8 col-lg-7">
-                <!-- المعلومات الأساسية -->
+                <!-- Informations de base -->
                 <div class="card shadow mb-4 fade-in hover-shadow">
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                         <h6 class="m-0 font-weight-bold text-primary">
-                            <i class="fas fa-info-circle"></i> المعلومات الأساسية
+                            <i class="fas fa-info-circle"></i> Informations de base
                         </h6>
                     </div>
                     <div class="card-body">
@@ -245,16 +245,16 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="ART_REF" class="form-label font-weight-bold text-dark">
-                                        كود المنتج <span class="required">*</span>
+                                        Code Produit <span class="required">*</span>
                                     </label>
                                     <input type="text" class="form-control @error('ART_REF') is-invalid @enderror" 
                                            id="ART_REF" name="ART_REF" 
                                            value="{{ old('ART_REF', $nextArticleRef ?? 'ART' . date('YmdHis')) }}" 
                                            required readonly
-                                           placeholder="مثال: ART001">
+                                           placeholder="Ex: ART001">
                                     <small class="help-text">
                                         <i class="fas fa-info-circle text-primary"></i>
-                                        سيتم إنشاء كود فريد تلقائياً
+                                        Un code unique sera généré automatiquement
                                     </small>
                                     @error('ART_REF')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -264,11 +264,11 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="ART_DESIGNATION" class="form-label font-weight-bold text-dark">
-                                        اسم المنتج <span class="required">*</span>
+                                        Nom du Produit <span class="required">*</span>
                                     </label>
                                     <input type="text" class="form-control @error('ART_DESIGNATION') is-invalid @enderror" 
                                            id="ART_DESIGNATION" name="ART_DESIGNATION" value="{{ old('ART_DESIGNATION') }}" required
-                                           placeholder="أدخل اسم المنتج">
+                                           placeholder="Saisissez le nom du produit">
                                     @error('ART_DESIGNATION')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -279,10 +279,10 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="famille" class="form-label font-weight-bold text-dark">العائلة</label>
+                                    <label for="famille" class="form-label font-weight-bold text-dark">Famille</label>
                                     <select class="form-control @error('famille') is-invalid @enderror" 
                                             id="famille" name="famille">
-                                        <option value="">اختر العائلة</option>
+                                        <option value="">Choisir la famille</option>
                                         @foreach($familles as $famille)
                                             <option value="{{ $famille->FAM_REF }}" 
                                                     {{ old('famille') == $famille->FAM_REF ? 'selected' : '' }}>
@@ -297,10 +297,10 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="sous_famille" class="form-label font-weight-bold text-dark">الفئة الفرعية</label>
+                                    <label for="sous_famille" class="form-label font-weight-bold text-dark">Sous-Famille</label>
                                     <select class="form-control @error('sous_famille') is-invalid @enderror" 
                                             id="sous_famille" name="sous_famille">
-                                        <option value="">اختر الفئة الفرعية</option>
+                                        <option value="">Choisir la sous-famille</option>
                                         @foreach($sousFamilles as $sousFamille)
                                             <option value="{{ $sousFamille->SFM_REF }}" 
                                                     data-famille="{{ $sousFamille->FAM_REF }}"
@@ -316,10 +316,10 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="unite_mesure" class="form-label font-weight-bold text-dark">وحدة القياس</label>
+                                    <label for="unite_mesure" class="form-label font-weight-bold text-dark">Unité de Mesure</label>
                                     <select class="form-control @error('unite_mesure') is-invalid @enderror" 
                                             id="unite_mesure" name="unite_mesure">
-                                        <option value="">اختر وحدة القياس</option>
+                                        <option value="">Choisir l'unité de mesure</option>
                                         @foreach($unitesMesure as $unite)
                                             <option value="{{ $unite->UNM_ABR }}" 
                                                     {{ old('unite_mesure') == $unite->UNM_ABR ? 'selected' : '' }}>
@@ -336,11 +336,11 @@
                     </div>
                 </div>
 
-                <!-- معلومات الأسعار -->
+                <!-- Informations prix -->
                 <div class="card shadow mb-4 fade-in hover-shadow">
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                         <h6 class="m-0 font-weight-bold text-primary">
-                            <i class="fas fa-dollar-sign"></i> معلومات الأسعار
+                            <i class="fas fa-dollar-sign"></i> Informations prix
                         </h6>
                     </div>
                     <div class="card-body">
@@ -348,14 +348,14 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="ART_PRIX_ACHAT" class="form-label font-weight-bold text-dark">
-                                        سعر الشراء <span class="required">*</span>
+                                        Prix d'Achat <span class="required">*</span>
                                     </label>
                                     <div class="input-group">
                                         <input type="number" class="form-control @error('ART_PRIX_ACHAT') is-invalid @enderror" 
                                                id="ART_PRIX_ACHAT" name="ART_PRIX_ACHAT" value="{{ old('ART_PRIX_ACHAT') }}" 
                                                step="0.01" min="0" required placeholder="0.00">
                                         <div class="input-group-append">
-                                            <span class="input-group-text bg-primary text-white">دج</span>
+                                            <span class="input-group-text bg-primary text-white">DH</span>
                                         </div>
                                     </div>
                                     @error('ART_PRIX_ACHAT')
@@ -366,14 +366,14 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="ART_PRIX_VENTE" class="form-label font-weight-bold text-dark">
-                                        سعر البيع <span class="required">*</span>
+                                        Prix de Vente <span class="required">*</span>
                                     </label>
                                     <div class="input-group">
                                         <input type="number" class="form-control @error('ART_PRIX_VENTE') is-invalid @enderror" 
                                                id="ART_PRIX_VENTE" name="ART_PRIX_VENTE" value="{{ old('ART_PRIX_VENTE') }}" 
                                                step="0.01" min="0" required placeholder="0.00">
                                         <div class="input-group-append">
-                                            <span class="input-group-text bg-primary text-white">دج</span>
+                                            <span class="input-group-text bg-primary text-white">DH</span>
                                         </div>
                                     </div>
                                     @error('ART_PRIX_VENTE')
@@ -383,7 +383,7 @@
                             </div>
                         </div>
 
-                        <!-- حساب الهامش تلقائياً -->
+                        <!-- Calcul de marge automatique -->
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="price-preview" id="profit-margin" style="display: none;">
@@ -395,11 +395,11 @@
                     </div>
                 </div>
 
-                <!-- إدارة المخزون -->
+                <!-- Gestion du stock -->
                 <div class="card shadow mb-4 fade-in hover-shadow">
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                         <h6 class="m-0 font-weight-bold text-primary">
-                            <i class="fas fa-warehouse"></i> إدارة المخزون
+                            <i class="fas fa-warehouse"></i> Gestion du stock
                         </h6>
                     </div>
                     <div class="card-body">
@@ -410,7 +410,7 @@
                                            name="ART_STOCKABLE" value="1" 
                                            {{ old('ART_STOCKABLE') ? 'checked' : '' }}>
                                     <label class="custom-control-label font-weight-bold" for="ART_STOCKABLE">
-                                        منتج قابل للتخزين (يتطلب متابعة المخزون)
+                                        Produit stockable (nécessite un suivi de stock)
                                     </label>
                                 </div>
                             </div>
@@ -419,13 +419,13 @@
                         <div id="stock-fields" style="display: {{ old('ART_STOCKABLE') ? 'block' : 'none' }};">
                             <div class="alert alert-warning border-left-warning">
                                 <i class="fas fa-info-circle me-2"></i>
-                                <strong>ملاحظة:</strong> عند تفعيل المخزون، سيتم إنشاء سجل مخزون أولي للمنتج.
+                                <strong>Note :</strong> En activant le stock, un enregistrement de stock initial sera créé pour le produit.
                             </div>
 
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="mb-3">
-                                        <label for="initial_stock" class="form-label font-weight-bold text-dark">المخزون الأولي</label>
+                                        <label for="initial_stock" class="form-label font-weight-bold text-dark">Stock Initial</label>
                                         <input type="number" class="form-control @error('initial_stock') is-invalid @enderror" 
                                                id="initial_stock" name="initial_stock" value="{{ old('initial_stock', 0) }}" 
                                                min="0" placeholder="0">
@@ -436,7 +436,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="mb-3">
-                                        <label for="ART_STOCK_MIN" class="form-label font-weight-bold text-dark">الحد الأدنى للمخزون</label>
+                                        <label for="ART_STOCK_MIN" class="form-label font-weight-bold text-dark">Stock Minimum</label>
                                         <input type="number" class="form-control @error('ART_STOCK_MIN') is-invalid @enderror" 
                                                id="ART_STOCK_MIN" name="ART_STOCK_MIN" value="{{ old('ART_STOCK_MIN', 5) }}" 
                                                min="0" placeholder="5">
@@ -447,7 +447,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="mb-3">
-                                        <label for="ART_STOCK_MAX" class="form-label font-weight-bold text-dark">الحد الأقصى للمخزون</label>
+                                        <label for="ART_STOCK_MAX" class="form-label font-weight-bold text-dark">Stock Maximum</label>
                                         <input type="number" class="form-control @error('ART_STOCK_MAX') is-invalid @enderror" 
                                                id="ART_STOCK_MAX" name="ART_STOCK_MAX" value="{{ old('ART_STOCK_MAX', 100) }}" 
                                                min="0" placeholder="100">
@@ -462,13 +462,13 @@
                 </div>
             </div>
 
-            <!-- الشريط الجانبي -->
+            <!-- Barre latérale -->
             <div class="col-xl-4 col-lg-5">
-                <!-- إعدادات المنتج -->
+                <!-- Paramètres du produit -->
                 <div class="card shadow mb-4 fade-in hover-shadow">
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                         <h6 class="m-0 font-weight-bold text-primary">
-                            <i class="fas fa-cog"></i> إعدادات المنتج
+                            <i class="fas fa-cog"></i> Paramètres du produit
                         </h6>
                     </div>
                     <div class="card-body">
@@ -478,7 +478,7 @@
                                        name="ART_VENTE" value="1" 
                                        {{ old('ART_VENTE', 1) ? 'checked' : '' }}>
                                 <label class="custom-control-label font-weight-bold" for="ART_VENTE">
-                                    منتج نشط (متاح للبيع)
+                                    Produit actif (disponible à la vente)
                                 </label>
                             </div>
                         </div>
@@ -489,27 +489,27 @@
                                        name="IsMenu" value="1" 
                                        {{ old('IsMenu') ? 'checked' : '' }}>
                                 <label class="custom-control-label font-weight-bold" for="IsMenu">
-                                    منتج قائمة طعام (وجبة أو طبق)
+                                    Produit menu restaurant (repas ou plat)
                                 </label>
                             </div>
-                            <small class="help-text">منتجات مخصصة للمطاعم أو القوائم</small>
+                            <small class="help-text">Produits dédiés aux restaurants ou menus</small>
                         </div>
                     </div>
                 </div>
 
-                <!-- الملاحظات والوصف -->
+                <!-- Notes et description -->
                 <div class="card shadow mb-4 fade-in hover-shadow">
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                         <h6 class="m-0 font-weight-bold text-primary">
-                            <i class="fas fa-sticky-note"></i> الملاحظات والوصف
+                            <i class="fas fa-sticky-note"></i> Notes et description
                         </h6>
                     </div>
                     <div class="card-body">
                         <div class="mb-3">
-                            <label for="ART_DESCRIPTION" class="form-label font-weight-bold text-dark">وصف المنتج</label>
+                            <label for="ART_DESCRIPTION" class="form-label font-weight-bold text-dark">Description du produit</label>
                             <textarea class="form-control @error('ART_DESCRIPTION') is-invalid @enderror" 
                                       id="ART_DESCRIPTION" name="ART_DESCRIPTION" rows="4" 
-                                      placeholder="وصف تفصيلي للمنتج (اختياري)">{{ old('ART_DESCRIPTION') }}</textarea>
+                                      placeholder="Description détaillée du produit (optionnel)">{{ old('ART_DESCRIPTION') }}</textarea>
                             @error('ART_DESCRIPTION')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -517,18 +517,18 @@
                     </div>
                 </div>
 
-                <!-- معاينة سريعة -->
+                <!-- Aperçu rapide -->
                 <div class="card shadow mb-4 fade-in hover-shadow">
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                         <h6 class="m-0 font-weight-bold text-primary">
-                            <i class="fas fa-eye"></i> معاينة سريعة
+                            <i class="fas fa-eye"></i> Aperçu rapide
                         </h6>
                     </div>
                     <div class="card-body">
-                        <h6 class="card-title font-weight-bold" id="preview-name">اسم المنتج</h6>
+                        <h6 class="card-title font-weight-bold" id="preview-name">Nom du produit</h6>
                         <p class="card-text">
-                            <small class="text-muted">الكود: <span id="preview-ref">-</span></small><br>
-                            <strong>السعر: <span id="preview-price">0.00</span> دج</strong>
+                            <small class="text-muted">Code : <span id="preview-ref">-</span></small><br>
+                            <strong>Prix : <span id="preview-price">0.00</span> DH</strong>
                         </p>
                         <div id="preview-badges"></div>
                     </div>
@@ -536,28 +536,28 @@
             </div>
         </div>
 
-        <!-- أزرار الحفظ -->
+        <!-- Boutons de sauvegarde -->
         <div class="row">
             <div class="col-12">
                 <div class="card shadow mb-4 fade-in">
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                         <h6 class="m-0 font-weight-bold text-primary">
-                            <i class="fas fa-save"></i> حفظ المنتج
+                            <i class="fas fa-save"></i> Sauvegarder le produit
                         </h6>
                     </div>
                     <div class="card-body">
                         <div class="d-flex justify-content-between flex-wrap">
                             <div class="mb-2">
                                 <button type="submit" class="btn btn-primary btn-lg mr-2" id="saveBtn">
-                                    <i class="fas fa-save me-2"></i> حفظ المنتج
+                                    <i class="fas fa-save me-2"></i> Sauvegarder le produit
                                 </button>
                                 <button type="submit" name="save_and_new" value="1" class="btn btn-success btn-lg mr-2" id="saveNewBtn">
-                                    <i class="fas fa-plus me-2"></i> حفظ وإضافة جديد
+                                    <i class="fas fa-plus me-2"></i> Sauvegarder et ajouter nouveau
                                 </button>
                             </div>
                             <div class="mb-2">
                                 <a href="{{ route('admin.articles.index') }}" class="btn btn-secondary btn-lg">
-                                    <i class="fas fa-times me-2"></i> إلغاء
+                                    <i class="fas fa-times me-2"></i> Annuler
                                 </a>
                             </div>
                         </div>
@@ -573,7 +573,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // تحسين عرض/إخفاء حقول المخزون
+        // Amélioration affichage/masquage des champs de stock
         const stockableCheckbox = document.getElementById('ART_STOCKABLE');
         const stockFields = document.getElementById('stock-fields');
         
@@ -596,10 +596,10 @@
             toggleStockFields(this.checked, true);
         });
 
-        // تشغيل التحقق الأولي
+        // Activer la vérification initiale
         toggleStockFields(stockableCheckbox.checked, false);
 
-        // تحسين فلترة الفئات الفرعية
+        // Amélioration du filtrage des sous-familles
         const familleSelect = document.getElementById('famille');
         const sousFamilleSelect = document.getElementById('sous_famille');
         const allSousFamilles = Array.from(sousFamilleSelect.options);
@@ -610,7 +610,7 @@
             sousFamilleSelect.disabled = true;
             
             setTimeout(() => {
-                sousFamilleSelect.innerHTML = '<option value="">اختر الفئة الفرعية</option>';
+                sousFamilleSelect.innerHTML = '<option value="">Choisir la sous-famille</option>';
                 
                 allSousFamilles.forEach(function(option) {
                     if (option.value === '' || option.dataset.famille === selectedFamille) {
@@ -622,7 +622,7 @@
             }, 200);
         });
 
-        // حساب هامش الربح المحسن
+        // Calcul de marge bénéficiaire amélioré
         const prixAchatInput = document.getElementById('ART_PRIX_ACHAT');
         const prixVenteInput = document.getElementById('ART_PRIX_VENTE');
         const marginDiv = document.getElementById('profit-margin');
@@ -639,10 +639,10 @@
                 marginText.innerHTML = `
                     <div class="d-flex align-items-center">
                         <div class="me-4">
-                            <strong>الهامش:</strong> <span class="badge badge-primary">${margin.toFixed(1)}%</span>
+                            <strong>Marge :</strong> <span class="badge badge-primary">${margin.toFixed(1)}%</span>
                         </div>
                         <div>
-                            <strong>الربح:</strong> <span class="badge badge-success">${profit.toFixed(2)} دج</span>
+                            <strong>Bénéfice :</strong> <span class="badge badge-success">${profit.toFixed(2)} DH</span>
                         </div>
                     </div>
                 `;
@@ -651,7 +651,7 @@
                     $(marginDiv).fadeIn(400);
                 }
                 
-                // تغيير اللون حسب الهامش
+                // Changer la couleur selon la marge
                 marginDiv.className = 'price-preview border-left-' + (margin < 0 ? 'danger' : margin < 10 ? 'warning' : 'success');
             } else {
                 if (marginDiv.style.display === 'block') {
@@ -663,14 +663,14 @@
         prixAchatInput.addEventListener('input', calculateMargin);
         prixVenteInput.addEventListener('input', calculateMargin);
 
-        // معاينة محسنة مع تأثيرات
+        // Aperçu amélioré avec effets
         const previewName = document.getElementById('preview-name');
         const previewRef = document.getElementById('preview-ref');
         const previewPrice = document.getElementById('preview-price');
         const previewBadges = document.getElementById('preview-badges');
         
         function updatePreview() {
-            const name = document.getElementById('ART_DESIGNATION').value || 'اسم المنتج';
+            const name = document.getElementById('ART_DESIGNATION').value || 'Nom du produit';
             const ref = document.getElementById('ART_REF').value || '-';
             const price = document.getElementById('ART_PRIX_VENTE').value || '0.00';
             const isActive = document.getElementById('ART_VENTE').checked;
@@ -683,23 +683,23 @@
             
             let badges = '';
             if (isActive) {
-                badges += '<span class="badge badge-success mr-1 mb-1"><span class="stock-indicator active"></span>نشط</span>';
+                badges += '<span class="badge badge-success mr-1 mb-1"><span class="stock-indicator active"></span>Actif</span>';
             } else {
-                badges += '<span class="badge badge-danger mr-1 mb-1"><span class="stock-indicator inactive"></span>غير نشط</span>';
+                badges += '<span class="badge badge-danger mr-1 mb-1"><span class="stock-indicator inactive"></span>Inactif</span>';
             }
             
             if (isMenu) {
-                badges += '<span class="badge badge-warning mr-1 mb-1">قائمة طعام</span>';
+                badges += '<span class="badge badge-warning mr-1 mb-1">Menu Restaurant</span>';
             }
             
             if (isStockable) {
-                badges += '<span class="badge badge-info mr-1 mb-1">قابل للتخزين</span>';
+                badges += '<span class="badge badge-info mr-1 mb-1">Stockable</span>';
             }
             
             previewBadges.innerHTML = badges;
         }
         
-        // ربط أحداث التحديث
+        // Lier les événements de mise à jour
         ['ART_DESIGNATION', 'ART_REF', 'ART_PRIX_VENTE', 'ART_VENTE', 'IsMenu', 'ART_STOCKABLE'].forEach(id => {
             const element = document.getElementById(id);
             if (element) {
@@ -707,10 +707,10 @@
             }
         });
 
-        // تشغيل المعاينة الأولى
+        // Lancer le premier aperçu
         updatePreview();
 
-        // تحسين التحقق من صحة النموذج
+        // Amélioration de la validation du formulaire
         document.getElementById('productForm').addEventListener('submit', function(e) {
             const stockableCheckbox = document.getElementById('ART_STOCKABLE');
             const stockMin = parseInt(document.getElementById('ART_STOCK_MIN').value) || 0;
@@ -720,15 +720,15 @@
                 e.preventDefault();
                 Swal.fire({
                     icon: 'warning',
-                    title: 'خطأ في البيانات',
-                    text: 'الحد الأدنى للمخزون يجب أن يكون أقل من الحد الأقصى',
-                    confirmButtonText: 'فهمت',
+                    title: 'Erreur dans les données',
+                    text: 'Le stock minimum doit être inférieur au stock maximum',
+                    confirmButtonText: 'J\'ai compris',
                     confirmButtonColor: '#4e73df'
                 });
                 return false;
             }
             
-            // التحقق من الحقول المطلوبة
+            // Vérifier les champs requis
             const artDesignation = document.getElementById('ART_DESIGNATION').value.trim();
             const artPrixVente = document.getElementById('ART_PRIX_VENTE').value;
             const artPrixAchat = document.getElementById('ART_PRIX_ACHAT').value;
@@ -737,9 +737,9 @@
                 e.preventDefault();
                 Swal.fire({
                     icon: 'error',
-                    title: 'حقل مطلوب',
-                    text: 'يرجى إدخال اسم المنتج',
-                    confirmButtonText: 'فهمت',
+                    title: 'Champ requis',
+                    text: 'Veuillez saisir le nom du produit',
+                    confirmButtonText: 'J\'ai compris',
                     confirmButtonColor: '#4e73df'
                 });
                 document.getElementById('ART_DESIGNATION').focus();
@@ -750,9 +750,9 @@
                 e.preventDefault();
                 Swal.fire({
                     icon: 'error',
-                    title: 'حقل مطلوب',
-                    text: 'يرجى إدخال سعر البيع',
-                    confirmButtonText: 'فهمت',
+                    title: 'Champ requis',
+                    text: 'Veuillez saisir le prix de vente',
+                    confirmButtonText: 'J\'ai compris',
                     confirmButtonColor: '#4e73df'
                 });
                 document.getElementById('ART_PRIX_VENTE').focus();
@@ -763,26 +763,26 @@
                 e.preventDefault();
                 Swal.fire({
                     icon: 'error',
-                    title: 'حقل مطلوب',
-                    text: 'يرجى إدخال سعر الشراء',
-                    confirmButtonText: 'فهمت',
+                    title: 'Champ requis',
+                    text: 'Veuillez saisir le prix d\'achat',
+                    confirmButtonText: 'J\'ai compris',
                     confirmButtonColor: '#4e73df'
                 });
                 document.getElementById('ART_PRIX_ACHAT').focus();
                 return false;
             }
             
-            // تأثير تحميل للأزرار
+            // Effet de chargement pour les boutons
             const submitBtns = this.querySelectorAll('button[type="submit"]');
             submitBtns.forEach((btn) => {
                 btn.disabled = true;
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>جاري الحفظ...';
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Sauvegarde en cours...';
             });
             
-            // رسالة تأكيد
+            // Message de confirmation
             Swal.fire({
-                title: 'جاري حفظ المنتج...',
-                text: 'يرجى الانتظار',
+                title: 'Sauvegarde du produit en cours...',
+                text: 'Veuillez patienter',
                 icon: 'info',
                 allowOutsideClick: false,
                 showConfirmButton: false,
@@ -792,12 +792,12 @@
             });
         });
 
-        // تأثيرات fade-in للكروت
+        // Effets fade-in pour les cartes
         $('.fade-in').each(function(i) {
             $(this).delay(i * 100).animate({opacity: 1}, 600);
         });
 
-        // تحسين أداء الحقول النصية مع debouncing
+        // Amélioration des performances des champs texte avec debouncing
         function debounce(func, wait) {
             let timeout;
             return function executedFunction(...args) {
@@ -813,7 +813,7 @@
         const debouncedUpdatePreview = debounce(updatePreview, 300);
         const debouncedCalculateMargin = debounce(calculateMargin, 300);
 
-        // ربط الـ debounced functions
+        // Lier les fonctions debounced
         ['ART_DESIGNATION', 'ART_REF'].forEach(id => {
             const element = document.getElementById(id);
             if (element) {

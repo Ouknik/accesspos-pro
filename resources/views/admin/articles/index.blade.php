@@ -1,358 +1,545 @@
 @extends('layouts.sb-admin')
 
-@section('title', 'Gestion des produits')
+@section('title', 'Gestion des Produits - AccessPos Pro')
 
-@section('styles')
-<style>
-    .badge-status-active { background-color: #28a745; }
-    .badge-status-inactive { background-color: #dc3545; }
-    .badge-stock-low { background-color: #ffc107; color: #000; }
-    .badge-stock-ok { background-color: #28a745; }
-    .card-stats { transition: transform 0.2s; }
-    .card-stats:hover { transform: translateY(-5px); }
-    .table-actions .btn { margin: 0 2px; }
-    .search-section { background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px; }
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
-</style>
+@section('page-heading')
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h1 class="h3 mb-0 text-gray-800">
+            <i class="fas fa-boxes"></i>
+            Gestion des Produits
+        </h1>
+        <p class="mb-0 text-muted">Gestion complète de tous les produits et articles</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="{{ route('admin.articles.create') }}" class="btn btn-primary btn-sm">
+            <i class="fas fa-plus"></i>
+            Ajouter un Produit
+        </a>
+    </div>
+</div>
 @endsection
 
 @section('content')
-<div class="container-fluid">
-    <!-- En-tête de la page -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h1 class="h3 mb-0">Gestion des produits</h1>
-            <p class="text-muted">Gestion complète de tous les produits et articles</p>
-        </div>
-        <div>
-            <a href="{{ route('admin.articles.create') }}" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Ajouter un nouveau produit
-            </a>
-            <a href="{{ route('admin.articles.analytics') }}" class="btn btn-info">
-                <i class="fas fa-chart-bar"></i> Analyses
-            </a>
-        </div>
+
+{{-- Export Buttons - Moved to main content --}}
+<div class="d-flex justify-content-end mb-4">
+    <div class="btn-group" role="group">
+        <a href="{{ route('admin.articles.export.excel', request()->query()) }}" 
+           class="btn btn-success btn-sm" 
+           target="_blank"
+           title="Exporter vers Excel">
+            <i class="fas fa-file-excel"></i>
+            Excel
+        </a>
+        
+        <a href="{{ route('admin.articles.export.pdf', request()->query()) }}" 
+           class="btn btn-danger btn-sm" 
+           target="_blank"
+           title="Exporter vers PDF">
+            <i class="fas fa-file-pdf"></i>
+            PDF
+        </a>
+        
+        <a href="{{ route('admin.articles.export.print', request()->query()) }}" 
+           class="btn btn-secondary btn-sm" 
+           target="_blank"
+           title="Imprimer la liste">
+            <i class="fas fa-print"></i>
+            Print
+        </a>
     </div>
+</div>
 
-    <!-- إحصائيات سريعة -->
-    <div class="stats-grid">
-        <div class="card text-white bg-primary card-stats">
+{{-- Statistiques Rapides --}}
+<div class="row mb-4">
+    
+    {{-- Total Produits --}}
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
             <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <h5 class="card-title">Total produits</h5>
-                        <h2 class="mb-0">{{ $stats['total'] ?? 0 }}</h2>
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            Total Produits
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            {{ $stats['total'] ?? 0 }}
+                        </div>
                     </div>
-                    <div class="align-self-center">
-                        <i class="fas fa-boxes fa-2x"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card text-white bg-success card-stats">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <h5 class="card-title">Produits actifs</h5>
-                        <h2 class="mb-0">{{ $stats['active'] ?? 0 }}</h2>
-                    </div>
-                    <div class="align-self-center">
-                        <i class="fas fa-check-circle fa-2x"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card text-white bg-warning card-stats">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <h5 class="card-title">Stock faible</h5>
-                        <h2 class="mb-0">{{ $stats['low_stock'] ?? 0 }}</h2>
-                    </div>
-                    <div class="align-self-center">
-                        <i class="fas fa-exclamation-triangle fa-2x"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card text-white bg-info card-stats">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <h5 class="card-title">Valeur du stock</h5>
-                        <h2 class="mb-0">{{ number_format($stats['stock_value'] ?? 0, 2) }} DA</h2>
-                    </div>
-                    <div class="align-self-center">
-                        <i class="fas fa-money-bill fa-2x"></i>
+                    <div class="col-auto">
+                        <i class="fas fa-boxes fa-2x text-gray-300"></i>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- البحث والفلاتر -->
-    <div class="search-section">
-        <form method="GET" action="{{ route('admin.articles.index') }}" class="row">
-            <div class="col-md-3">
-                <label class="form-label">Recherche</label>
-                <input type="text" name="search" class="form-control" placeholder="Nom du produit ou code..." 
-                       value="{{ request('search') }}">
+    {{-- Produits Actifs --}}
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            Produits Actifs
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            {{ $stats['active'] ?? 0 }}
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-check-circle fa-2x text-gray-300"></i>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-2">
-                <label class="form-label">Famille</label>
-                <select name="famille" class="form-select">
-                    <option value="">Toutes les familles</option>
-                    @foreach($familles as $famille)
-                        <option value="{{ $famille->FAM_REF }}" 
-                                {{ request('famille') == $famille->FAM_REF ? 'selected' : '' }}>
-                            {{ $famille->FAM_LIB }}
-                        </option>
-                    @endforeach
-                </select>
+        </div>
+    </div>
+
+    {{-- Stock Faible --}}
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                            Stock Faible
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            {{ $stats['low_stock'] ?? 0 }}
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-exclamation-triangle fa-2x text-gray-300"></i>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-2">
-                <label class="form-label">État</label>
-                <select name="statut" class="form-select">
-                    <option value="">Tous les états</option>
-                    <option value="1" {{ request('statut') == '1' ? 'selected' : '' }}>Actif</option>
-                    <option value="0" {{ request('statut') == '0' ? 'selected' : '' }}>Inactif</option>
-                </select>
+        </div>
+    </div>
+
+    {{-- Valeur du Stock --}}
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                            Valeur du Stock
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            {{ number_format($stats['stock_value'] ?? 0, 2) }} DH
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-money-bill-wave fa-2x text-gray-300"></i>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-2">
-                <label class="form-label">Nombre de résultats</label>
-                <select name="per_page" class="form-select">
-                    <option value="15" {{ request('per_page') == '15' ? 'selected' : '' }}>15</option>
-                    <option value="25" {{ request('per_page') == '25' ? 'selected' : '' }}>25</option>
-                    <option value="50" {{ request('per_page') == '50' ? 'selected' : '' }}>50</option>
-                    <option value="100" {{ request('per_page') == '100' ? 'selected' : '' }}>100</option>
-                </select>
-            </div>
-            <div class="col-md-3 d-flex align-items-end">
-                <button type="submit" class="btn btn-primary me-2">
-                    <i class="fas fa-search"></i> Rechercher
-                </button>
-                <a href="{{ route('admin.articles.index') }}" class="btn btn-secondary">
-                    <i class="fas fa-redo"></i> Réinitialiser
-                </a>
+        </div>
+    </div>
+
+</div>
+
+{{-- Section de Recherche et Filtres --}}
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">
+            <i class="fas fa-search"></i>
+            Recherche et Filtres
+        </h6>
+    </div>
+    <div class="card-body bg-light">
+        <form method="GET" action="{{ route('admin.articles.index') }}" id="searchForm">
+            <div class="row">
+                {{-- Recherche par nom --}}
+                <div class="col-md-4 mb-3">
+                    <label for="search" class="form-label">Recherche par nom</label>
+                    <div class="input-group">
+                        <input type="text" 
+                               class="form-control" 
+                               id="search" 
+                               name="search" 
+                               value="{{ request('search') }}" 
+                               placeholder="Nom du produit...">
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="fas fa-search"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Filtre par catégorie --}}
+                <div class="col-md-3 mb-3">
+                    <label for="famille" class="form-label">Famille</label>
+                    <select class="form-control" id="famille" name="famille">
+                        <option value="">Toutes les familles</option>
+                        @if(isset($familles))
+                            @foreach($familles as $famille)
+                                <option value="{{ $famille->FAM_REF }}" 
+                                        {{ request('famille') == $famille->FAM_REF ? 'selected' : '' }}>
+                                    {{ $famille->FAM_LIB }}
+                                </option>
+                            @endforeach
+                        @endif
+                    </select>
+                </div>
+
+                {{-- Filtre par statut --}}
+                <div class="col-md-2 mb-3">
+                    <label for="statut" class="form-label">Statut</label>
+                    <select class="form-control" id="statut" name="statut">
+                        <option value="">Tous</option>
+                        <option value="1" {{ request('statut') == '1' ? 'selected' : '' }}>Actif</option>
+                        <option value="0" {{ request('statut') == '0' ? 'selected' : '' }}>Inactif</option>
+                    </select>
+                </div>
+
+                {{-- Filtre par stock --}}
+                <div class="col-md-2 mb-3">
+                    <label for="stock_filter" class="form-label">Stock</label>
+                    <select class="form-control" id="stock_filter" name="stock_filter">
+                        <option value="">Tous</option>
+                        <option value="faible" {{ request('stock_filter') == 'faible' ? 'selected' : '' }}>Stock faible</option>
+                        <option value="rupture" {{ request('stock_filter') == 'rupture' ? 'selected' : '' }}>Rupture</option>
+                    </select>
+                </div>
+
+                {{-- Boutons d'action --}}
+                <div class="col-md-1 mb-3 d-flex align-items-end">
+                    <div class="d-flex flex-column w-100">
+                        <button type="submit" class="btn btn-primary btn-sm mb-1">
+                            <i class="fas fa-search"></i>
+                        </button>
+                        <a href="{{ route('admin.articles.index') }}" class="btn btn-secondary btn-sm">
+                            <i class="fas fa-undo"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
         </form>
     </div>
+</div>
 
-    <!-- Tableau des produits -->
-    <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-        <h5 class="mb-0">Liste des produits ({{ $articles->total() }} produits)</h5>
-            <div>
-                <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exportModal">
-                    <i class="fas fa-download"></i> Exporter
-                </button>
+
+{{-- Tableau des Produits --}}
+<div class="card shadow mb-4">
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary">
+            <i class="fas fa-list"></i>
+            Liste des Produits
+        </h6>
+        <div class="d-flex align-items-center">
+            
+            
+            <span class="text-muted mr-3">
+                @if(isset($articles))
+                    @if(is_object($articles) && method_exists($articles, 'total'))
+                        {{ $articles->total() }} produit(s) au total
+                    @elseif(is_countable($articles))
+                        {{ count($articles) }} produit(s) au total
+                    @else
+                        0 produit(s) au total
+                    @endif
+                @else
+                    0 produit(s) au total
+                @endif
+            </span>
+            <div class="dropdown no-arrow">
+                <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                </a>
+                
             </div>
         </div>
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover mb-0">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>Code produit</th>
-                            <th>Nom du produit</th>
-                            <th>Famille</th>
-                            <th>Sous-catégorie</th>
-                            <th>Prix d'achat</th>
-                            <th>Prix de vente</th>
-                            <th>Stock</th>
-                            <th>Statut</th>
-                            <th>Date de création</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($articles as $article)
-                        <tr>
-                            <td><code>{{ $article->ART_REF }}</code></td>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th width="5%">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="selectAll">
+                                <label class="custom-control-label" for="selectAll"></label>
+                            </div>
+                        </th>
+                        <th>Image</th>
+                        <th>Nom</th>
+                        <th>Catégorie</th>
+                        <th>Prix</th>
+                        <th>Stock</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if(isset($articles) && count($articles) > 0)
+                        @foreach($articles as $article)
+                            <tr>
                             <td>
-                                <div class="d-flex align-items-center">
-                                    @if($article->IsMenu)
-                                        <i class="fas fa-utensils text-warning me-2" title="Produit de menu"></i>
-                                    @endif
-                                    <strong>{{ $article->ART_DESIGNATION }}</strong>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" 
+                                           class="custom-control-input article-checkbox" 
+                                           id="check{{ $article->ART_REF }}"
+                                           value="{{ $article->ART_REF }}">
+                                    <label class="custom-control-label" for="check{{ $article->ART_REF }}"></label>
+                                </div>
+                            </td>
+                            <td>
+                                {{-- Pas d'images dans la structure actuelle --}}
+                                <div class="bg-gray-200 d-flex align-items-center justify-content-center" 
+                                     style="width: 50px; height: 50px; border-radius: 4px;">
+                                    <i class="fas fa-image text-gray-400"></i>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="font-weight-bold">{{ $article->ART_DESIGNATION ?? 'N/A' }}</div>
+                                <div class="text-xs text-muted">
+                                    Réf: {{ $article->ART_REF }}
                                 </div>
                             </td>
                             <td>
                                 @if($article->famille)
-                                    <span class="badge bg-secondary">{{ $article->famille }}</span>
+                                    <span class="badge badge-secondary">
+                                        {{ $article->famille }}
+                                    </span>
                                 @else
-                                    <span class="text-muted">Non spécifié</span>
+                                    <span class="text-muted">-</span>
                                 @endif
                             </td>
                             <td>
-                                @if($article->sous_famille)
-                                    <span class="badge bg-light text-dark">{{ $article->sous_famille }}</span>
-                                @else
-                                    <span class="text-muted">Non spécifié</span>
-                                @endif
-                            </td>
-                            <td>
+                                <div class="font-weight-bold text-success">
+                                    {{ number_format($article->ART_PRIX_VENTE ?? 0, 2) }} DH
+                                </div>
                                 @if($article->ART_PRIX_ACHAT)
-                                    <span class="text-success">{{ number_format($article->ART_PRIX_ACHAT, 2) }} DA</span>
-                                @else
-                                    <span class="text-muted">Non spécifié</span>
+                                    <div class="text-xs text-muted">
+                                        Achat: {{ number_format($article->ART_PRIX_ACHAT, 2) }} DH
+                                    </div>
                                 @endif
                             </td>
                             <td>
-                                <span class="text-primary fw-bold">{{ number_format($article->ART_PRIX_VENTE, 2) }} DA</span>
-                            </td>
-                            <td>
-                                @if($article->ART_STOCKABLE)
-                                    @if($article->stock_total <= $article->ART_STOCK_MIN)
-                                        <span class="badge badge-stock-low">
-                                            {{ $article->stock_total }} (faible)
-                                        </span>
-                                    @else
-                                        <span class="badge badge-stock-ok">
-                                            {{ $article->stock_total }}
-                                        </span>
-                                    @endif
+                                @php
+                                    $stock = $article->stock_total ?? 0;
+                                    $seuil_alerte = $article->ART_STOCK_MIN ?? 10;
+                                @endphp
+                                
+                                @if($stock <= 0)
+                                    <span class="badge badge-danger">
+                                        <i class="fas fa-times"></i>
+                                        Rupture
+                                    </span>
+                                @elseif($stock <= $seuil_alerte)
+                                    <span class="badge badge-warning">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                        {{ $stock }} (Faible)
+                                    </span>
                                 @else
-                                    <span class="text-muted">Non stockable</span>
-                                @endif
-                            </td>
-                            <td>
-                                @if($article->ART_VENTE)
-                                    <span class="badge badge-status-active">Actif</span>
-                                @else
-                                    <span class="badge badge-status-inactive">Inactif</span>
+                                    <span class="badge badge-success">
+                                        <i class="fas fa-check"></i>
+                                        {{ $stock }}
+                                    </span>
                                 @endif
                             </td>
                             <td>
-                                @if($article->ART_DATE_CREATION)
-                                    {{ \Carbon\Carbon::parse($article->ART_DATE_CREATION)->format('d/m/Y') }}
+                                @if($article->ART_VENTE == 1)
+                                    <span class="badge badge-success">
+                                        <i class="fas fa-check-circle"></i>
+                                        Actif
+                                    </span>
                                 @else
-                                    <span class="text-muted">Non spécifié</span>
+                                    <span class="badge badge-secondary">
+                                        <i class="fas fa-pause-circle"></i>
+                                        Inactif
+                                    </span>
                                 @endif
                             </td>
-                            <td class="table-actions">
-                                <a href="{{ route('admin.articles.show', $article->ART_REF) }}" 
-                                   class="btn btn-sm btn-outline-info" title="Voir les détails">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a href="{{ route('admin.articles.edit', $article->ART_REF) }}" 
-                                   class="btn btn-sm btn-outline-warning" title="Modifier">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                @if(auth()->user()->isAdmin())
-                                    <form method="POST" action="{{ route('admin.articles.toggle-status', $article->ART_REF) }}" 
-                                          class="d-inline" onsubmit="return confirm('Voulez-vous modifier le statut de ce produit ?')">
-                                        @csrf
-                                        @method('PATCH')
-                                        <button type="submit" class="btn btn-sm btn-outline-secondary" 
-                                                title="{{ $article->ART_VENTE ? 'Désactiver' : 'Activer' }}">
-                                            <i class="fas fa-{{ $article->ART_VENTE ? 'times' : 'check' }}"></i>
-                                        </button>
-                                    </form>
-                                @endif
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="10" class="text-center py-4">
-                                <div class="text-muted">
-                                    <i class="fas fa-box-open fa-3x mb-3"></i>
-                                    <p>Aucun produit ne correspond aux critères de recherche</p>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a href="{{ route('admin.articles.show', $article->ART_REF) }}" 
+                                       class="btn btn-info btn-sm" 
+                                       title="Voir">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{{ route('admin.articles.edit', $article->ART_REF) }}" 
+                                       class="btn btn-warning btn-sm" 
+                                       title="Modifier">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <button type="button" 
+                                            class="btn btn-danger btn-sm" 
+                                            title="Supprimer"
+                                            onclick="confirmDelete('{{ $article->ART_REF }}', '{{ $article->ART_DESIGNATION }}')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
                                 </div>
                             </td>
                         </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                        @endforeach
+                    @else
+                        <tr>
+                            <td colspan="8" class="text-center py-4">
+                                <div class="text-muted">
+                                    <i class="fas fa-box fa-3x mb-3"></i>
+                                    <p class="mb-0">Aucun produit trouvé</p>
+                                    <a href="{{ route('admin.articles.create') }}" class="btn btn-primary btn-sm mt-2">
+                                        <i class="fas fa-plus"></i>
+                                        Ajouter le premier produit
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    @endif
+                </tbody>
+            </table>
+        </div>
+
+        {{-- Pagination --}}
+        @if(isset($articles) && is_object($articles) && method_exists($articles, 'hasPages') && $articles->hasPages())
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <div class="text-muted">
+                    <small>
+                        Affichage de {{ $articles->firstItem() }} à {{ $articles->lastItem() }} 
+                        sur {{ $articles->total() }} résultats
+                    </small>
+                </div>
+                <div>
+                    {{ $articles->appends(request()->query())->links('pagination.sb-admin') }}
+                </div>
             </div>
-        </div>
-        <div class="card-footer">
-            {{ $articles->appends(request()->query())->links() }}
-        </div>
+        @elseif(isset($articles) && count($articles) > 0)
+            <div class="d-flex justify-content-center mt-4">
+                <div class="text-muted">
+                    <small>{{ count($articles) }} produit(s) affiché(s)</small>
+                </div>
+            </div>
+        @endif
     </div>
 </div>
 
-<!-- Modal pour l'exportation -->
-<div class="modal fade" id="exportModal" tabindex="-1">
-    <div class="modal-dialog">
+{{-- Modal de Confirmation de Suppression --}}
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Exporter les produits</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <h5 class="modal-title" id="deleteModalLabel">
+                    <i class="fas fa-exclamation-triangle text-warning"></i>
+                    Confirmer la Suppression
+                </h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
             </div>
             <div class="modal-body">
-                <form method="GET" action="{{ route('admin.articles.export') }}">
-                    <!-- Transfert des critères de recherche actuels -->
-                    @foreach(request()->query() as $key => $value)
-                        @if($key !== 'page')
-                            <input type="hidden" name="{{ $key }}" value="{{ $value }}">
-                        @endif
-                    @endforeach
-                    
-                    <div class="mb-3">
-                        <label class="form-label">Type d'exportation</label>
-                        <select name="format" class="form-select" required>
-                            <option value="excel">Excel (.xlsx)</option>
-                            <option value="csv">CSV</option>
-                            <option value="pdf">PDF</option>
-                        </select>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label class="form-label">Données requises</label>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="fields[]" value="basic" checked>
-                            <label class="form-check-label">Informations de base</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="fields[]" value="stock">
-                            <label class="form-check-label">Informations de stock</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="fields[]" value="prices">
-                            <label class="form-check-label">Prix</label>
-                        </div>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-download"></i> Exporter
+                <p>Êtes-vous sûr de vouloir supprimer le produit <strong id="productName"></strong> ?</p>
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Cette action est irréversible !
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">
+                    <i class="fas fa-times"></i>
+                    Annuler
+                </button>
+                <form method="POST" id="deleteForm" style="display: inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash"></i>
+                        Supprimer
                     </button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
 @endsection
 
 @section('scripts')
 <script>
-    // Mise à jour automatique de la page toutes les 5 minutes pour afficher le stock mis à jour
-    setTimeout(function() {
-        location.reload();
-    }, 300000);
-    
-    // Affichage des messages de succès
-    @if(session('success'))
-        Swal.fire({
-            icon: 'success',
-            title: 'Succès !',
-            text: '{{ session('success') }}',
-            timer: 3000,
-            showConfirmButton: false
-        });
-    @endif
+$(document).ready(function() {
+    // Initialisation DataTable avec configuration SB Admin
+    $('#dataTable').DataTable({
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.24/i18n/French.json"
+        },
+        "pageLength": 25,
+        "order": [[ 2, "asc" ]],
+        "columnDefs": [
+            { "orderable": false, "targets": [0, 1, 7] }
+        ]
+    });
 
-    @if(session('error'))
+    // Gestion de la sélection multiple
+    $('#selectAll').change(function() {
+        $('.article-checkbox').prop('checked', this.checked);
+        updateBulkActions();
+    });
+
+    $('.article-checkbox').change(function() {
+        updateBulkActions();
+    });
+
+    // Recherche en temps réel
+    $('#search').on('input', function() {
+        var searchTerm = $(this).val();
+        if (searchTerm.length >= 3 || searchTerm.length === 0) {
+            $('#searchForm').submit();
+        }
+    });
+});
+
+function updateBulkActions() {
+    var selected = $('.article-checkbox:checked').length;
+    $('#selected-count').text(selected);
+    
+    if (selected > 0) {
+        $('#bulk-actions-info').show();
+    } else {
+        $('#bulk-actions-info').hide();
+    }
+    
+    // Mise à jour du checkbox "Tout sélectionner"
+    var total = $('.article-checkbox').length;
+    $('#selectAll').prop('indeterminate', selected > 0 && selected < total);
+    $('#selectAll').prop('checked', selected === total && total > 0);
+}
+
+function confirmDelete(artRef, name) {
+    $('#productName').text(name);
+    $('#deleteForm').attr('action', '/admin/articles/' + artRef);
+    $('#deleteModal').modal('show');
+}
+
+function exportSelected(format) {
+    var selectedIds = $('.article-checkbox:checked').map(function() {
+        return $(this).val();
+    }).get();
+    
+    if (selectedIds.length === 0) {
         Swal.fire({
-            icon: 'error',
-            title: 'Erreur !',
-            text: '{{ session('error') }}',
-            timer: 3000,
-            showConfirmButton: false
+            icon: 'warning',
+            title: 'Aucune sélection',
+            text: 'Veuillez sélectionner au moins un produit.',
+            confirmButtonClass: 'btn btn-primary'
         });
-    @endif
+        return;
+    }
+    
+    // Logique d'export
+    console.log('Export ' + format + ' for IDs:', selectedIds);
+}
+
+function refreshTable() {
+    window.location.reload();
+}
+
+function importModal() {
+    // Modal d'import
+    console.log('Import modal');
+}
 </script>
 @endsection

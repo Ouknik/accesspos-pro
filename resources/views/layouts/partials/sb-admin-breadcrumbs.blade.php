@@ -226,9 +226,7 @@
             <a href="{{ route('admin.articles.create') }}" class="btn btn-primary btn-sm">
                 <i class="fas fa-plus"></i> Ajouter un produit
             </a>
-            <button class="btn btn-success btn-sm" onclick="AccessPosArticles.exportArticles()">
-                <i class="fas fa-file-excel"></i> Exporter
-            </button>
+           
         @elseif(request()->routeIs('admin.dashboard'))
             <button class="btn btn-info btn-sm" onclick="AccessPosDashboard.refreshLiveData()">
                 <i class="fas fa-sync-alt"></i> Actualiser

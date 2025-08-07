@@ -409,10 +409,10 @@
                                            id="art_prix_achat" name="art_prix_achat" 
                                            value="{{ old('art_prix_achat', $article->ART_PRIX_ACHAT) }}" 
                                            step="0.01" min="0">
-                                    <span class="input-group-text">DA</span>
+                                    <span class="input-group-text">DH</span>
                                 </div>
                                 <div class="original-value">
-                                    Valeur originale : {{ number_format($article->ART_PRIX_ACHAT ?? 0, 2) }} DA
+                                    Valeur originale : {{ number_format($article->ART_PRIX_ACHAT ?? 0, 2) }} DH
                                 </div>
                                 @error('art_prix_achat')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -429,10 +429,10 @@
                                            id="art_prix_vente" name="art_prix_vente" 
                                            value="{{ old('art_prix_vente', $article->ART_PRIX_VENTE) }}" 
                                            step="0.01" min="0" required>
-                                    <span class="input-group-text">DA</span>
+                                    <span class="input-group-text">DH</span>
                                 </div>
                                 <div class="original-value">
-                                    Valeur originale : {{ number_format($article->ART_PRIX_VENTE, 2) }} DA
+                                    Valeur originale : {{ number_format($article->ART_PRIX_VENTE, 2) }} DH
                                 </div>
                                 @error('art_prix_vente')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -440,10 +440,10 @@
                             </div>
                         </div>
                     </div>
-                                    <span class="input-group-text">DA</span>
+                                    <span class="input-group-text">DH</span>
                                 </div>
                                 <div class="original-value">
-                                    Valeur originale : {{ number_format($article->ART_PRIX_VENTE, 2) }} DA
+                                    Valeur originale : {{ number_format($article->ART_PRIX_VENTE, 2) }} DH
                                 </div>
                                 @error('ART_PRIX_VENTE')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -764,7 +764,7 @@
                 const margin = ((prixVente - prixAchat) / prixAchat) * 100;
                 const profit = prixVente - prixAchat;
                 
-                marginText.innerHTML = `Marge bénéficiaire : ${margin.toFixed(1)}% (${profit.toFixed(2)} DA)`;
+                marginText.innerHTML = `Marge bénéficiaire : ${margin.toFixed(1)}% (${profit.toFixed(2)} DH)`;
                 
                 if (margin < 0) {
                     marginDiv.className = 'alert alert-danger';

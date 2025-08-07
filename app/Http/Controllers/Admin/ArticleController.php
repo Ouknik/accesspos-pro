@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Exports\ArticlesExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 
 /**
  * Contrôleur pour la gestion des articles/produits
@@ -101,7 +103,7 @@ class ArticleController extends Controller
             // Liste des familles pour le filtre
             $familles = DB::table('FAMILLE')->orderBy('FAM_LIB')->get();
 
-            return view('admin.articles.index-sb-admin', compact('articles', 'stats', 'familles', 'search', 'famille', 'statut'));
+            return view('admin.articles.index', compact('articles', 'stats', 'familles', 'search', 'famille', 'statut'));
 
         } catch (\Exception $e) {
             // Log pour debugging
@@ -570,6 +572,441 @@ class ArticleController extends Controller
 
         } catch (\Exception $e) {
             return response()->json(['error' => 'Erreur: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Export articles to Excel (Real Excel file)
+     */
+    public function exportExcel(Request $request)
+    {
+        try {
+            // Prepare filters for the export
+            $filters = [
+                'search' => $request->get('search'),
+                'famille' => $request->get('famille'),
+                'statut' => $request->get('statut'),
+                'stock_filter' => $request->get('stock_filter'),
+            ];
+
+            // Generate filename with timestamp
+            $filename = 'articles_export_' . date('Y-m-d_H-i-s') . '.xlsx';
+
+            // Use Laravel Excel to create a proper Excel file
+            return Excel::download(
+                new ArticlesExport($filters), 
+                $filename
+            );
+
+        } catch (\Exception $e) {
+            Log::error('Error in exportExcel: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Erreur lors de l\'export Excel: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Export articles to PDF
+     */
+    public function exportPDF(Request $request)
+    {
+        try {
+            // Get the same data as exportExcel
+            $search = $request->get('search');
+            $famille = $request->get('famille');
+            $statut = $request->get('statut');
+            $stock_filter = $request->get('stock_filter');
+
+            // Build the query
+            $query = DB::table('ARTICLE as a')
+                ->leftJoin('SOUS_FAMILLE as sf', 'a.SFM_REF', '=', 'sf.SFM_REF')
+                ->leftJoin('FAMILLE as f', 'sf.FAM_REF', '=', 'f.FAM_REF')
+                ->select([
+                    'a.ART_REF',
+                    'a.ART_DESIGNATION',
+                    'a.ART_PRIX_VENTE',
+                    'a.ART_PRIX_ACHAT',
+                    'a.ART_STOCK_MIN',
+                    'a.ART_VENTE',
+                    'f.FAM_LIB as famille',
+                    DB::raw('CASE 
+                        WHEN a.ART_VENTE = 1 THEN \'Actif\' 
+                        ELSE \'Inactif\' 
+                    END as statut_display')
+                ]);
+
+            // Apply filters (same as exportExcel)
+            if ($search) {
+                $query->where(function($q) use ($search) {
+                    $q->where('a.ART_DESIGNATION', 'LIKE', "%{$search}%")
+                      ->orWhere('a.ART_REF', 'LIKE', "%{$search}%");
+                });
+            }
+
+            if ($famille) {
+                $query->where('f.FAM_REF', $famille);
+            }
+
+            if ($statut !== null) {
+                $query->where('a.ART_VENTE', $statut);
+            }
+
+            $articles = $query->orderBy('a.ART_DESIGNATION')->get();
+
+            // Add stock information
+            foreach ($articles as $article) {
+                $stock = DB::table('STOCK')
+                    ->where('ART_REF', $article->ART_REF)
+                    ->sum('STK_QTE');
+                $article->stock_total = $stock ?? 0;
+            }
+
+            // Apply stock filter
+            if ($stock_filter) {
+                $articles = $articles->filter(function($article) use ($stock_filter) {
+                    if ($stock_filter === 'faible') {
+                        return $article->stock_total <= $article->ART_STOCK_MIN && $article->stock_total > 0;
+                    } elseif ($stock_filter === 'rupture') {
+                        return $article->stock_total <= 0;
+                    }
+                    return true;
+                });
+            }
+
+            // Create HTML content for PDF
+            $html = '<!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <title>Liste des Articles - AccessPos Pro</title>
+                <style>
+                    body { 
+                        font-family: Arial, sans-serif; 
+                        margin: 20px; 
+                        font-size: 12px;
+                    }
+                    .header { 
+                        text-align: center; 
+                        margin-bottom: 30px; 
+                        border-bottom: 3px solid #007bff;
+                        padding-bottom: 15px;
+                    }
+                    .header h1 { 
+                        color: #333; 
+                        margin: 0;
+                        font-size: 24px;
+                    }
+                    .header-info { 
+                        color: #666; 
+                        margin-top: 10px;
+                        background: #f8f9fa;
+                        padding: 15px;
+                        border-radius: 5px;
+                    }
+                    table { 
+                        width: 100%; 
+                        border-collapse: collapse; 
+                        margin-top: 20px; 
+                        font-size: 11px;
+                    }
+                    th, td { 
+                        border: 1px solid #ddd; 
+                        padding: 8px; 
+                        text-align: left; 
+                    }
+                    th { 
+                        background-color: #f8f9fa; 
+                        font-weight: bold; 
+                        text-align: center;
+                        font-size: 10px;
+                    }
+                    tr:nth-child(even) { 
+                        background-color: #f9f9f9; 
+                    }
+                    .footer {
+                        margin-top: 20px;
+                        text-align: center;
+                        color: #666;
+                        font-size: 10px;
+                        border-top: 1px solid #ddd;
+                        padding-top: 10px;
+                    }
+                    .ref-cell { font-weight: bold; color: #007bff; }
+                    .price-cell { text-align: right; }
+                    .stock-cell { text-align: center; }
+                    .status-cell { text-align: center; }
+                </style>
+            </head>
+            <body>
+                <div class="header">
+                    <h1>📋 LISTE DES ARTICLES</h1>
+                    <div class="header-info">
+                        <p><strong>Date d\'export:</strong> ' . date('d/m/Y à H:i:s') . '</p>
+                        <p><strong>Nombre d\'articles:</strong> ' . count($articles) . '</p>
+                        <p><strong>AccessPos Pro</strong> - Système de Gestion</p>
+                    </div>
+                </div>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 15%;">Référence</th>
+                            <th style="width: 30%;">Nom du Produit</th>
+                            <th style="width: 15%;">Catégorie</th>
+                            <th style="width: 12%;">Prix Vente</th>
+                            <th style="width: 12%;">Prix Achat</th>
+                            <th style="width: 8%;">Stock</th>
+                            <th style="width: 8%;">Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody>';
+
+            foreach ($articles as $article) {
+                $html .= '<tr>
+                    <td class="ref-cell">' . htmlspecialchars($article->ART_REF) . '</td>
+                    <td><strong>' . htmlspecialchars($article->ART_DESIGNATION) . '</strong></td>
+                    <td>' . htmlspecialchars($article->famille ?? 'Non définie') . '</td>
+                    <td class="price-cell">' . number_format($article->ART_PRIX_VENTE ?? 0, 2) . ' DH</td>
+                    <td class="price-cell">' . number_format($article->ART_PRIX_ACHAT ?? 0, 2) . ' DH</td>
+                    <td class="stock-cell">' . $article->stock_total . '</td>
+                    <td class="status-cell">' . htmlspecialchars($article->statut_display) . '</td>
+                </tr>';
+            }
+
+            $html .= '</tbody>
+                </table>
+                
+                <div class="footer">
+                    <p><strong>AccessPos Pro</strong> - Système de Gestion Professionnel</p>
+                    <p>Document généré le ' . date('d/m/Y à H:i:s') . '</p>
+                    <p>Total: <strong>' . count($articles) . '</strong> articles listés</p>
+                </div>
+            </body>
+            </html>';
+
+            // Return HTML response that will open in a new window for printing
+            return response($html)
+                ->header('Content-Type', 'text/html; charset=UTF-8')
+                ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+                ->header('Pragma', 'no-cache')
+                ->header('Expires', '0');
+
+        } catch (\Exception $e) {
+            Log::error('Error in exportPDF: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Erreur lors de l\'export PDF: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Print articles list
+     */
+    public function printArticles(Request $request)
+    {
+        try {
+            // Get the same data as exportExcel
+            $search = $request->get('search');
+            $famille = $request->get('famille');
+            $statut = $request->get('statut');
+            $stock_filter = $request->get('stock_filter');
+
+            // Build the query
+            $query = DB::table('ARTICLE as a')
+                ->leftJoin('SOUS_FAMILLE as sf', 'a.SFM_REF', '=', 'sf.SFM_REF')
+                ->leftJoin('FAMILLE as f', 'sf.FAM_REF', '=', 'f.FAM_REF')
+                ->select([
+                    'a.ART_REF',
+                    'a.ART_DESIGNATION',
+                    'a.ART_PRIX_VENTE',
+                    'a.ART_PRIX_ACHAT',
+                    'a.ART_STOCK_MIN',
+                    'a.ART_VENTE',
+                    'f.FAM_LIB as famille',
+                    DB::raw('CASE 
+                        WHEN a.ART_VENTE = 1 THEN \'Actif\' 
+                        ELSE \'Inactif\' 
+                    END as statut_display')
+                ]);
+
+            // Apply filters
+            if ($search) {
+                $query->where(function($q) use ($search) {
+                    $q->where('a.ART_DESIGNATION', 'LIKE', "%{$search}%")
+                      ->orWhere('a.ART_REF', 'LIKE', "%{$search}%");
+                });
+            }
+
+            if ($famille) {
+                $query->where('f.FAM_REF', $famille);
+            }
+
+            if ($statut !== null) {
+                $query->where('a.ART_VENTE', $statut);
+            }
+
+            $articles = $query->orderBy('a.ART_DESIGNATION')->get();
+
+            // Add stock information
+            foreach ($articles as $article) {
+                $stock = DB::table('STOCK')
+                    ->where('ART_REF', $article->ART_REF)
+                    ->sum('STK_QTE');
+                $article->stock_total = $stock ?? 0;
+            }
+
+            // Apply stock filter
+            if ($stock_filter) {
+                $articles = $articles->filter(function($article) use ($stock_filter) {
+                    if ($stock_filter === 'faible') {
+                        return $article->stock_total <= $article->ART_STOCK_MIN && $article->stock_total > 0;
+                    } elseif ($stock_filter === 'rupture') {
+                        return $article->stock_total <= 0;
+                    }
+                    return true;
+                });
+            }
+
+            // Create print-optimized HTML
+            $html = '<!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <title>Impression - Articles</title>
+                <style>
+                    body { 
+                        font-family: Arial, sans-serif; 
+                        margin: 0; 
+                        padding: 15px;
+                        font-size: 11px;
+                        background: white;
+                    }
+                    .header { 
+                        text-align: center; 
+                        margin-bottom: 25px; 
+                        border-bottom: 2px solid #333;
+                        padding-bottom: 15px;
+                    }
+                    .header h1 { 
+                        color: #333; 
+                        margin: 0;
+                        font-size: 20px;
+                        text-transform: uppercase;
+                    }
+                    .header-info { 
+                        color: #666; 
+                        margin-top: 10px;
+                        background: #f8f9fa;
+                        padding: 8px;
+                        border-radius: 5px;
+                        font-size: 10px;
+                    }
+                    table { 
+                        width: 100%; 
+                        border-collapse: collapse; 
+                        margin-top: 15px;
+                        font-size: 9px;
+                    }
+                    th, td { 
+                        border: 1px solid #333; 
+                        padding: 4px; 
+                        text-align: left; 
+                        vertical-align: top;
+                    }
+                    th { 
+                        background-color: #f0f0f0; 
+                        font-weight: bold;
+                        text-align: center;
+                        font-size: 8px;
+                        text-transform: uppercase;
+                    }
+                    tr:nth-child(even) { 
+                        background-color: #f9f9f9; 
+                    }
+                    .footer {
+                        margin-top: 20px;
+                        text-align: center;
+                        font-size: 8px;
+                        color: #666;
+                        border-top: 1px solid #ccc;
+                        padding-top: 10px;
+                    }
+                    .ref-cell { font-weight: bold; color: #007bff; }
+                    .price-cell { text-align: right; font-weight: bold; }
+                    .stock-cell { text-align: center; }
+                    .status-cell { text-align: center; font-weight: bold; }
+                    .no-print { display: none; }
+                    @page { margin: 1cm; }
+                    @media print {
+                        body { margin: 0; padding: 10px; }
+                        .no-print { display: none !important; }
+                        table { font-size: 8px; }
+                        th, td { padding: 3px; }
+                        .header h1 { font-size: 16px; }
+                    }
+                </style>
+                <script>
+                    window.onload = function() {
+                        setTimeout(function() {
+                            window.print();
+                        }, 1000);
+                    };
+                </script>
+            </head>
+            <body>
+                <div class="header">
+                    <h1>📋 LISTE COMPLÈTE DES ARTICLES</h1>
+                    <div class="header-info">
+                        <p><strong>Date d\'impression:</strong> ' . date('d/m/Y à H:i:s') . '</p>
+                        <p><strong>Nombre d\'articles:</strong> ' . count($articles) . '</p>
+                        <p><strong>AccessPos Pro</strong> - Système de Gestion des Stocks</p>
+                    </div>
+                </div>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 12%;">Référence</th>
+                            <th style="width: 28%;">Nom du Produit</th>
+                            <th style="width: 15%;">Catégorie</th>
+                            <th style="width: 12%;">Prix Vente</th>
+                            <th style="width: 12%;">Prix Achat</th>
+                            <th style="width: 10%;">Stock</th>
+                            <th style="width: 11%;">Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody>';
+
+            foreach ($articles as $article) {
+                $html .= '<tr>
+                    <td class="ref-cell">' . htmlspecialchars($article->ART_REF) . '</td>
+                    <td><strong>' . htmlspecialchars($article->ART_DESIGNATION) . '</strong></td>
+                    <td>' . htmlspecialchars($article->famille ?? 'Non définie') . '</td>
+                    <td class="price-cell">' . number_format($article->ART_PRIX_VENTE ?? 0, 2) . ' DH</td>
+                    <td class="price-cell">' . number_format($article->ART_PRIX_ACHAT ?? 0, 2) . ' DH</td>
+                    <td class="stock-cell">' . $article->stock_total . '</td>
+                    <td class="status-cell">' . htmlspecialchars($article->statut_display) . '</td>
+                </tr>';
+            }
+
+            $html .= '</tbody>
+                </table>
+                
+                <div class="footer">
+                    <p><strong>AccessPos Pro</strong> - Système de Gestion Professionnel</p>
+                    <p>Document généré le ' . date('d/m/Y à H:i:s') . '</p>
+                    <p>Total: <strong>' . count($articles) . '</strong> articles listés</p>
+                </div>
+            </body>
+            </html>';
+
+            // Return HTML response optimized for printing
+            return response($html)
+                ->header('Content-Type', 'text/html; charset=UTF-8')
+                ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+                ->header('Pragma', 'no-cache')
+                ->header('Expires', '0');
+
+        } catch (\Exception $e) {
+            Log::error('Error in printArticles: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Erreur lors de l\'impression: ' . $e->getMessage());
         }
     }
 

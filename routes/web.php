@@ -53,9 +53,28 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     })->name('admin.console-errors-test');
     
     // Routes pour les pages de détails (versions SB Admin)
-    Route::get('/details/chiffre-affaires', function() {
-        return view('admin.chiffre-affaires-details-sb-admin');
-    })->name('admin.dashboard.chiffre-affaires');
+    Route::get('/details/chiffre-affaires', [App\Http\Controllers\Admin\ChiffreAffairesController::class, 'index'])
+        ->name('admin.dashboard.chiffre-affaires');
+    
+    // Routes pour les rapports de chiffre d'affaires - تقارير رقم الأعمال
+    Route::prefix('chiffre-affaires')->name('admin.chiffre-affaires.')->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\ChiffreAffairesController::class, 'index'])
+            ->name('index');
+        Route::get('/serveur', [App\Http\Controllers\Admin\ChiffreAffairesController::class, 'rapportServeur'])
+            ->name('serveur');
+        Route::get('/famille', [App\Http\Controllers\Admin\ChiffreAffairesController::class, 'rapportFamille'])
+            ->name('famille');
+        Route::get('/article', [App\Http\Controllers\Admin\ChiffreAffairesController::class, 'rapportArticle'])
+            ->name('article');
+        Route::get('/paiement', [App\Http\Controllers\Admin\ChiffreAffairesController::class, 'rapportPaiement'])
+            ->name('paiement');
+        Route::get('/client', [App\Http\Controllers\Admin\ChiffreAffairesController::class, 'rapportClient'])
+            ->name('client');
+        Route::get('/caissier', [App\Http\Controllers\Admin\ChiffreAffairesController::class, 'rapportCaissier'])
+            ->name('caissier');
+        Route::get('/export', [App\Http\Controllers\Admin\ChiffreAffairesController::class, 'export'])
+            ->name('export');
+    });
     
     Route::get('/details/stock-rupture', function() {
         return view('admin.stock-rupture-details-sb-admin');
@@ -124,6 +143,11 @@ Route::middleware('auth')->prefix('admin')->group(function () {
         Route::get('/{article}/edit', [ArticleController::class, 'edit'])->name('edit');
         Route::put('/{article}', [ArticleController::class, 'update'])->name('update');
         
+        // Routes d'export - NEW
+        Route::get('/export/excel', [ArticleController::class, 'exportExcel'])->name('export.excel');
+        Route::get('/export/pdf', [ArticleController::class, 'exportPDF'])->name('export.pdf');
+        Route::get('/export/print', [ArticleController::class, 'printArticles'])->name('export.print');
+        
         // Routes administrateur uniquement (protection renforcée)
         Route::middleware('admin')->group(function () {
             Route::patch('/{article}/toggle-status', [ArticleController::class, 'toggleStatus'])->name('toggle-status');
@@ -140,19 +164,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
         Route::get('/api/stats', [ArticleController::class, 'getStats'])->name('api.stats');
     });
 
-    // API routes pour les modals (si nécessaires dans le futur)
-    Route::get('/api/chiffre-affaires-details', [TableauDeBordController::class, 'getChiffreAffairesDetails'])
-        ->name('admin.chiffre-affaires-details');
-    Route::get('/api/stock-rupture-details', [TableauDeBordController::class, 'getStockRuptureDetails'])
-        ->name('admin.articles-rupture-details');
-    Route::get('/api/top-clients-details', [TableauDeBordController::class, 'getTopClientsDetails'])
-        ->name('admin.top-clients-details');
-    Route::get('/api/performance-horaire-details', [TableauDeBordController::class, 'getPerformanceHoraireDetails'])
-        ->name('admin.performance-horaire-details');
-    Route::get('/api/modes-paiement-details', [TableauDeBordController::class, 'getModesPaiementDetails'])
-        ->name('admin.modes-paiement-details');
-    Route::get('/api/etat-tables-details', [TableauDeBordController::class, 'getEtatTablesDetails'])
-        ->name('admin.etat-tables-details');
+    
     
     // Route pour export des données
     Route::get('/api/dashboard-export', [TableauDeBordController::class, 'exportModalData'])
@@ -182,6 +194,41 @@ Route::middleware('auth')->prefix('admin')->group(function () {
         Route::get('/{zone}/edit', [App\Http\Controllers\Admin\ZoneController::class, 'edit'])->name('edit');
         Route::put('/{zone}', [App\Http\Controllers\Admin\ZoneController::class, 'update'])->name('update');
         Route::delete('/{zone}', [App\Http\Controllers\Admin\ZoneController::class, 'destroy'])->name('destroy');
+    });
+
+    // Routes pour la gestion des tickets/التذاكر
+    Route::prefix('tickets')->name('admin.tickets.')->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\TicketController::class, 'index'])->name('index');
+        Route::get('/details', [App\Http\Controllers\Admin\TicketController::class, 'details'])->name('details');
+        Route::get('/print', [App\Http\Controllers\Admin\TicketController::class, 'print'])->name('print');
+        Route::post('/update-status', [App\Http\Controllers\Admin\TicketController::class, 'updateStatus'])->name('update-status');
+        Route::post('/delete', [App\Http\Controllers\Admin\TicketController::class, 'delete'])->name('delete');
+    });
+
+    // Routes pour la gestion des factures/الفواتير
+    Route::prefix('factures')->name('admin.factures.')->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\FactureController::class, 'index'])->name('index');
+        Route::get('/create', [App\Http\Controllers\Admin\FactureController::class, 'create'])->name('create');
+        Route::post('/', [App\Http\Controllers\Admin\FactureController::class, 'store'])->name('store');
+        Route::get('/{facture}', [App\Http\Controllers\Admin\FactureController::class, 'show'])->name('show');
+        Route::get('/{facture}/edit', [App\Http\Controllers\Admin\FactureController::class, 'edit'])->name('edit');
+        Route::put('/{facture}', [App\Http\Controllers\Admin\FactureController::class, 'update'])->name('update');
+        Route::delete('/{facture}', [App\Http\Controllers\Admin\FactureController::class, 'destroy'])->name('destroy');
+        Route::get('/{facture}/print', [App\Http\Controllers\Admin\FactureController::class, 'print'])->name('print');
+        Route::get('/convert/{cmdRef}', [App\Http\Controllers\Admin\FactureController::class, 'convertFromCommand'])->name('convert');
+        Route::post('/export', [App\Http\Controllers\Admin\FactureController::class, 'export'])->name('export');
+    });
+
+    // API Routes pour les factures - البحث والبيانات الديناميكية
+    Route::prefix('api/factures')->name('api.factures.')->group(function () {
+        Route::get('search-clients', [App\Http\Controllers\Admin\FactureController::class, 'searchClients'])->name('search-clients');
+        Route::post('create-client', [App\Http\Controllers\Admin\FactureController::class, 'createClient'])->name('create-client');
+        Route::get('search-articles', [App\Http\Controllers\Admin\FactureController::class, 'searchArticles'])->name('search-articles');
+        Route::get('client/{id}', [App\Http\Controllers\Admin\FactureController::class, 'getClientDetails'])->name('client-details');
+        Route::get('article/{ref}', [App\Http\Controllers\Admin\FactureController::class, 'getArticleDetails'])->name('article-details');
+        Route::post('validate-stock', [App\Http\Controllers\Admin\FactureController::class, 'validateStock'])->name('validate-stock');
+        Route::get('statistics', [App\Http\Controllers\Admin\FactureController::class, 'getStatistics'])->name('statistics');
+        Route::get('daily-summary', [App\Http\Controllers\Admin\FactureController::class, 'getDailySummary'])->name('daily-summary');
     });
 });
 

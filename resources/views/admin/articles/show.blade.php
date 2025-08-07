@@ -218,14 +218,14 @@
                         <div class="col-md-4">
                             <div class="stat-box">
                                 <i class="fas fa-shopping-cart fa-2x text-primary mb-2"></i>
-                                <h4 class="text-primary">{{ number_format($article->ART_PRIX_ACHAT ?? 0, 2) }} DA</h4>
+                                <h4 class="text-primary">{{ number_format($article->ART_PRIX_ACHAT ?? 0, 2) }} DH</h4>
                                 <p class="text-muted mb-0">Prix d'achat</p>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="stat-box">
                                 <i class="fas fa-tag fa-2x text-success mb-2"></i>
-                                <h4 class="text-success">{{ number_format($article->ART_PRIX_VENTE, 2) }} DA</h4>
+                                <h4 class="text-success">{{ number_format($article->ART_PRIX_VENTE, 2) }} DH</h4>
                                 <p class="text-muted mb-0">Prix de vente</p>
                             </div>
                         </div>
@@ -279,7 +279,7 @@
                             <div class="stat-box">
                                 <i class="fas fa-money-bill-wave fa-2x text-primary mb-2"></i>
                                 <h4 class="text-primary">
-                                    {{ number_format(($article->stock_total ?? 0) * ($article->ART_PRIX_ACHAT ?? 0), 2) }} DA
+                                    {{ number_format(($article->stock_total ?? 0) * ($article->ART_PRIX_ACHAT ?? 0), 2) }} DH
                                 </h4>
                                 <p class="text-muted mb-0">Valeur du stock</p>
                             </div>
@@ -325,7 +325,7 @@
                         
                         <div class="stat-box">
                             <i class="fas fa-money-bill fa-2x text-primary mb-2"></i>
-                            <h4 class="text-primary">{{ number_format($salesStats['total_revenue'] ?? 0, 2) }} DA</h4>
+                            <h4 class="text-primary">{{ number_format($salesStats['total_revenue'] ?? 0, 2) }} DH</h4>
                             <p class="text-muted mb-0">Chiffre d'affaires total</p>
                         </div>
 

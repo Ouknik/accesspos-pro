@@ -125,19 +125,68 @@
                 <a class="collapse-item {{ request()->routeIs('admin.tables.create') ? 'active' : '' }}" href="{{ route('admin.tables.create') }}">
                     <i class="fas fa-plus"></i> Ajouter une table
                 </a>
-                {{-- <div class="collapse-divider"></div>
-                <h6 class="collapse-header">Vue d'ensemble:</h6>
-                <a class="collapse-item {{ request()->routeIs('admin.dashboard.etat-tables') ? 'active' : '' }}" href="{{ route('admin.dashboard.etat-tables') }}">
-                    <i class="fas fa-eye"></i> État en temps réel
+            </div>
+        </div>
+    </li>
+
+    <!-- Nav Item - Gestion des Tickets -->
+    <li class="nav-item {{ request()->routeIs('admin.tickets.*') ? 'active' : '' }}">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTickets"
+            aria-expanded="{{ request()->routeIs('admin.tickets.*') ? 'true' : 'false' }}" aria-controls="collapseTickets">
+            <i class="fas fa-fw fa-ticket-alt"></i>
+            <span>Gestion des Tickets</span>
+        </a>
+        <div id="collapseTickets" class="collapse {{ request()->routeIs('admin.tickets.*') ? 'show' : '' }}" aria-labelledby="headingTickets" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Commandes & Tickets:</h6>
+                <a class="collapse-item {{ request()->routeIs('admin.tickets.index') ? 'active' : '' }}" href="{{ route('admin.tickets.index') }}">
+                    <i class="fas fa-list"></i> Liste des tickets
                 </a>
-                <a class="collapse-item {{ request()->routeIs('admin.zones.index') ? 'active' : '' }}" href="{{ route('admin.zones.index') }}">
-                    <i class="fas fa-map-marker-alt"></i> Gestion des zones
+                <div class="collapse-divider"></div>
+                <h6 class="collapse-header">Actions rapides:</h6>
+                <a class="collapse-item" href="{{ route('admin.tickets.index') }}?status=En cours">
+                    <i class="fas fa-clock text-warning"></i> Tickets en cours
                 </a>
-                @if(Route::has('admin.tables.layout'))
-                <a class="collapse-item" href="{{ route('admin.tables.layout') }}">
-                    <i class="fas fa-map"></i> Plan du restaurant
+                <a class="collapse-item" href="{{ route('admin.tickets.index') }}?status=En attente">
+                    <i class="fas fa-pause text-info"></i> Tickets en attente
                 </a>
-                @endif --}}
+                <a class="collapse-item" href="{{ route('admin.tickets.index') }}?date=today">
+                    <i class="fas fa-calendar-day text-success"></i> Tickets du jour
+                </a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Nav Item - Gestion des Factures -->
+    <li class="nav-item {{ request()->routeIs('admin.factures.*') ? 'active' : '' }}">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFactures"
+            aria-expanded="{{ request()->routeIs('admin.factures.*') ? 'true' : 'false' }}" aria-controls="collapseFactures">
+            <i class="fas fa-fw fa-file-invoice"></i>
+            <span>Gestion des Factures</span>
+        </a>
+        <div id="collapseFactures" class="collapse {{ request()->routeIs('admin.factures.*') ? 'show' : '' }}" aria-labelledby="headingFactures" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Facturation:</h6>
+                <a class="collapse-item {{ request()->routeIs('admin.factures.index') ? 'active' : '' }}" href="{{ route('admin.factures.index') }}">
+                    <i class="fas fa-list"></i> Liste des factures
+                </a>
+                <a class="collapse-item {{ request()->routeIs('admin.factures.create') ? 'active' : '' }}" href="{{ route('admin.factures.create') }}">
+                    <i class="fas fa-plus"></i> Nouvelle facture
+                </a>
+                <div class="collapse-divider"></div>
+                <h6 class="collapse-header">Actions rapides:</h6>
+                <a class="collapse-item" href="{{ route('admin.factures.index') }}?status=brouillon">
+                    <i class="fas fa-edit text-warning"></i> Brouillons
+                </a>
+                <a class="collapse-item" href="{{ route('admin.factures.index') }}?status=valide">
+                    <i class="fas fa-check text-success"></i> Factures validées
+                </a>
+                <a class="collapse-item" href="{{ route('admin.factures.index') }}?date=today">
+                    <i class="fas fa-calendar-day text-info"></i> Factures du jour
+                </a>
+                <a class="collapse-item" href="{{ route('admin.tickets.index') }}?status=Terminé">
+                    <i class="fas fa-exchange-alt text-primary"></i> Tickets à facturer
+                </a>
             </div>
         </div>
     </li>

@@ -1,0 +1,945 @@
+=== EXTRACTION DES DONNEES TICKETS - AccessPos Pro ===
+Date d'extraction: 2025-07-28 21:38:06
+Base de données: RestoWinxo
+===============================================================
+
+1. STRUCTURE DU TABLE CMD_VENTE (Tickets principaux)
+---------------------------------------------------
+- CMD_REF: nvarchar(32) NOT NULL
+- CLT_REF: nvarchar(32) NOT NULL
+- ETP_REF: nvarchar(32) NOT NULL
+- DVS_DATE: datetime NOT NULL
+- DVS_MONTANT_HT: decimal NOT NULL
+- DVS_MONTANT_TTC: decimal NOT NULL
+- DVS_REMISE: float NOT NULL
+- DVS_DUREEVALIDE: int NOT NULL
+- DVS_NUMERO: nvarchar(32) NOT NULL
+- DVS_VALIDE: bit NULL
+- DVS_TRANSFORME: bit NULL
+- DVS_EXONORE: bit NULL
+- DVS_UTILISATEUR: nvarchar(20) NULL
+- DVS_RMARQUE: nvarchar(200) NULL
+- TAB_REF: nvarchar(32) NULL
+- DVS_ETAT: nvarchar(255) NULL
+- DVS_NBR_COUVERT: float NULL
+- DVS_SERVEUR: nvarchar(20) NULL
+- CSS_ID_CAISSE: nvarchar(32) NULL
+- NbrReclame: int NULL
+- TAB_LIB: nvarchar(250) NULL
+- ImprimerNote: bit NOT NULL
+
+2. ECHANTILLON DE DONNEES CMD_VENTE (10 premiers)
+-----------------------------------------------
+Colonnes trouvées: CMD_REF, CLT_REF, ETP_REF, DVS_DATE, DVS_MONTANT_HT, DVS_MONTANT_TTC, DVS_REMISE, DVS_DUREEVALIDE, DVS_NUMERO, DVS_VALIDE, DVS_TRANSFORME, DVS_EXONORE, DVS_UTILISATEUR, DVS_RMARQUE, TAB_REF, DVS_ETAT, DVS_NBR_COUVERT, DVS_SERVEUR, CSS_ID_CAISSE, NbrReclame, TAB_LIB, ImprimerNote
+
+Ticket 1:
+  CMD_REF: 9
+  CLT_REF: 0
+  ETP_REF: 001
+  DVS_DATE: 2017-05-18 12:51:15.790
+  DVS_MONTANT_HT: 48.00
+  DVS_MONTANT_TTC: 48.00
+  DVS_REMISE: 0.0
+  DVS_DUREEVALIDE: 0
+  DVS_NUMERO: N9
+  DVS_VALIDE: 0
+  DVS_TRANSFORME: 0
+  DVS_EXONORE: 0
+  DVS_UTILISATEUR: 3
+  DVS_RMARQUE: 
+  TAB_REF: 2
+  DVS_ETAT: Annulé
+  DVS_NBR_COUVERT: 0.0
+  DVS_SERVEUR: 1
+  CSS_ID_CAISSE: 01
+  NbrReclame: 1
+  TAB_LIB: NULL
+  ImprimerNote: 0
+
+Ticket 2:
+  CMD_REF: 8
+  CLT_REF: 0
+  ETP_REF: 001
+  DVS_DATE: 2017-05-18 11:28:16.520
+  DVS_MONTANT_HT: 241.00
+  DVS_MONTANT_TTC: 241.00
+  DVS_REMISE: 0.0
+  DVS_DUREEVALIDE: 0
+  DVS_NUMERO: N8
+  DVS_VALIDE: 0
+  DVS_TRANSFORME: 0
+  DVS_EXONORE: 0
+  DVS_UTILISATEUR: 00
+  DVS_RMARQUE: 
+  TAB_REF: 1
+  DVS_ETAT: Annulé
+  DVS_NBR_COUVERT: 0.0
+  DVS_SERVEUR: 00
+  CSS_ID_CAISSE: 01
+  NbrReclame: 1
+  TAB_LIB: NULL
+  ImprimerNote: 0
+
+Ticket 3:
+  CMD_REF: 7
+  CLT_REF: 0
+  ETP_REF: 001
+  DVS_DATE: 2017-05-13 22:20:30.950
+  DVS_MONTANT_HT: 104.00
+  DVS_MONTANT_TTC: 104.00
+  DVS_REMISE: 0.0
+  DVS_DUREEVALIDE: 0
+  DVS_NUMERO: N7
+  DVS_VALIDE: 0
+  DVS_TRANSFORME: 0
+  DVS_EXONORE: 0
+  DVS_UTILISATEUR: 00
+  DVS_RMARQUE: 
+  TAB_REF: 1
+  DVS_ETAT: Annulé
+  DVS_NBR_COUVERT: 0.0
+  DVS_SERVEUR: 00
+  CSS_ID_CAISSE: 01
+  NbrReclame: 1
+  TAB_LIB: NULL
+  ImprimerNote: 0
+
+Ticket 4:
+  CMD_REF: 6
+  CLT_REF: 0
+  ETP_REF: 001
+  DVS_DATE: 2017-05-13 22:20:18.573
+  DVS_MONTANT_HT: 28.00
+  DVS_MONTANT_TTC: 28.00
+  DVS_REMISE: 0.0
+  DVS_DUREEVALIDE: 0
+  DVS_NUMERO: N6
+  DVS_VALIDE: 0
+  DVS_TRANSFORME: 0
+  DVS_EXONORE: 0
+  DVS_UTILISATEUR: 00
+  DVS_RMARQUE: 
+  TAB_REF: 1
+  DVS_ETAT: Annulé
+  DVS_NBR_COUVERT: 0.0
+  DVS_SERVEUR: 00
+  CSS_ID_CAISSE: 01
+  NbrReclame: 1
+  TAB_LIB: NULL
+  ImprimerNote: 0
+
+Ticket 5:
+  CMD_REF: 5
+  CLT_REF: 0
+  ETP_REF: 001
+  DVS_DATE: 2017-05-13 22:19:58.117
+  DVS_MONTANT_HT: 74.00
+  DVS_MONTANT_TTC: 74.00
+  DVS_REMISE: 0.0
+  DVS_DUREEVALIDE: 0
+  DVS_NUMERO: N5
+  DVS_VALIDE: 0
+  DVS_TRANSFORME: 0
+  DVS_EXONORE: 0
+  DVS_UTILISATEUR: 00
+  DVS_RMARQUE: 
+  TAB_REF: 1
+  DVS_ETAT: Annulé
+  DVS_NBR_COUVERT: 0.0
+  DVS_SERVEUR: 00
+  CSS_ID_CAISSE: 01
+  NbrReclame: 1
+  TAB_LIB: NULL
+  ImprimerNote: 0
+
+Ticket 6:
+  CMD_REF: 4
+  CLT_REF: 0
+  ETP_REF: 001
+  DVS_DATE: 2017-05-13 22:19:39.913
+  DVS_MONTANT_HT: 79.00
+  DVS_MONTANT_TTC: 79.00
+  DVS_REMISE: 0.0
+  DVS_DUREEVALIDE: 0
+  DVS_NUMERO: N4
+  DVS_VALIDE: 0
+  DVS_TRANSFORME: 0
+  DVS_EXONORE: 0
+  DVS_UTILISATEUR: 00
+  DVS_RMARQUE: 
+  TAB_REF: 1
+  DVS_ETAT: Annulé
+  DVS_NBR_COUVERT: 0.0
+  DVS_SERVEUR: 00
+  CSS_ID_CAISSE: 01
+  NbrReclame: 1
+  TAB_LIB: NULL
+  ImprimerNote: 0
+
+Ticket 7:
+  CMD_REF: 3
+  CLT_REF: 0
+  ETP_REF: 001
+  DVS_DATE: 2017-05-13 22:19:25.053
+  DVS_MONTANT_HT: 185.00
+  DVS_MONTANT_TTC: 185.00
+  DVS_REMISE: 0.0
+  DVS_DUREEVALIDE: 0
+  DVS_NUMERO: N3
+  DVS_VALIDE: 0
+  DVS_TRANSFORME: 0
+  DVS_EXONORE: 0
+  DVS_UTILISATEUR: 00
+  DVS_RMARQUE: 
+  TAB_REF: 1
+  DVS_ETAT: Annulé
+  DVS_NBR_COUVERT: 0.0
+  DVS_SERVEUR: 00
+  CSS_ID_CAISSE: 01
+  NbrReclame: 1
+  TAB_LIB: NULL
+  ImprimerNote: 0
+
+Ticket 8:
+  CMD_REF: 2
+  CLT_REF: 0
+  ETP_REF: 001
+  DVS_DATE: 2017-05-13 22:18:57.517
+  DVS_MONTANT_HT: 109.00
+  DVS_MONTANT_TTC: 109.00
+  DVS_REMISE: 0.0
+  DVS_DUREEVALIDE: 0
+  DVS_NUMERO: N2
+  DVS_VALIDE: 0
+  DVS_TRANSFORME: 0
+  DVS_EXONORE: 0
+  DVS_UTILISATEUR: 00
+  DVS_RMARQUE: 
+  TAB_REF: 1
+  DVS_ETAT: Annulé
+  DVS_NBR_COUVERT: 0.0
+  DVS_SERVEUR: 00
+  CSS_ID_CAISSE: 01
+  NbrReclame: 1
+  TAB_LIB: NULL
+  ImprimerNote: 0
+
+Ticket 9:
+  CMD_REF: 1
+  CLT_REF: 0
+  ETP_REF: 001
+  DVS_DATE: 2017-05-13 22:18:14.153
+  DVS_MONTANT_HT: 132.00
+  DVS_MONTANT_TTC: 132.00
+  DVS_REMISE: 0.0
+  DVS_DUREEVALIDE: 0
+  DVS_NUMERO: N1
+  DVS_VALIDE: 0
+  DVS_TRANSFORME: 0
+  DVS_EXONORE: 0
+  DVS_UTILISATEUR: 00
+  DVS_RMARQUE: 
+  TAB_REF: 1
+  DVS_ETAT: Annulé
+  DVS_NBR_COUVERT: 0.0
+  DVS_SERVEUR: 00
+  CSS_ID_CAISSE: 01
+  NbrReclame: 1
+  TAB_LIB: NULL
+  ImprimerNote: 0
+
+
+3. STRUCTURE DU TABLE CMD_VENTE_DETAIL (Détails des tickets)
+-----------------------------------------------------------
+- CMD_REF: nvarchar(32) NOT NULL
+- ART_REF: nvarchar(32) NOT NULL
+- CVD_COILISAGE: float NOT NULL
+- CVD_REMISE: float NOT NULL
+- CVD_NBR_COLIS: float NOT NULL
+- CVD_QTE: decimal NOT NULL
+- CVD_PRIX_HT: decimal NOT NULL
+- CVD_PRIX_TTC: decimal NOT NULL
+- CVD_TVA: float NOT NULL
+- CVD_QTE_GRATUITE: float NOT NULL
+- CVD_COMMENTAIRE: nvarchar(-1) NULL
+- TRF_LIBELLE: nvarchar(200) NULL
+- CMD_ID: int NOT NULL
+- ASUIVRE: int NULL
+- IsMenu: bit NOT NULL
+- NameMenu: nvarchar(255) NULL
+- CVD_COMPOSITION: nvarchar(500) NOT NULL
+- CVD_PREPARER: bit NOT NULL
+
+4. ECHANTILLON DE DONNEES CMD_VENTE_DETAIL (15 premiers)
+-----------------------------------------------------
+Colonnes trouvées: CMD_REF, ART_REF, CVD_COILISAGE, CVD_REMISE, CVD_NBR_COLIS, CVD_QTE, CVD_PRIX_HT, CVD_PRIX_TTC, CVD_TVA, CVD_QTE_GRATUITE, CVD_COMMENTAIRE, TRF_LIBELLE, CMD_ID, ASUIVRE, IsMenu, NameMenu, CVD_COMPOSITION, CVD_PREPARER
+
+Détail 1:
+  CMD_REF: 1
+  ART_REF: 1
+  CVD_COILISAGE: 0.0
+  CVD_REMISE: 0.0
+  CVD_NBR_COLIS: 0.0
+  CVD_QTE: 1.000
+  CVD_PRIX_HT: 18.18
+  CVD_PRIX_TTC: 20.00
+  CVD_TVA: 10.0
+  CVD_QTE_GRATUITE: 0.0
+  CVD_COMMENTAIRE: NULL
+  TRF_LIBELLE: Sur place
+  CMD_ID: 142590
+  ASUIVRE: 1
+  IsMenu: 0
+  NameMenu:  
+  CVD_COMPOSITION: 
+  CVD_PREPARER: 0
+
+Détail 2:
+  CMD_REF: 1
+  ART_REF: 2
+  CVD_COILISAGE: 0.0
+  CVD_REMISE: 0.0
+  CVD_NBR_COLIS: 0.0
+  CVD_QTE: 1.000
+  CVD_PRIX_HT: 25.45
+  CVD_PRIX_TTC: 28.00
+  CVD_TVA: 10.0
+  CVD_QTE_GRATUITE: 0.0
+  CVD_COMMENTAIRE: NULL
+  TRF_LIBELLE: Sur place
+  CMD_ID: 142591
+  ASUIVRE: 1
+  IsMenu: 0
+  NameMenu:  
+  CVD_COMPOSITION: 
+  CVD_PREPARER: 0
+
+Détail 3:
+  CMD_REF: 1
+  ART_REF: 3
+  CVD_COILISAGE: 0.0
+  CVD_REMISE: 0.0
+  CVD_NBR_COLIS: 0.0
+  CVD_QTE: 1.000
+  CVD_PRIX_HT: 27.27
+  CVD_PRIX_TTC: 30.00
+  CVD_TVA: 10.0
+  CVD_QTE_GRATUITE: 0.0
+  CVD_COMMENTAIRE: NULL
+  TRF_LIBELLE: Sur place
+  CMD_ID: 142592
+  ASUIVRE: 1
+  IsMenu: 0
+  NameMenu:  
+  CVD_COMPOSITION: 
+  CVD_PREPARER: 0
+
+Détail 4:
+  CMD_REF: 1
+  ART_REF: 4
+  CVD_COILISAGE: 0.0
+  CVD_REMISE: 0.0
+  CVD_NBR_COLIS: 0.0
+  CVD_QTE: 1.000
+  CVD_PRIX_HT: 30.91
+  CVD_PRIX_TTC: 34.00
+  CVD_TVA: 10.0
+  CVD_QTE_GRATUITE: 0.0
+  CVD_COMMENTAIRE: NULL
+  TRF_LIBELLE: Sur place
+  CMD_ID: 142593
+  ASUIVRE: 1
+  IsMenu: 0
+  NameMenu:  
+  CVD_COMPOSITION: 
+  CVD_PREPARER: 0
+
+Détail 5:
+  CMD_REF: 1
+  ART_REF: 5
+  CVD_COILISAGE: 0.0
+  CVD_REMISE: 0.0
+  CVD_NBR_COLIS: 0.0
+  CVD_QTE: 1.000
+  CVD_PRIX_HT: 18.18
+  CVD_PRIX_TTC: 20.00
+  CVD_TVA: 10.0
+  CVD_QTE_GRATUITE: 0.0
+  CVD_COMMENTAIRE: NULL
+  TRF_LIBELLE: Sur place
+  CMD_ID: 142594
+  ASUIVRE: 1
+  IsMenu: 0
+  NameMenu:  
+  CVD_COMPOSITION: 
+  CVD_PREPARER: 0
+
+Détail 6:
+  CMD_REF: 2
+  ART_REF: 10
+  CVD_COILISAGE: 0.0
+  CVD_REMISE: 0.0
+  CVD_NBR_COLIS: 0.0
+  CVD_QTE: 1.000
+  CVD_PRIX_HT: 12.73
+  CVD_PRIX_TTC: 14.00
+  CVD_TVA: 10.0
+  CVD_QTE_GRATUITE: 0.0
+  CVD_COMMENTAIRE: NULL
+  TRF_LIBELLE: Sur place
+  CMD_ID: 142595
+  ASUIVRE: 1
+  IsMenu: 0
+  NameMenu:  
+  CVD_COMPOSITION: 
+  CVD_PREPARER: 0
+
+Détail 7:
+  CMD_REF: 2
+  ART_REF: 11
+  CVD_COILISAGE: 0.0
+  CVD_REMISE: 0.0
+  CVD_NBR_COLIS: 0.0
+  CVD_QTE: 1.000
+  CVD_PRIX_HT: 12.73
+  CVD_PRIX_TTC: 14.00
+  CVD_TVA: 10.0
+  CVD_QTE_GRATUITE: 0.0
+  CVD_COMMENTAIRE: NULL
+  TRF_LIBELLE: Sur place
+  CMD_ID: 142596
+  ASUIVRE: 1
+  IsMenu: 0
+  NameMenu:  
+  CVD_COMPOSITION: 
+  CVD_PREPARER: 0
+
+Détail 8:
+  CMD_REF: 2
+  ART_REF: 12
+  CVD_COILISAGE: 0.0
+  CVD_REMISE: 0.0
+  CVD_NBR_COLIS: 0.0
+  CVD_QTE: 1.000
+  CVD_PRIX_HT: 13.64
+  CVD_PRIX_TTC: 15.00
+  CVD_TVA: 10.0
+  CVD_QTE_GRATUITE: 0.0
+  CVD_COMMENTAIRE: NULL
+  TRF_LIBELLE: Sur place
+  CMD_ID: 142597
+  ASUIVRE: 1
+  IsMenu: 0
+  NameMenu:  
+  CVD_COMPOSITION: 
+  CVD_PREPARER: 0
+
+Détail 9:
+  CMD_REF: 2
+  ART_REF: 13
+  CVD_COILISAGE: 0.0
+  CVD_REMISE: 0.0
+  CVD_NBR_COLIS: 0.0
+  CVD_QTE: 1.000
+  CVD_PRIX_HT: 13.64
+  CVD_PRIX_TTC: 15.00
+  CVD_TVA: 10.0
+  CVD_QTE_GRATUITE: 0.0
+  CVD_COMMENTAIRE: NULL
+  TRF_LIBELLE: Sur place
+  CMD_ID: 142598
+  ASUIVRE: 1
+  IsMenu: 0
+  NameMenu:  
+  CVD_COMPOSITION: 
+  CVD_PREPARER: 0
+
+Détail 10:
+  CMD_REF: 2
+  ART_REF: 14
+  CVD_COILISAGE: 0.0
+  CVD_REMISE: 0.0
+  CVD_NBR_COLIS: 0.0
+  CVD_QTE: 1.000
+  CVD_PRIX_HT: 13.64
+  CVD_PRIX_TTC: 15.00
+  CVD_TVA: 10.0
+  CVD_QTE_GRATUITE: 0.0
+  CVD_COMMENTAIRE: NULL
+  TRF_LIBELLE: Sur place
+  CMD_ID: 142599
+  ASUIVRE: 1
+  IsMenu: 0
+  NameMenu:  
+  CVD_COMPOSITION: 
+  CVD_PREPARER: 0
+
+Détail 11:
+  CMD_REF: 2
+  ART_REF: 6
+  CVD_COILISAGE: 0.0
+  CVD_REMISE: 0.0
+  CVD_NBR_COLIS: 0.0
+  CVD_QTE: 1.000
+  CVD_PRIX_HT: 5.45
+  CVD_PRIX_TTC: 6.00
+  CVD_TVA: 10.0
+  CVD_QTE_GRATUITE: 0.0
+  CVD_COMMENTAIRE: NULL
+  TRF_LIBELLE: Sur place
+  CMD_ID: 142600
+  ASUIVRE: 1
+  IsMenu: 0
+  NameMenu:  
+  CVD_COMPOSITION: 
+  CVD_PREPARER: 0
+
+Détail 12:
+  CMD_REF: 2
+  ART_REF: 7
+  CVD_COILISAGE: 0.0
+  CVD_REMISE: 0.0
+  CVD_NBR_COLIS: 0.0
+  CVD_QTE: 1.000
+  CVD_PRIX_HT: 9.09
+  CVD_PRIX_TTC: 10.00
+  CVD_TVA: 10.0
+  CVD_QTE_GRATUITE: 0.0
+  CVD_COMMENTAIRE: NULL
+  TRF_LIBELLE: Sur place
+  CMD_ID: 142601
+  ASUIVRE: 1
+  IsMenu: 0
+  NameMenu:  
+  CVD_COMPOSITION: 
+  CVD_PREPARER: 0
+
+Détail 13:
+  CMD_REF: 2
+  ART_REF: 8
+  CVD_COILISAGE: 0.0
+  CVD_REMISE: 0.0
+  CVD_NBR_COLIS: 0.0
+  CVD_QTE: 1.000
+  CVD_PRIX_HT: 9.09
+  CVD_PRIX_TTC: 10.00
+  CVD_TVA: 10.0
+  CVD_QTE_GRATUITE: 0.0
+  CVD_COMMENTAIRE: NULL
+  TRF_LIBELLE: Sur place
+  CMD_ID: 142602
+  ASUIVRE: 1
+  IsMenu: 0
+  NameMenu:  
+  CVD_COMPOSITION: 
+  CVD_PREPARER: 0
+
+Détail 14:
+  CMD_REF: 2
+  ART_REF: 9
+  CVD_COILISAGE: 0.0
+  CVD_REMISE: 0.0
+  CVD_NBR_COLIS: 0.0
+  CVD_QTE: 1.000
+  CVD_PRIX_HT: 9.09
+  CVD_PRIX_TTC: 10.00
+  CVD_TVA: 10.0
+  CVD_QTE_GRATUITE: 0.0
+  CVD_COMMENTAIRE: NULL
+  TRF_LIBELLE: Sur place
+  CMD_ID: 142603
+  ASUIVRE: 1
+  IsMenu: 0
+  NameMenu:  
+  CVD_COMPOSITION: 
+  CVD_PREPARER: 0
+
+Détail 15:
+  CMD_REF: 3
+  ART_REF: 15
+  CVD_COILISAGE: 0.0
+  CVD_REMISE: 0.0
+  CVD_NBR_COLIS: 0.0
+  CVD_QTE: 1.000
+  CVD_PRIX_HT: 12.73
+  CVD_PRIX_TTC: 14.00
+  CVD_TVA: 10.0
+  CVD_QTE_GRATUITE: 0.0
+  CVD_COMMENTAIRE: NULL
+  TRF_LIBELLE: Sur place
+  CMD_ID: 142604
+  ASUIVRE: 1
+  IsMenu: 0
+  NameMenu:  
+  CVD_COMPOSITION: 
+  CVD_PREPARER: 0
+
+
+5. RECHERCHE DES TABLES LIEES AUX REMISES ET OFFRES
+=================================================
+
+Tables contenant 'remise':
+------------------------------
+Aucune table trouvée
+
+Tables contenant 'offre':
+------------------------------
+Aucune table trouvée
+
+Tables contenant 'discount':
+------------------------------
+Aucune table trouvée
+
+Tables contenant 'promotion':
+------------------------------
+Aucune table trouvée
+
+Tables contenant 'cadeau':
+------------------------------
+- CADEAU_FEDELITE
+  Colonnes: Cadeau_REF, NumTicket, Pt_Cadeau, Date_Cad, Heure_Cad, Num_Caisse, Code_Caissier, Nom_Caissier, Prenom_Cassier, Code_Client, Client, Cadeau, MntCadeau, Exporter
+
+
+Tables contenant 'reduction':
+------------------------------
+Aucune table trouvée
+
+6. RECHERCHE DANS LES COLONNES POUR REMISES/OFFRES
+===============================================
+
+Colonnes contenant 'remise':
+-----------------------------------
+- Table: AVOIR_ACHAT_DETAIL, Colonne: AVRA_REMISE (float)
+
+- Table: AVOIR_VENTE_DETAIL, Colonne: AVRVD_REMISE (float)
+
+- Table: BL_FOURNISSEUR, Colonne: BLF_REMISE (float)
+
+- Table: BL_VENTE, Colonne: CMV_REMISE (float)
+
+- Table: BL_VENTE_DETAIL, Colonne: BVD_REMISE (float)
+
+- Table: BLFOURNISSEUR_DETAIL, Colonne: ABF_REMISE (float)
+
+- Table: CMD_VENTE, Colonne: DVS_REMISE (float)
+  Valeurs: 0.0
+
+- Table: CMD_VENTE_DETAIL, Colonne: CVD_REMISE (float)
+  Valeurs: 0.0
+
+- Table: COMMANDE_ACHAT, Colonne: ACH_REMISE (float)
+
+- Table: COMMANDE_ACHAT_DETAIL, Colonne: CAD_REMISE (float)
+
+- Table: FACTURE_FOURNISSEUR, Colonne: FCF_REMISE_GLOBAL (float)
+
+- Table: FACTURE_FRS_DETAIL, Colonne: FCF_REMISE (float)
+
+- Table: FACTURE_VNT, Colonne: FCTV_REMISE (float)
+  Valeurs: 0.0
+
+- Table: FACTURE_VNT_DETAIL, Colonne: FVD_REMISE (float)
+  Valeurs: 0.0
+
+- Table: FOURNISSEUR_OF_ARTICLE, Colonne: FR_ART_REMISE (float)
+
+- Table: HISTORIQUE_ANNULATION, Colonne: HA_REMISE (float)
+  Valeurs: 0.0
+
+- Table: ROLE, Colonne: A_AVR_AFFECT_REMISE (bit)
+
+- Table: ROLE, Colonne: A_CMD_AFFECTATION_REMISE (bit)
+
+- Table: ROLE, Colonne: A_FACT_AFFECTATION_REMISE (bit)
+
+- Table: ROLE, Colonne: A_RECEP_AFFECTATION_REMISE (bit)
+
+- Table: ROLE, Colonne: CAIS_REMISE_CHANG_PRIX_OFFERT (bit)
+
+- Table: ROLE, Colonne: INTER_ENTR_AFFECT_REMISE (bit)
+
+- Table: ROLE, Colonne: INTER_SORT_AFFECTATION_REMISE (bit)
+
+- Table: ROLE, Colonne: V_AV_AFFECTATION_REMISE (bit)
+
+- Table: ROLE, Colonne: V_DEV_AFFECT_REMISE (bit)
+
+- Table: ROLE, Colonne: V_FACT_AFFECT_REMISE (bit)
+
+- Table: ROLE, Colonne: V_LIV_AFFECT_REMISE (bit)
+
+
+Colonnes contenant 'offre':
+-----------------------------------
+Aucune colonne trouvée
+
+Colonnes contenant 'discount':
+-----------------------------------
+Aucune colonne trouvée
+
+Colonnes contenant 'promotion':
+-----------------------------------
+Aucune colonne trouvée
+
+Colonnes contenant 'cadeau':
+-----------------------------------
+- Table: CADEAU_FEDELITE, Colonne: Cadeau (decimal)
+
+- Table: CADEAU_FEDELITE, Colonne: Cadeau_REF (nvarchar)
+
+- Table: CADEAU_FEDELITE, Colonne: MntCadeau (decimal)
+
+- Table: CADEAU_FEDELITE, Colonne: Pt_Cadeau (int)
+
+- Table: Det_Fedilite, Colonne: DET_FED_MNT_CADEAU (decimal)
+
+- Table: Det_Fedilite, Colonne: DET_FED_PT_CADEAU (int)
+
+
+Colonnes contenant 'reduction':
+-----------------------------------
+Aucune colonne trouvée
+
+7. TABLES SYSTEME DE GESTION
+===========================
+
+Table: PARAMETRES
+-----------------
+Colonnes: CHAMP, VALEUR
+Ligne 1:
+  CHAMP: ART_REF
+  VALEUR: 62
+
+Ligne 2:
+  CHAMP: CLT_REF
+  VALEUR: 0
+
+Ligne 3:
+  CHAMP: CMD_VENTE_NUM
+  VALEUR: 0
+
+Ligne 4:
+  CHAMP: CMD_VENTE_REF
+  VALEUR: 9
+
+Ligne 5:
+  CHAMP: CMP_REF
+  VALEUR: 0
+
+
+Table: PARAMETRECAISSE
+----------------------
+Colonnes: NumCaisse, Enteteticket1, Enteteticket2, Npattente, RC, IFE, Adresse, PiedPage, GTable, GServeur, Ouverturetiroir, ImprimerNote, ImprimerCuisine, ImprimerTicket, ImprimanteTicket, RenitialiserTicket, ActiverAffich, ComAfficheur, RenitialiserNumCmd, NumEntrepot, MSGAFFICHEUR, MSGAFFICHEUR2, BAUDRATEAFFICHEUR, OptionRamadan, Imp_Expr, SourceChemin, LocalChemin, ArchiveChemin, cloturer_journee_continu, Choix_Tva, Choix_Credit, Imp_Expr_Pda, SourceCheminPda, option_table_par_clavier, option_Voir_Numticket, CF, Telephone, ImporterTout, PiedPage2, Tarif, option_imprimer_cmdCompler, NbrTicketEncaiss, ImprimanteRecapCuisine, Nbr_Imp_Cuisine, ImprimerRecapCuisine, FamilleNonImprime, ICE, RFID, BAUDRFID, COMRFID, GestionFedilite, GestionPlanSalle, ImprimerTencaissemetavecTcuisine, ExportFileTxtOrDbf, NbrCouvert, ImprimerNoteSE, Tauxdroittimbre, Droittimbre
+Ligne 1:
+  NumCaisse: 01
+  Enteteticket1: STATION WINXO
+  Enteteticket2: 
+  Npattente: 
+  RC: 
+  IFE: 
+  Adresse: 
+  PiedPage: Merci de votre visite
+  GTable: 1
+  GServeur: 1
+  Ouverturetiroir: 1
+  ImprimerNote: 1
+  ImprimerCuisine: 1
+  ImprimerTicket: 1
+  ImprimanteTicket: Ticket
+  RenitialiserTicket: 1
+  ActiverAffich: 0
+  ComAfficheur: 
+  RenitialiserNumCmd: 1
+  NumEntrepot: 001
+  MSGAFFICHEUR: **WELCOME TO**
+  MSGAFFICHEUR2: 
+  BAUDRATEAFFICHEUR: 
+  OptionRamadan: 0
+  Imp_Expr: 0
+  SourceChemin: C:\Fichier Caisse\Local
+  LocalChemin: D:\FichierCaisse
+  ArchiveChemin: C:\Fichier Caisse\Archive
+  cloturer_journee_continu: 0
+  Choix_Tva: 1
+  Choix_Credit: 0
+  Imp_Expr_Pda: 0
+  SourceCheminPda: 
+  option_table_par_clavier: 1
+  option_Voir_Numticket: 0
+  CF: CF
+  Telephone: 05 24 88 82 82 -FAX 0524883738
+  ImporterTout: 1
+  PiedPage2: 
+  Tarif: Sur place
+  option_imprimer_cmdCompler: 0
+  NbrTicketEncaiss: 2
+  ImprimanteRecapCuisine:  
+  Nbr_Imp_Cuisine: 1
+  ImprimerRecapCuisine: 0
+  FamilleNonImprime: 
+  ICE: 
+  RFID: 0
+  BAUDRFID: 9600
+  COMRFID: 
+  GestionFedilite: 0
+  GestionPlanSalle: 0
+  ImprimerTencaissemetavecTcuisine: 0
+  ExportFileTxtOrDbf: 0
+  NbrCouvert: 0
+  ImprimerNoteSE: 0
+  Tauxdroittimbre: .00
+  Droittimbre: 0
+
+
+Table: MODEPAIMENT
+------------------
+Colonnes: MPY_REF, MPY_LIB
+Ligne 1:
+  MPY_REF: 2014231
+  MPY_LIB: Carte
+
+Ligne 2:
+  MPY_REF: 2014224
+  MPY_LIB: Chèque
+
+Ligne 3:
+  MPY_REF: 2014212
+  MPY_LIB: Espèce
+
+
+Table: FONDDECAISSE
+-------------------
+Colonnes: id, FondCaisse, DateFondcaisse, Numcaisse
+
+8. STATISTIQUES DES STATUTS DE TICKETS
+====================================
+- Annulé: 9 tickets
+
+9. TYPES DE TABLES ET SERVEURS
+=============================
+Tables utilisées: 1, 2
+Serveurs: 00, 1
+
+10. CHAMPS LIES AUX MONTANTS ET PRIX
+==================================
+
+Champs contenant 'montant':
+- BL_FOURNISSEUR.BLF_MONTANT_HT (decimal)
+- BL_FOURNISSEUR.BLF_MONTANT_TTC (decimal)
+- CMD_VENTE.DVS_MONTANT_HT (decimal)
+- CMD_VENTE.DVS_MONTANT_TTC (decimal)
+- COMMANDE_ACHAT.ACH_MONTANT_HT (decimal)
+- COMMANDE_ACHAT.ACH_MONTANT_TTC (decimal)
+- CREDITCLIENT.MontantCredit (float)
+- DEPENSE.DEP_MONTANTHT (float)
+- DetailsReglement.MontantRegle (decimal)
+- DetailsReglement.MontantTotal (decimal)
+- FACTURE_FOURNISSEUR.FCF_MONTANT_HT_ (decimal)
+- FACTURE_FOURNISSEUR.FCF_MONTANT_TTC (decimal)
+- FACTURE_VNT.MontantBonAchat (decimal)
+- FACTURE_VNT.MontantCharte (decimal)
+- FACTURE_VNT.MontantCheque (decimal)
+- FACTURE_VNT.MontantCredit (decimal)
+- FACTURE_VNT.MontantEspece (decimal)
+- FACTURE_VNT.MontantTicketR (decimal)
+- PERIODE_TRAVAIL.PER_TRV_MONTANT_CAISSE (float)
+- PERIODE_TRAVAIL_JOUR.PER_TRV_JR_MONTANT_CAISSE (float)
+- REGLEMENT.REG_MONTANT (money)
+- TRANSACTIONCLIENT.TR_MONTANT_RGL (float)
+
+Champs contenant 'prix':
+- ARTICLE.ART_PRIX_ACHAT (float)
+- ARTICLE.ART_PRIX_ACHAT_HT (decimal)
+- ARTICLE.ART_PRIX_EMPORTER (decimal)
+- ARTICLE.ART_PRIX_VENTE (float)
+- ARTICLE.ART_PRIX_VENTE_HT (decimal)
+- AVOIR_ACHAT_DETAIL.ARVA_PRIX_HT (decimal)
+- AVOIR_ACHAT_DETAIL.AVRA_PRIX_TTC (decimal)
+- AVOIR_VENTE_DETAIL.AVRVD_PRIX_HT (decimal)
+- AVOIR_VENTE_DETAIL.AVRVD_PRIX_TTC (decimal)
+- BL_VENTE_DETAIL.BVD_PRIX_VNT_HT (decimal)
+- BL_VENTE_DETAIL.BVD_PRIX_VNT_TTC (decimal)
+- BLFOURNISSEUR_DETAIL.ABF_PRIX_TTC (decimal)
+- BLFOURNISSEUR_DETAIL.ABF_PRIXHT (decimal)
+- CMD_VENTE_DETAIL.CVD_PRIX_HT (decimal)
+- CMD_VENTE_DETAIL.CVD_PRIX_TTC (decimal)
+- COMMANDE_ACHAT_DETAIL.CAD_PRIX_TTC (decimal)
+- COMMANDE_ACHAT_DETAIL.CAD_PRIXV_HT (decimal)
+- COMPOSITION_ARTICLE.PrixVntTTC (float)
+- FACTURE_FRS_DETAIL.FCF_PRIX_HT (decimal)
+- FACTURE_FRS_DETAIL.FCF_PRIX_TTC (decimal)
+- FACTURE_VNT_DETAIL.FVD_PRIX_VNT_HT (decimal)
+- FACTURE_VNT_DETAIL.FVD_PRIX_VNT_TTC (decimal)
+- FOURNISSEUR_OF_ARTICLE.PRIX_ACHAT (decimal)
+- HISTORIQUE_ANNULATION.HA_PRIX_HT (decimal)
+- HISTORIQUE_ANNULATION.HA_PRIX_TTC (decimal)
+- INVENTAIRE_DETAIL.INV_ARTPRIX (float)
+- MENU.PrixVntTTC (float)
+- PARAMETRES_BALANCE.CODEBARRE_PRIX (bit)
+- ROLE.A_AVR_MODIF_PRIXART (bit)
+- ROLE.A_CMD_MODIF_PRIXART (bit)
+- ROLE.A_FACT_MODIF_PRIXART (bit)
+- ROLE.A_RECEP_MODIF_PRIXART (bit)
+- ROLE.A_RET_MODIF_PRIXART (bit)
+- ROLE.CAIS_REMISE_CHANG_PRIX_OFFERT (bit)
+- ROLE.INTER_ENTR_MODIF_PRIXACHT (bit)
+- ROLE.INTER_SORT_MODIF_PRIXART (bit)
+- ROLE.V_AV_MODIF_PRIXART (bit)
+- ROLE.V_DEV_MODIF_PRIXART (bit)
+- ROLE.V_FACT_MODIF_PRIXART (bit)
+- ROLE.V_LIV_MODIF_PRIXART (bit)
+- TARIF_OF_ARTICLE.TRF_ART_PRIXHT (float)
+- TARIF_OF_ARTICLE.TRF_ART_PRIXTTC (float)
+- V_ARTICLES.ART_PRIX_ACHAT (float)
+- V_ARTICLES.ART_PRIX_ACHAT_HT (decimal)
+- V_ARTICLES.ART_PRIX_EMPORTER (decimal)
+- V_ARTICLES.ART_PRIX_VENTE (float)
+- V_ARTICLES.ART_PRIX_VENTE_HT (decimal)
+- VIEW_RETOUR_ARTICLE.FVD_PRIX_VNT_HT (decimal)
+- VIEW_RETOUR_ARTICLE.FVD_PRIX_VNT_TTC (decimal)
+- VIEW_RETOUR_ARTICLE.PRIX_UNITAIRE (float)
+
+Champs contenant 'total':
+- Comptage_Caisse.TotalDepense (decimal)
+- DetailsReglement.MontantTotal (decimal)
+- FACTURE_FOURNISSEUR.FCT_MNT_TOTAL (decimal)
+- FACTURE_VNT.FCT_MNT_TOTAL (decimal)
+- PERIODE_TRAVAIL.PER_TRV_RECETTE_TOTAL (float)
+- PERIODE_TRAVAIL_JOUR.PER_TRV_JR_RECETTE_TOTAL (float)
+
+Champs contenant 'remise':
+- AVOIR_ACHAT_DETAIL.AVRA_REMISE (float)
+- AVOIR_VENTE_DETAIL.AVRVD_REMISE (float)
+- BL_FOURNISSEUR.BLF_REMISE (float)
+- BL_VENTE.CMV_REMISE (float)
+- BL_VENTE_DETAIL.BVD_REMISE (float)
+- BLFOURNISSEUR_DETAIL.ABF_REMISE (float)
+- CMD_VENTE.DVS_REMISE (float)
+- CMD_VENTE_DETAIL.CVD_REMISE (float)
+- COMMANDE_ACHAT.ACH_REMISE (float)
+- COMMANDE_ACHAT_DETAIL.CAD_REMISE (float)
+- FACTURE_FOURNISSEUR.FCF_REMISE_GLOBAL (float)
+- FACTURE_FRS_DETAIL.FCF_REMISE (float)
+- FACTURE_VNT.FCTV_REMISE (float)
+- FACTURE_VNT_DETAIL.FVD_REMISE (float)
+- FOURNISSEUR_OF_ARTICLE.FR_ART_REMISE (float)
+- HISTORIQUE_ANNULATION.HA_REMISE (float)
+- ROLE.A_AVR_AFFECT_REMISE (bit)
+- ROLE.A_CMD_AFFECTATION_REMISE (bit)
+- ROLE.A_FACT_AFFECTATION_REMISE (bit)
+- ROLE.A_RECEP_AFFECTATION_REMISE (bit)
+- ROLE.CAIS_REMISE_CHANG_PRIX_OFFERT (bit)
+- ROLE.INTER_ENTR_AFFECT_REMISE (bit)
+- ROLE.INTER_SORT_AFFECTATION_REMISE (bit)
+- ROLE.V_AV_AFFECTATION_REMISE (bit)
+- ROLE.V_DEV_AFFECT_REMISE (bit)
+- ROLE.V_FACT_AFFECT_REMISE (bit)
+- ROLE.V_LIV_AFFECT_REMISE (bit)
+
+Champs contenant 'taux':
+- PARAMETRECAISSE.Tauxdroittimbre (decimal)
+- ROLE.STATIS_CHIFFREAF_TAUXTVA (bit)
+
+===============================================================
+FIN DE L'EXTRACTION - 2025-07-28 21:38:07
+===============================================================
