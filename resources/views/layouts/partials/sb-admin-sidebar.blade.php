@@ -241,20 +241,7 @@
                 <a class="collapse-item" href="{{ route('admin.excel-reports.custom-form') }}">
                     <i class="fas fa-cogs"></i> Rapport personnalisé
                 </a>
-                <div class="collapse-divider"></div>
-                <h6 class="collapse-header">Rapports spécifiques:</h6>
-                <a class="collapse-item" onclick="generateQuickReport('inventory_value')" style="cursor: pointer;">
-                    <i class="fas fa-warehouse"></i> Inventaire en valeur
-                </a>
-                <a class="collapse-item" onclick="generateQuickReport('physical_inventory')" style="cursor: pointer;">
-                    <i class="fas fa-boxes"></i> Inventaire physique
-                </a>
-                <a class="collapse-item" onclick="generateQuickReport('sales_output')" style="cursor: pointer;">
-                    <i class="fas fa-shopping-cart"></i> État de sortie
-                </a>
-                <a class="collapse-item" onclick="generateQuickReport('reception_status')" style="cursor: pointer;">
-                    <i class="fas fa-truck"></i> État de réception
-                </a>
+                
             </div>
         </div>
     </li>

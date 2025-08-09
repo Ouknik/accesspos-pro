@@ -25,6 +25,8 @@ class FactureController extends Controller
                 'serveur' => $request->get('serveur', 'all'),
                 'mode_paiement' => $request->get('mode_paiement', 'all'),
                 'date' => $request->get('date', 'today'),
+                'date_debut' => $request->get('date_debut'),
+                'date_fin' => $request->get('date_fin'),
                 'search' => $request->get('search', '')
             ];
 
@@ -32,7 +34,7 @@ class FactureController extends Controller
             $clients = $this->getClients();
             $serveurs = $this->getServeurs();
             $modesPaiement = $this->getModesPaiement();
-            $stats = $this->getFactureStats();
+            $stats = $this->getFactureStats($filters);
 
             return view('admin.factures.index', compact('factures', 'clients', 'serveurs', 'modesPaiement', 'stats', 'filters'));
 
@@ -410,7 +412,7 @@ class FactureController extends Controller
     {
         try {
             $format = $request->get('format', 'excel');
-            $filters = $request->only(['status', 'client', 'date', 'serveur']);
+            $filters = $request->only(['status', 'client', 'date', 'date_debut', 'date_fin', 'serveur', 'mode_paiement', 'search']);
             
             // Implémentation de l'export selon le format demandé
             // TODO: Implémenter avec Maatwebsite\Excel ou DomPDF
@@ -492,6 +494,15 @@ class FactureController extends Controller
                     break;
                 case 'month':
                     $query->where('fv.FCTV_DATE', '>=', Carbon::now()->subMonth());
+                    break;
+                case 'custom':
+                    // الفلترة المخصصة بتاريخين محددين
+                    if (isset($filters['date_debut']) && !empty($filters['date_debut'])) {
+                        $query->whereDate('fv.FCTV_DATE', '>=', $filters['date_debut']);
+                    }
+                    if (isset($filters['date_fin']) && !empty($filters['date_fin'])) {
+                        $query->whereDate('fv.FCTV_DATE', '<=', $filters['date_fin']);
+                    }
                     break;
             }
         }
@@ -955,18 +966,65 @@ class FactureController extends Controller
     }
 
     /**
-     * Récupérer les statistiques des factures
+     * Récupérer les statistiques des factures avec filtres
      */
-    private function getFactureStats()
+    private function getFactureStats($filters = [])
     {
-        return DB::table('FACTURE_VNT')
-            ->select([
+        $query = DB::table('FACTURE_VNT');
+        
+        // Appliquer les filtres de date
+        if (isset($filters['date'])) {
+            switch ($filters['date']) {
+                case 'today':
+                    $query->whereDate('FCTV_DATE', Carbon::today());
+                    break;
+                case 'week':
+                    $query->where('FCTV_DATE', '>=', Carbon::now()->subWeek());
+                    break;
+                case 'month':
+                    $query->where('FCTV_DATE', '>=', Carbon::now()->subMonth());
+                    break;
+                case 'custom':
+                    if (isset($filters['date_debut']) && !empty($filters['date_debut'])) {
+                        $query->whereDate('FCTV_DATE', '>=', $filters['date_debut']);
+                    }
+                    if (isset($filters['date_fin']) && !empty($filters['date_fin'])) {
+                        $query->whereDate('FCTV_DATE', '<=', $filters['date_fin']);
+                    }
+                    break;
+            }
+        }
+        
+        // Appliquer les autres filtres
+        if (isset($filters['status']) && $filters['status'] !== 'all') {
+            if ($filters['status'] === 'valide') {
+                $query->where('FCTV_VALIDE', 1)->where('FCTV_ETAT', 1);
+            } elseif ($filters['status'] === 'annule') {
+                $query->where('FCTV_ETAT', 0);
+            } elseif ($filters['status'] === 'brouillon') {
+                $query->where('FCTV_VALIDE', 0);
+            }
+        }
+        
+        if (isset($filters['client']) && $filters['client'] !== 'all') {
+            $query->where('CLT_REF', $filters['client']);
+        }
+        
+        if (isset($filters['serveur']) && $filters['serveur'] !== 'all') {
+            $query->where('FCTV_SERVEUR', $filters['serveur']);
+        }
+        
+        if (isset($filters['mode_paiement']) && $filters['mode_paiement'] !== 'all') {
+            $query->where('FCTV_MODEPAIEMENT', $filters['mode_paiement']);
+        }
+
+        return $query->select([
                 DB::raw('COUNT(*) as total_factures'),
                 DB::raw("SUM(CASE WHEN FCTV_VALIDE = 1 AND FCTV_ETAT = 1 THEN 1 ELSE 0 END) as factures_valides"),
                 DB::raw("SUM(CASE WHEN FCTV_ETAT = 0 THEN 1 ELSE 0 END) as factures_annulees"),
                 DB::raw("SUM(CASE WHEN FCTV_VALIDE = 0 THEN 1 ELSE 0 END) as brouillons"),
-                DB::raw("SUM(CASE WHEN CAST(FCTV_DATE AS DATE) = CAST(GETDATE() AS DATE) AND FCTV_VALIDE = 1 AND FCTV_ETAT = 1 THEN COALESCE(FCTV_MNT_TTC, 0) ELSE 0 END) as ca_journalier"),
-                DB::raw("SUM(CASE WHEN CAST(FCTV_DATE AS DATE) = CAST(GETDATE() AS DATE) THEN COALESCE(FCTV_REMISE, 0) ELSE 0 END) as remise_journaliere"),
+                DB::raw("SUM(CASE WHEN FCTV_VALIDE = 1 AND FCTV_ETAT = 1 THEN COALESCE(FCTV_MNT_TTC, 0) ELSE 0 END) as ca_total"),
+                DB::raw("SUM(CASE WHEN FCTV_VALIDE = 1 AND FCTV_ETAT = 1 THEN COALESCE(FCTV_REMISE, 0) ELSE 0 END) as remise_totale"),
                 DB::raw('AVG(CASE WHEN FCTV_VALIDE = 1 AND FCTV_ETAT = 1 THEN COALESCE(FCTV_MNT_TTC, 0) END) as facture_moyenne'),
                 DB::raw('SUM(CASE WHEN FCTV_VALIDE = 1 AND FCTV_ETAT = 1 THEN COALESCE(MontantEspece, 0) ELSE 0 END) as total_especes'),
                 DB::raw('SUM(CASE WHEN FCTV_VALIDE = 1 AND FCTV_ETAT = 1 THEN COALESCE(MontantCharte, 0) ELSE 0 END) as total_cartes'),

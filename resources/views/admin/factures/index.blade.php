@@ -170,10 +170,20 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                CA Journalier
+                                @if($filters['date'] === 'today')
+                                    CA Journalier
+                                @elseif($filters['date'] === 'week')
+                                    CA Cette Semaine
+                                @elseif($filters['date'] === 'month')
+                                    CA Ce Mois
+                                @elseif($filters['date'] === 'custom')
+                                    CA Période Sélectionnée
+                                @else
+                                    CA Total
+                                @endif
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                {{ number_format($stats->ca_journalier ?? 0, 2) }} DH
+                                {{ number_format($stats->ca_total ?? 0, 2) }} DH
                             </div>
                         </div>
                         <div class="col-auto">
@@ -285,12 +295,27 @@
 
                         <div class="col-md-2 mb-3">
                             <label class="text-white mb-2">Période:</label>
-                            <select name="date" class="form-control">
+                            <select name="date" id="dateFilter" class="form-control">
                                 <option value="today" {{ $filters['date'] === 'today' ? 'selected' : '' }}>Aujourd'hui</option>
                                 <option value="week" {{ $filters['date'] === 'week' ? 'selected' : '' }}>Cette semaine</option>
                                 <option value="month" {{ $filters['date'] === 'month' ? 'selected' : '' }}>Ce mois</option>
+                                <option value="custom" {{ $filters['date'] === 'custom' ? 'selected' : '' }}>Période personnalisée</option>
                                 <option value="all" {{ $filters['date'] === 'all' ? 'selected' : '' }}>Toutes</option>
                             </select>
+                        </div>
+
+                        <!-- Période personnalisée -->
+                        <div class="col-md-3 mb-3" id="customDateRange" style="display: {{ $filters['date'] === 'custom' ? 'block' : 'none' }};">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label class="text-white mb-2">Du:</label>
+                                    <input type="date" name="date_debut" class="form-control" value="{{ $filters['date_debut'] ?? '' }}">
+                                </div>
+                                <div class="col-6">
+                                    <label class="text-white mb-2">Au:</label>
+                                    <input type="date" name="date_fin" class="form-control" value="{{ $filters['date_fin'] ?? '' }}">
+                                </div>
+                            </div>
                         </div>
 
                         <div class="col-md-2 mb-3">
@@ -319,6 +344,24 @@
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     <h6 class="m-0 font-weight-bold text-primary">
                         Liste des Factures ({{ count($factures) }} résultats)
+                        @if($filters['date'] === 'custom' && $filters['date_debut'] && $filters['date_fin'])
+                            <small class="text-muted d-block">
+                                <i class="fas fa-calendar"></i> 
+                                Du {{ \Carbon\Carbon::parse($filters['date_debut'])->format('d/m/Y') }} 
+                                au {{ \Carbon\Carbon::parse($filters['date_fin'])->format('d/m/Y') }}
+                            </small>
+                        @elseif($filters['date'] !== 'all')
+                            <small class="text-muted d-block">
+                                <i class="fas fa-calendar"></i> 
+                                @if($filters['date'] === 'today')
+                                    Aujourd'hui
+                                @elseif($filters['date'] === 'week')
+                                    Cette semaine
+                                @elseif($filters['date'] === 'month')
+                                    Ce mois
+                                @endif
+                            </small>
+                        @endif
                     </h6>
                     <div class="dropdown no-arrow">
                         <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
@@ -557,5 +600,49 @@ setInterval(function() {
         location.reload();
     }
 }, 60000);
+
+// Gestion de l'affichage des dates personnalisées
+$(document).ready(function() {
+    $('#dateFilter').change(function() {
+        const selectedValue = $(this).val();
+        const customDateRange = $('#customDateRange');
+        
+        if (selectedValue === 'custom') {
+            customDateRange.show();
+            // Définir les dates par défaut si vides
+            const dateDebut = $('input[name="date_debut"]');
+            const dateFin = $('input[name="date_fin"]');
+            
+            if (!dateDebut.val()) {
+                // Début du mois actuel
+                const today = new Date();
+                const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+                dateDebut.val(firstDay.toISOString().split('T')[0]);
+            }
+            
+            if (!dateFin.val()) {
+                // Aujourd'hui
+                const today = new Date();
+                dateFin.val(today.toISOString().split('T')[0]);
+            }
+        } else {
+            customDateRange.hide();
+            // Vider les dates personnalisées
+            $('input[name="date_debut"]').val('');
+            $('input[name="date_fin"]').val('');
+        }
+    });
+    
+    // Validation des dates
+    $('input[name="date_debut"], input[name="date_fin"]').change(function() {
+        const dateDebut = new Date($('input[name="date_debut"]').val());
+        const dateFin = new Date($('input[name="date_fin"]').val());
+        
+        if (dateDebut && dateFin && dateDebut > dateFin) {
+            alert('تاريخ البداية يجب أن يكون قبل تاريخ النهاية');
+            $(this).val('');
+        }
+    });
+});
 </script>
 @endpush
