@@ -385,22 +385,7 @@
             <a href="{{ route('admin.chiffre-affaires.export', ['type' => 'excel', 'report' => 'ventes-details'] + request()->query()) }}" class="btn btn-success btn-sm">
                 <i class="fas fa-file-excel"></i> Excel
             </a>
-            <div class="btn-group" role="group">
-                <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown">
-                    <i class="fas fa-print"></i> طباعة
-                </button>
-                <div class="dropdown-menu">
-                    <a class="dropdown-item" href="javascript:void(0)" onclick="printTable('ventesTable')">
-                        <i class="fas fa-print"></i> طباعة متقدمة
-                    </a>
-                    <a class="dropdown-item" href="javascript:void(0)" onclick="simplePrint('ventesTable')">
-                        <i class="fas fa-print"></i> طباعة مبسطة
-                    </a>
-                    <a class="dropdown-item" href="javascript:void(0)" onclick="window.print()">
-                        <i class="fas fa-print"></i> طباعة الصفحة
-                    </a>
-                </div>
-            </div>
+            
         </div>
     </div>
     <div class="card-body">

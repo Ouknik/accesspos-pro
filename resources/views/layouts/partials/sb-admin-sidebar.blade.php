@@ -43,13 +43,13 @@
                 <a class="collapse-item {{ request()->routeIs('admin.articles.create') ? 'active' : '' }}" href="{{ route('admin.articles.create') }}">
                     <i class="fas fa-plus"></i> Ajouter un produit
                 </a>
-                @if(Route::has('admin.articles.analytics'))
+                {{-- @if(Route::has('admin.articles.analytics'))
                 <a class="collapse-item {{ request()->routeIs('admin.articles.analytics') ? 'active' : '' }}" href="{{ route('admin.articles.analytics') }}">
                     <i class="fas fa-chart-bar"></i> Analytiques
                 </a>
                 @endif
                 <div class="collapse-divider"></div>
-                <h6 class="collapse-header">Gestion du stock:</h6>
+                <h6 class="collapse-header">Gestion du stock:</h6> --}}
                 @if(Route::has('admin.stock.index'))
                 <a class="collapse-item" href="{{ route('admin.stock.index') }}">
                     <i class="fas fa-warehouse"></i> Gestion du stock
@@ -221,6 +221,48 @@
                 <a class="collapse-item {{ request()->routeIs('admin.dashboard.top-clients') ? 'active' : '' }}" href="{{ route('admin.dashboard.top-clients') }}">
                     <i class="fas fa-users"></i> Top clients
                 </a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Nav Item - Gestion de Stock -->
+    <li class="nav-item {{ request()->routeIs('admin.stock.*') ? 'active' : '' }}">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseStock"
+            aria-expanded="{{ request()->routeIs('admin.stock.*') ? 'true' : 'false' }}" aria-controls="collapseStock">
+            <i class="fas fa-fw fa-warehouse text-primary"></i>
+            <span>Gestion de Stock</span>
+        </a>
+        <div id="collapseStock" class="collapse {{ request()->routeIs('admin.stock.*') ? 'show' : '' }}" aria-labelledby="headingStock" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Tableau de bord:</h6>
+                <a class="collapse-item {{ request()->routeIs('admin.stock.dashboard') ? 'active' : '' }}" href="{{ route('admin.stock.dashboard') }}">
+                    <i class="fas fa-chart-pie text-info"></i> Tableau de bord Stock
+                </a>
+                <div class="collapse-divider"></div>
+                <h6 class="collapse-header">Gestion du stock:</h6>
+                <a class="collapse-item {{ request()->routeIs('admin.stock.inventaire') ? 'active' : '' }}" href="{{ route('admin.stock.inventaire') }}">
+                    <i class="fas fa-boxes text-primary"></i> Inventaire actuel
+                </a>
+                <a class="collapse-item {{ request()->routeIs('admin.stock.mouvements') ? 'active' : '' }}" href="{{ route('admin.stock.mouvements') }}">
+                    <i class="fas fa-exchange-alt text-warning"></i> Mouvements de stock
+                </a>
+                <a class="collapse-item {{ request()->routeIs('admin.stock.ajustements') ? 'active' : '' }}" href="{{ route('admin.stock.ajustements') }}">
+                    <i class="fas fa-edit text-success"></i> Ajustements
+                </a>
+                <div class="collapse-divider"></div>
+                {{-- <h6 class="collapse-header">Achats & Approvisionnement:</h6>
+                <a class="collapse-item {{ request()->routeIs('admin.stock.achats') ? 'active' : '' }}" href="{{ route('admin.stock.achats') }}">
+                    <i class="fas fa-shopping-cart text-success"></i> Gestion des achats
+                </a>
+                <a class="collapse-item {{ request()->routeIs('admin.stock.reception') ? 'active' : '' }}" href="{{ route('admin.stock.reception') }}">
+                    <i class="fas fa-truck text-info"></i> Réception marchandises
+                </a> --}}
+                <div class="collapse-divider"></div>
+                <h6 class="collapse-header">Rapports & Analyses:</h6>
+                <a class="collapse-item {{ request()->routeIs('admin.stock.rapports') ? 'active' : '' }}" href="{{ route('admin.stock.rapports') }}">
+                    <i class="fas fa-chart-bar text-primary"></i> Rapports de stock
+                </a>
+               
             </div>
         </div>
     </li>

@@ -362,9 +362,25 @@ class ExcelReportsController extends Controller
             ])
             ->where('ff.FCF_VALIDE', 1);
 
-        // Application du filtrage par dates si elles sont transmises
+        // Application du filtrage par dates si elles sont transmises - تحسين الفلترة
         if ($dateFrom && $dateTo) {
-            $query->whereBetween('ff.FCF_DATE', [$dateFrom, $dateTo]);
+            // التأكد من تحويل التواريخ للتنسيق الصحيح
+            $dateFromFormatted = Carbon::parse($dateFrom)->startOfDay();
+            $dateToFormatted = Carbon::parse($dateTo)->endOfDay();
+            
+            $query->whereBetween('ff.FCF_DATE', [
+                $dateFromFormatted->format('Y-m-d H:i:s'),
+                $dateToFormatted->format('Y-m-d H:i:s')
+            ]);
+        } else {
+            // إذا لم يتم تحديد تواريخ، استخدم التواريخ الافتراضية (الشهر الحالي)
+            $defaultStart = Carbon::now()->startOfMonth();
+            $defaultEnd = Carbon::now()->endOfMonth();
+            
+            $query->whereBetween('ff.FCF_DATE', [
+                $defaultStart->format('Y-m-d H:i:s'),
+                $defaultEnd->format('Y-m-d H:i:s')
+            ]);
         }
 
         $receptions = $query->orderBy('ff.FCF_DATE', 'desc')
@@ -487,9 +503,25 @@ class ExcelReportsController extends Controller
             ])
             ->where('fv.FCTV_VALIDE', 1);
 
-        // Application du filtrage par dates si elles sont transmises
+        // Application du filtrage par dates avec تحسين للفلترة
         if ($dateFrom && $dateTo) {
-            $query->whereBetween('fv.FCTV_DATE', [$dateFrom, $dateTo]);
+            // التأكد من تحويل التواريخ للتنسيق الصحيح
+            $dateFromFormatted = Carbon::parse($dateFrom)->startOfDay();
+            $dateToFormatted = Carbon::parse($dateTo)->endOfDay();
+            
+            $query->whereBetween('fv.FCTV_DATE', [
+                $dateFromFormatted->format('Y-m-d H:i:s'),
+                $dateToFormatted->format('Y-m-d H:i:s')
+            ]);
+        } else {
+            // إذا لم يتم تحديد تواريخ، استخدم التواريخ الافتراضية (الشهر الحالي)
+            $defaultStart = Carbon::now()->startOfMonth();
+            $defaultEnd = Carbon::now()->endOfMonth();
+            
+            $query->whereBetween('fv.FCTV_DATE', [
+                $defaultStart->format('Y-m-d H:i:s'),
+                $defaultEnd->format('Y-m-d H:i:s')
+            ]);
         }
 
         $sorties = $query->orderBy('fv.FCTV_DATE', 'desc')
@@ -613,14 +645,21 @@ class ExcelReportsController extends Controller
         foreach ($inventaire as $item) {
             $sheet->setCellValue('A' . $row, $item->designation ?? '');
             
-            // Calcul des quantités entrées avec filtrage par dates
+            // Calcul des quantités entrées avec filtrage par dates محسن
             $queryEntree = DB::table('FACTURE_FRS_DETAIL as ffd')
                 ->join('FACTURE_FOURNISSEUR as ff', 'ffd.FCF_REF', '=', 'ff.FCF_REF')
                 ->where('ffd.ART_REF', $item->art_ref) // Utilisation de l'ART_REF correct
                 ->where('ff.FCF_VALIDE', 1);
             
             if ($dateFrom && $dateTo) {
-                $queryEntree->whereBetween('ff.FCF_DATE', [$dateFrom, $dateTo]);
+                // التأكد من تحويل التواريخ للتنسيق الصحيح
+                $dateFromFormatted = Carbon::parse($dateFrom)->startOfDay();
+                $dateToFormatted = Carbon::parse($dateTo)->endOfDay();
+                
+                $queryEntree->whereBetween('ff.FCF_DATE', [
+                    $dateFromFormatted->format('Y-m-d H:i:s'),
+                    $dateToFormatted->format('Y-m-d H:i:s')
+                ]);
             }
             
             try {
@@ -629,14 +668,21 @@ class ExcelReportsController extends Controller
                 $quantiteEntree = 0;
             }
                 
-            // Calcul des quantités sorties avec filtrage par dates
+            // Calcul des quantités sorties avec filtrage par dates محسن
             $querySortie = DB::table('FACTURE_VNT_DETAIL as fvd')
                 ->join('FACTURE_VNT as fv', 'fvd.FCTV_REF', '=', 'fv.FCTV_REF')
                 ->where('fvd.ART_REF', $item->art_ref) // Utilisation de l'ART_REF correct
                 ->where('fv.FCTV_VALIDE', 1);
             
             if ($dateFrom && $dateTo) {
-                $querySortie->whereBetween('fv.FCTV_DATE', [$dateFrom, $dateTo]);
+                // التأكد من تحويل التواريخ للتنسيق الصحيح
+                $dateFromFormatted = Carbon::parse($dateFrom)->startOfDay();
+                $dateToFormatted = Carbon::parse($dateTo)->endOfDay();
+                
+                $querySortie->whereBetween('fv.FCTV_DATE', [
+                    $dateFromFormatted->format('Y-m-d H:i:s'),
+                    $dateToFormatted->format('Y-m-d H:i:s')
+                ]);
             }
             
             try {
@@ -748,7 +794,7 @@ class ExcelReportsController extends Controller
 
 
     /**
-     * Calcul de la plage de dates basé sur la période choisie
+     * Calcul de la plage de dates basé sur la période choisie - تحسين منطق التواريخ
      */
     private function calculateDateRange($period, $dateFrom = null, $dateTo = null)
     {
@@ -757,20 +803,47 @@ class ExcelReportsController extends Controller
         switch ($period) {
             case 'today':
                 return [$now->format('Y-m-d'), $now->format('Y-m-d')];
+                
             case 'this_week':
-                return [$now->startOfWeek()->format('Y-m-d'), $now->copy()->endOfWeek()->format('Y-m-d')];
+                return [
+                    $now->copy()->startOfWeek()->format('Y-m-d'), 
+                    $now->copy()->endOfWeek()->format('Y-m-d')
+                ];
+                
             case 'this_month':
-                return [$now->startOfMonth()->format('Y-m-d'), $now->copy()->endOfMonth()->format('Y-m-d')];
+                return [
+                    $now->copy()->startOfMonth()->format('Y-m-d'), 
+                    $now->copy()->endOfMonth()->format('Y-m-d')
+                ];
+                
             case 'last_month':
                 $lastMonth = $now->copy()->subMonth();
-                return [$lastMonth->startOfMonth()->format('Y-m-d'), $lastMonth->endOfMonth()->format('Y-m-d')];
-            case 'custom':
                 return [
-                    $dateFrom ?: $now->startOfMonth()->format('Y-m-d'),
-                    $dateTo ?: $now->format('Y-m-d')
+                    $lastMonth->startOfMonth()->format('Y-m-d'), 
+                    $lastMonth->endOfMonth()->format('Y-m-d')
                 ];
+                
+            case 'custom':
+                // التأكد من وجود التواريخ المخصصة
+                if ($dateFrom && $dateTo) {
+                    return [
+                        Carbon::parse($dateFrom)->format('Y-m-d'),
+                        Carbon::parse($dateTo)->format('Y-m-d')
+                    ];
+                } else {
+                    // قيم افتراضية إذا لم يتم تحديد التواريخ
+                    return [
+                        $now->copy()->startOfMonth()->format('Y-m-d'),
+                        $now->format('Y-m-d')
+                    ];
+                }
+                
             default:
-                return [$now->startOfMonth()->format('Y-m-d'), $now->format('Y-m-d')];
+                // قيم افتراضية للحالات غير المعرّفة
+                return [
+                    $now->copy()->startOfMonth()->format('Y-m-d'),
+                    $now->format('Y-m-d')
+                ];
         }
     }
 
@@ -803,12 +876,16 @@ class ExcelReportsController extends Controller
                 'date_to.after_or_equal' => 'La date de fin doit être postérieure ou égale à la date de début',
             ]);
             
-            // Calcul de la plage de dates
+            // Calcul de la plage de dates - تحسين منطق التواريخ
             [$dateFrom, $dateTo] = $this->calculateDateRange(
                 $request->period,
                 $request->date_from,
                 $request->date_to
             );
+            
+            // التأكد من أن التواريخ في الشكل الصحيح
+            $dateFromFormatted = Carbon::parse($dateFrom)->format('Y-m-d');
+            $dateToFormatted = Carbon::parse($dateTo)->format('Y-m-d');
             
             $spreadsheet = new Spreadsheet();
             $reportType = $request->report_type;
@@ -817,31 +894,31 @@ class ExcelReportsController extends Controller
             switch ($reportType) {
                 case 'papier_travail':
                     // Création du rapport complet des quatre
-                    $this->createInventaireValeurSheet($spreadsheet, $dateFrom, $dateTo);
-                    $this->createEtatReceptionSheet($spreadsheet, $dateFrom, $dateTo);
-                    $this->createEtatSortieSheet($spreadsheet, $dateFrom, $dateTo);
-                    $this->createInventairePhysiqueSheet($spreadsheet, $dateFrom, $dateTo);
-                    $fileName = 'Papier_de_Travail_' . $dateFrom . '_' . $dateTo;
+                    $this->createInventaireValeurSheet($spreadsheet, $dateFromFormatted, $dateToFormatted);
+                    $this->createEtatReceptionSheet($spreadsheet, $dateFromFormatted, $dateToFormatted);
+                    $this->createEtatSortieSheet($spreadsheet, $dateFromFormatted, $dateToFormatted);
+                    $this->createInventairePhysiqueSheet($spreadsheet, $dateFromFormatted, $dateToFormatted);
+                    $fileName = 'Papier_de_Travail_' . $dateFromFormatted . '_' . $dateToFormatted;
                     break;
                     
                 case 'inventory_value':
-                    $this->createInventaireValeurSheet($spreadsheet, $dateFrom, $dateTo);
-                    $fileName = 'Inventaire_Valeur_' . $dateFrom . '_' . $dateTo;
+                    $this->createInventaireValeurSheet($spreadsheet, $dateFromFormatted, $dateToFormatted);
+                    $fileName = 'Inventaire_Valeur_' . $dateFromFormatted . '_' . $dateToFormatted;
                     break;
                     
                 case 'physical_inventory':
-                    $this->createInventairePhysiqueSheet($spreadsheet, $dateFrom, $dateTo);
-                    $fileName = 'Inventaire_Physique_' . $dateFrom . '_' . $dateTo;
+                    $this->createInventairePhysiqueSheet($spreadsheet, $dateFromFormatted, $dateToFormatted);
+                    $fileName = 'Inventaire_Physique_' . $dateFromFormatted . '_' . $dateToFormatted;
                     break;
                     
                 case 'sales_output':
-                    $this->createEtatSortieSheet($spreadsheet, $dateFrom, $dateTo);
-                    $fileName = 'Etat_Sortie_' . $dateFrom . '_' . $dateTo;
+                    $this->createEtatSortieSheet($spreadsheet, $dateFromFormatted, $dateToFormatted);
+                    $fileName = 'Etat_Sortie_' . $dateFromFormatted . '_' . $dateToFormatted;
                     break;
                     
                 case 'reception_status':
-                    $this->createEtatReceptionSheet($spreadsheet, $dateFrom, $dateTo);
-                    $fileName = 'Etat_Reception_' . $dateFrom . '_' . $dateTo;
+                    $this->createEtatReceptionSheet($spreadsheet, $dateFromFormatted, $dateToFormatted);
+                    $fileName = 'Etat_Reception_' . $dateFromFormatted . '_' . $dateToFormatted;
                     break;
                     
                 default:

@@ -230,6 +230,61 @@ Route::middleware('auth')->prefix('admin')->group(function () {
         Route::get('statistics', [App\Http\Controllers\Admin\FactureController::class, 'getStatistics'])->name('statistics');
         Route::get('daily-summary', [App\Http\Controllers\Admin\FactureController::class, 'getDailySummary'])->name('daily-summary');
     });
+
+    // Routes pour la gestion du stock - Stock Management
+    Route::prefix('stock')->name('admin.stock.')->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\StockController::class, 'dashboard'])->name('dashboard');
+        
+        // Gestion de l'inventaire
+        Route::get('/inventaire', [App\Http\Controllers\Admin\StockController::class, 'inventaire'])->name('inventaire');
+        Route::post('/inventaire/update', [App\Http\Controllers\Admin\StockController::class, 'updateInventaire'])->name('inventaire.update');
+        Route::get('/inventaire/export', [App\Http\Controllers\Admin\StockController::class, 'exportInventaire'])->name('inventaire.export');
+        
+        // Mouvements de stock
+        Route::get('/mouvements', [App\Http\Controllers\Admin\StockController::class, 'mouvements'])->name('mouvements');
+        Route::post('/mouvements/create', [App\Http\Controllers\Admin\StockController::class, 'createMouvement'])->name('mouvements.create');
+        Route::get('/mouvements/history/{article}', [App\Http\Controllers\Admin\StockController::class, 'historiqueMouvements'])->name('mouvements.history');
+        
+        // Ajustements
+        Route::get('/ajustements', [App\Http\Controllers\Admin\StockController::class, 'ajustements'])->name('ajustements');
+        Route::post('/ajustements/create', [App\Http\Controllers\Admin\StockController::class, 'createAjustement'])->name('ajustements.create');
+        Route::get('/ajustements/history', [App\Http\Controllers\Admin\StockController::class, 'historiqueAjustements'])->name('ajustements.history');
+        
+        // Gestion des achats
+        Route::get('/achats', [App\Http\Controllers\Admin\StockController::class, 'achats'])->name('achats');
+        Route::get('/achats/create', [App\Http\Controllers\Admin\StockController::class, 'createAchat'])->name('achats.create');
+        Route::post('/achats/store', [App\Http\Controllers\Admin\StockController::class, 'storeAchat'])->name('achats.store');
+        Route::get('/achats/{facture}', [App\Http\Controllers\Admin\StockController::class, 'showAchat'])->name('achats.show');
+        Route::get('/achats/{facture}/details', [App\Http\Controllers\Admin\StockController::class, 'showAchatDetails'])->name('achats.details');
+        Route::post('/achats/{facture}/validate', [App\Http\Controllers\Admin\StockController::class, 'validateAchat'])->name('achats.validate');
+        Route::get('/achats/{facture}/print', [App\Http\Controllers\Admin\StockController::class, 'printAchat'])->name('achats.print');
+        
+        // Réception de marchandises
+        Route::get('/reception', [App\Http\Controllers\Admin\StockController::class, 'reception'])->name('reception');
+        Route::post('/reception/confirm', [App\Http\Controllers\Admin\StockController::class, 'confirmReception'])->name('reception.confirm');
+        Route::get('/reception/bon/{bl}', [App\Http\Controllers\Admin\StockController::class, 'showBonLivraison'])->name('reception.bon');
+        
+        // Rapports et analyses
+        Route::get('/rapports', [App\Http\Controllers\Admin\StockController::class, 'rapports'])->name('rapports');
+        Route::get('/rapports/valorisation', [App\Http\Controllers\Admin\StockController::class, 'rapportValorisation'])->name('rapports.valorisation');
+        Route::get('/rapports/mouvements-periode', [App\Http\Controllers\Admin\StockController::class, 'rapportMouvementsPeriode'])->name('rapports.mouvements-periode');
+        Route::get('/rapports/rupture', [App\Http\Controllers\Admin\StockController::class, 'rapportRupture'])->name('rapports.rupture');
+        Route::get('/rapports/rotation', [App\Http\Controllers\Admin\StockController::class, 'rapportRotation'])->name('rapports.rotation');
+        
+        // Alertes de stock
+        Route::get('/alertes', [App\Http\Controllers\Admin\StockController::class, 'alertes'])->name('alertes');
+        Route::post('/alertes/mark-read', [App\Http\Controllers\Admin\StockController::class, 'markAlerteRead'])->name('alertes.mark-read');
+        Route::get('/alertes/notifications', [App\Http\Controllers\Admin\StockController::class, 'getNotificationsAlertes'])->name('alertes.notifications');
+    });
+    
+    // API Routes pour le stock - AJAX calls
+    Route::prefix('api/stock')->name('admin.stock.api.')->group(function () {
+        Route::get('/articles/search', [App\Http\Controllers\Admin\StockController::class, 'searchArticles'])->name('articles.search');
+        Route::get('/stats', [App\Http\Controllers\Admin\StockController::class, 'getStockStats'])->name('stats');
+        Route::get('/mouvements/recent', [App\Http\Controllers\Admin\StockController::class, 'getRecentMouvementsApi'])->name('mouvements.recent');
+        Route::get('/alertes/count', [App\Http\Controllers\Admin\StockController::class, 'getAlertesCount'])->name('alertes.count');
+        Route::get('/fournisseurs/{fournisseur}/articles', [App\Http\Controllers\Admin\StockController::class, 'getFournisseurArticles'])->name('fournisseurs.articles');
+    });
 });
 
 // Redirection pour compatibilité avec les anciens liens
